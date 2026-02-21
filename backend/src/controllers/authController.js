@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { genOtpToken,genToken } from "../utils/authToken.js";
 
 
+// ----------------UserRegister-----------------
 export const UserRegister = async (req, res, next) => {
   try {
     console.log(req.body);
@@ -57,6 +58,7 @@ export const UserRegister = async (req, res, next) => {
   }
 };
 
+// -----------------UserLogin---------------------
 export const UserLogin = async (req, res, next) => {
   try {
     //Fetch Data from Frontend
@@ -96,6 +98,17 @@ export const UserLogin = async (req, res, next) => {
   }
 };
 
+// ------------------UserLogout---------------
+export const UserLogout = async (req, res, next) => {
+  try {
+    res.clearCookie("parleG");
+    res.status(200).json({ message: "Logout Successfull" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ----------------UserGenOTP-------------------
 export const UserGenOTP = async (req, res, next) => {
   try {
     //Fetch Data from Frontend
@@ -144,6 +157,7 @@ export const UserGenOTP = async (req, res, next) => {
   }
 };
 
+// --------------UserVerifyOTP-------------------
 export const UserVerifyOtp = async (req, res, next) => {
   try {
     //Fetch Data from Frontend
@@ -192,15 +206,7 @@ export const UserVerifyOtp = async (req, res, next) => {
   }
 };
 
-export const UserLogout = async (req, res, next) => {
-  try {
-    res.clearCookie("health");
-    res.status(200).json({ message: "Logout Successfull" });
-  } catch (error) {
-    next(error);
-  }
-};
-
+// ---------------UserForgetPassword
 export const UserForgetPassword = async (req, res, next) => {
   try {
     const { newPassword } = req.body;
