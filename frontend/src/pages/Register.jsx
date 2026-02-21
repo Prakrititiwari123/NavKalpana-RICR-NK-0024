@@ -53,7 +53,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
@@ -157,7 +157,7 @@ const Register = () => {
       <div className="max-w-6xl w-full bg-white rounded-3xl shadow-2xl flex overflow-hidden relative z-10 animate-fadeInUp">
         
         {/* Left Side - Branding & Progress */}
-        <div className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-8 flex-col relative overflow-hidden animate-slideInLeft">
+        <div className="hidden lg:flex lg:w-2/5 bg-linear-to-br from-blue-600 via-indigo-600 to-purple-600 p-8 flex-col relative overflow-hidden animate-slideInLeft">
           {/* Abstract Background Shapes */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float"></div>
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-blob"></div>
@@ -243,7 +243,7 @@ const Register = () => {
           <div className="max-w-2xl mx-auto">
             {/* Header */}
             <div className="text-center lg:text-left mb-8">
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Create Account</h2>
+              <h2 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Create Account</h2>
               <p className="text-gray-500 mt-2">
                 Step {currentStep} of 3: {currentStep === 1 ? 'Account Details' : currentStep === 2 ? 'Personal Information' : 'Fitness Goals'}
               </p>
@@ -491,7 +491,7 @@ const Register = () => {
                     </select>
                   </div>
 
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100 transform transition-all duration-300 hover:shadow-md">
+                  <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100 transform transition-all duration-300 hover:shadow-md">
                     <h3 className="font-semibold text-gray-800 mb-3">Medical Disclaimer</h3>
                     <p className="text-sm text-gray-600">
                       By creating an account, you confirm that you have consulted with a healthcare 
@@ -538,18 +538,18 @@ const Register = () => {
                   <button
                     type="button"
                     onClick={nextStep}
-                    className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transform transition-all duration-200 hover:scale-[1.02] hover:shadow-xl relative overflow-hidden group"
+                    className="flex-1 bg-linear-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transform transition-all duration-200 hover:scale-[1.02] hover:shadow-xl relative overflow-hidden group"
                   >
-                    <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                    <span className="absolute inset-0 w-full h-full bg-linear-to-r from-indigo-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
                     <span className="relative">Continue</span>
                   </button>
                 ) : (
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transform transition-all duration-200 hover:scale-[1.02] hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group"
+                    className="flex-1 bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transform transition-all duration-200 hover:scale-[1.02] hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group"
                   >
-                    <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                    <span className="absolute inset-0 w-full h-full bg-linear-to-r from-purple-600 via-indigo-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
                     <span className="relative">
                     {isLoading ? (
                       <div className="flex items-center justify-center">
