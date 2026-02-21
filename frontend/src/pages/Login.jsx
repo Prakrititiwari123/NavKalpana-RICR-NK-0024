@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiMail, FiLock, FiEye, FiEyeOff, FiActivity } from 'react-icons/fi';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -266,7 +268,7 @@ const Login = () => {
               {/* Sign Up Link */}
               <p className="text-center text-sm text-gray-600">
                 Don't have an account?{' '}
-                <button type="button" className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors duration-200 relative group">
+                <button type="button" onClick={() => navigate('/register')} className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors duration-200 relative group">
                   Sign Up
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 group-hover:w-full transition-all duration-300"></span>
                 </button>
