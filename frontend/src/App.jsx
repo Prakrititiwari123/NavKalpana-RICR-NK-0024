@@ -7,6 +7,7 @@ import Home from './pages/Home.jsx';
 import Footer from './components/Footer.jsx';
 import Header from './components/Header.jsx';
 import Dashboard from './pages/Dashboard/Dashboard.jsx';
+import Workout from './pages/Dashboard/Workout.jsx';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/workout" element={<Workout />} />
         </Routes>
         <Footer/>
       </BrowserRouter>
