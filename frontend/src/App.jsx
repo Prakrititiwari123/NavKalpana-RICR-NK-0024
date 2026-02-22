@@ -7,14 +7,14 @@ import AppRoutes from "./Routes/approutes";
 
 const App = () => {
   return (
-      <BrowserRouter>
-        <Toaster />
+    <BrowserRouter>
+      <Toaster />
       <Header />
 
       <AppRoutes />
 
       <Footer />
-      </BrowserRouter>
+    </BrowserRouter>
   );
 };
 
