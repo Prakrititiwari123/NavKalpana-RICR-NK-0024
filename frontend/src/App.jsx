@@ -8,6 +8,7 @@ import Footer from './components/Footer.jsx';
 import Header from './components/Header.jsx';
 import Dashboard from './pages/Dashboard/Dashboard.jsx';
 import Workout from './pages/Dashboard/Workout.jsx';
+import Diet from './pages/Dashboard/Diet.jsx';
 import ScrollToTop from './context/ScrollToTop.jsx';
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/workout" element={<Workout />} />
+          <Route path="/diet" element={<Diet />} />
         </Routes>
         <Footer/>
       </BrowserRouter>
