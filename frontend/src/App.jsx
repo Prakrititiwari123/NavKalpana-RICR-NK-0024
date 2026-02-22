@@ -1,5 +1,4 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
@@ -33,4 +32,21 @@ const App = () => {
   )
 }
 
-export default App
+import Header from "./components/Common/Header";
+import Footer from "./components/Common/Footer";
+import AppRoutes from "./Routes/approutes";
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Toaster />
+      <Header />
+
+      <AppRoutes />
+
+      <Footer />
+    </BrowserRouter>
+  );
+};
+
+export default App;
