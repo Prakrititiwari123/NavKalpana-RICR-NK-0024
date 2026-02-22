@@ -1,17 +1,17 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter,Routes,Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Login from './pages/Login.jsx'
-import Register from './pages/Register.jsx'
+import Login from './pages/auth/Login.jsx'
+import Register from './pages/auth/Register.jsx'
 import Home from './pages/Home.jsx';
-import Footer from './components/Footer.jsx';
-import Header from './components/Header.jsx';
+import Footer from './components/Common/Footer.jsx';
+import Header from './components/Common/Header.jsx';
 import Dashboard from './pages/Dashboard/Dashboard.jsx';
 import Workout from './pages/Dashboard/Workout.jsx';
 import Diet from './pages/Dashboard/Diet.jsx';
 import ScrollToTop from './context/ScrollToTop.jsx';
 
 const App = () => {
-  return (
+  return (  
     <>
       <BrowserRouter>
         <Toaster />
