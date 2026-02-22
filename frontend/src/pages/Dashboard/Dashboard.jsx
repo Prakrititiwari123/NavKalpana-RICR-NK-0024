@@ -66,7 +66,7 @@ const Dashboard = () => {
   const progressPercentage = ((userData.currentWeight - userData.startWeight) / (userData.goalWeight - userData.startWeight)) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-indigo-50 relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-white via-blue-50 to-indigo-50 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-blue-100 mix-blend-multiply filter blur-3xl opacity-30 animate-pulse-slow"></div>
@@ -81,7 +81,7 @@ const Dashboard = () => {
         <div className="mb-8 animate-fadeInDown">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+              <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
                 Welcome back, {userName}!
               </h1>
               <div className="flex items-center gap-2 text-gray-600">
@@ -211,7 +211,7 @@ const Dashboard = () => {
               >
                 <button
                   onClick={() => handleExerciseComplete(exercise.id)}
-                  className={`flex-shrink-0 w-6 h-6 rounded-full border-2 transition-all duration-300 flex items-center justify-center ${
+                  className={`shrink-0 w-6 h-6 rounded-full border-2 transition-all duration-300 flex items-center justify-center ${
                     completedExercises.includes(exercise.id)
                       ? 'bg-green-500 border-green-500'
                       : 'border-gray-300 hover:border-blue-500'
@@ -237,7 +237,7 @@ const Dashboard = () => {
 
           <button
             onClick={() => navigate('/workout')}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+            className="w-full bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
           >
             <FiEdit3 className="w-5 h-5" />
             Log Workout
@@ -289,7 +289,7 @@ const Dashboard = () => {
 
           <button
             onClick={() => navigate('/diet')}
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+            className="w-full bg-linear-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
           >
             <FiEdit3 className="w-5 h-5" />
             Log Meal
@@ -313,7 +313,7 @@ const Dashboard = () => {
           </div>
 
           {/* Weight Progress */}
-          <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
+          <div className="mb-8 p-6 bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl">
             <h3 className="text-sm font-semibold text-gray-700 mb-4">Weight Goal Progress</h3>
             <div className="flex items-center justify-between mb-4 text-sm">
               <span className="text-gray-600">
@@ -328,7 +328,7 @@ const Dashboard = () => {
             </div>
             <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-blue-500 to-indigo-500 h-3 rounded-full transition-all duration-500"
+                className="bg-linear-to-r from-blue-500 to-indigo-500 h-3 rounded-full transition-all duration-500"
                 style={{ width: `${Math.max(0, Math.min(progressPercentage, 100))}%` }}
               ></div>
             </div>
@@ -357,7 +357,7 @@ const Dashboard = () => {
                     <p className="text-3xl font-bold text-gray-900 mb-2">{stat.value}%</p>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className={`bg-gradient-to-r ${stat.color} h-2 rounded-full transition-all duration-500`}
+                        className={`bg-linear-to-r ${stat.color} h-2 rounded-full transition-all duration-500`}
                         style={{ width: `${stat.value}%` }}
                       ></div>
                     </div>
@@ -381,7 +381,7 @@ const Dashboard = () => {
               <button
                 key={action.label}
                 onClick={() => navigate(action.action)}
-                className={`bg-gradient-to-r ${action.color} text-white font-semibold py-6 rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-110 flex flex-col items-center gap-3 group animate-slideInUp`}
+                className={`bg-linear-to-r ${action.color} text-white font-semibold py-6 rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-110 flex flex-col items-center gap-3 group animate-slideInUp`}
                 style={{ animationDelay: `${0.8 + index * 0.1}s` }}
               >
                 <Icon className="w-8 h-8 group-hover:scale-125 transition-transform duration-300" />
@@ -394,7 +394,7 @@ const Dashboard = () => {
       </div>
 
       {/* Custom Animations CSS */}
-      <style jsx>{`
+      <style jsx="true">{`
         @keyframes fadeInDown {
           from {
             opacity: 0;
