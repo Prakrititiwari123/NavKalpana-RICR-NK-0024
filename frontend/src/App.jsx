@@ -8,6 +8,10 @@ import Header from './components/Common/Header.jsx';
 import Dashboard from './pages/Dashboard/Dashboard.jsx';
 import Workout from './pages/Dashboard/Workout.jsx';
 import Diet from './pages/Dashboard/Diet.jsx';
+import Progress from "./pages/Dashboard/Progress.jsx";
+import Analytics from "./pages/Dashboard/Analytics.jsx";
+import Chat from "./pages/Dashboard/Chat.jsx";
+import Settings from "./pages/Dashboard/Settings.jsx";
 import ScrollToTop from './context/ScrollToTop.jsx';
 
 const App = () => {
@@ -24,6 +28,10 @@ const App = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/workout" element={<Workout />} />
           <Route path="/diet" element={<Diet />} />
+          <Route path="/progress" element={<Progress />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
         <Footer/>
       </BrowserRouter>

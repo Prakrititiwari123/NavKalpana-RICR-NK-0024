@@ -37,7 +37,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className={`${isLandingPage ? 'bg-gradient-to-b from-white to-blue-50' : 'bg-linear-to-b from-white to-gray-50'} border-t border-gray-200 ${isLandingPage ? 'mt-20' : 'mt-12'} relative overflow-hidden`}>
+    <footer className={`${isLandingPage ? 'bg-linear-to-b from-white to-blue-50' : 'bg-linear-to-b from-white to-gray-50'} border-t border-gray-200 ${isLandingPage ? 'mt-20' : 'mt-12'} relative overflow-hidden`}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className={`absolute -top-40 -right-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-slow ${
