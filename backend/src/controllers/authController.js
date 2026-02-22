@@ -101,7 +101,7 @@ export const UserLogin = async (req, res, next) => {
 // ------------------UserLogout---------------
 export const UserLogout = async (req, res, next) => {
   try {
-    res.clearCookie("parleG");
+    res.clearCookie("Nexus");
     res.status(200).json({ message: "Logout Successfull" });
   } catch (error) {
     next(error);

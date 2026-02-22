@@ -7,6 +7,12 @@ const userSchema = mongoose.Schema(
     mobileNumber: { type: String, required: true },
     password: { type: String, required: true, select: false },
 
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
+
     dob: { type: String, default: "N/A" },
     gender: {
       type: String,

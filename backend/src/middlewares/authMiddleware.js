@@ -1,9 +1,11 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
+
+// ----------------------Protect------------------
 export const Protect = async (req, res, next) => {
   try {
-    const parax = req.cookies.parleG;
+    const parax = req.cookies.Nexus;
     console.log("Token recived in Cookies:", parax);
 
     const tea = jwt.verify(parax, process.env.JWT_SECRET);
@@ -29,6 +31,10 @@ export const Protect = async (req, res, next) => {
   }
 };
 
+// ----------------------admin Protect------------
+
+
+// -------------------OTP Protect-----------------------
 export const OtpProtect = async (req, res, next) => {
   try {
     const token = req.cookies.otpToken;
