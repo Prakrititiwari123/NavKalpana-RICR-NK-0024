@@ -8,12 +8,14 @@ import Footer from './components/Footer.jsx';
 import Header from './components/Header.jsx';
 import Dashboard from './pages/Dashboard/Dashboard.jsx';
 import Workout from './pages/Dashboard/Workout.jsx';
+import ScrollToTop from './context/ScrollToTop.jsx';
 
 const App = () => {
   return (
     <>
       <BrowserRouter>
         <Toaster />
+        <ScrollToTop/>
         <Header/>
         <Routes>
           <Route path="/" element={<Home />} />
