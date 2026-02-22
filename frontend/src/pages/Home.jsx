@@ -3,8 +3,7 @@ import {
   FiActivity, FiTrendingUp, FiCalendar, FiDroplet, 
   FiClock, FiAward, FiTarget, FiHeart, FiZap,
   FiArrowRight, FiCheckCircle, FiBarChart2,
-  FiSun, FiMoon, FiUser, FiSettings, FiBell,
-  FiChevronRight, FiChevronLeft, FiPlay, FiPause,
+  FiSun, FiMoon, FiChevronRight, FiChevronLeft, FiPlay, FiPause,
   FiCoffee, FiMapPin, FiPhone, FiMail,
   FiAlertCircle, FiThermometer, FiHeart as FiHeartIcon,
   FiGitPullRequest, FiClipboard, FiFileText,
@@ -16,18 +15,13 @@ import {
 const Home = () => {
   const [greeting, setGreeting] = useState('');
   const [greetingIcon, setGreetingIcon] = useState(null);
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [showWelcome, setShowWelcome] = useState(true);
   const [selectedEnergy, setSelectedEnergy] = useState('');
   const [waterIntake, setWaterIntake] = useState(5);
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [activeTab, setActiveTab] = useState('overview');
   const [completedExercises, setCompletedExercises] = useState([1]);
   const [completedMeals, setCompletedMeals] = useState([0]);
-  const [showQuote, setShowQuote] = useState(true);
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
 
   // Mock user data based on your schema
   const userData = {
@@ -172,13 +166,6 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
   const calculateAge = (dob) => {
     const birthDate = new Date(dob);
     const today = new Date();
@@ -224,71 +211,6 @@ const Home = () => {
         <div className="absolute -bottom-32 left-1/2 w-96 h-96 bg-indigo-300/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
       </div>
 
-      {/* Navbar */}
-      <nav className="bg-white/80 backdrop-blur-xl shadow-md sticky top-0 z-50 border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-3 group cursor-pointer">
-              <div className="bg-linear-to-r from-blue-600 to-indigo-600 p-2 rounded-xl transform group-hover:rotate-6 transition-all duration-300 group-hover:shadow-lg">
-                <FiActivity className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-tight">
-                Healthnexus
-              </span>
-            </div>
-
-            {/* Live Time */}
-            <div className="hidden md:flex items-center space-x-2 bg-linear-to-r from-blue-50 to-indigo-50 px-4 py-2 rounded-full border border-blue-100/50">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <FiClock className="w-4 h-4 text-indigo-600" />
-              <span className="text-sm font-medium text-gray-700">
-                {currentTime.toLocaleTimeString()}
-              </span>
-            </div>
-
-            {/* Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
-              {['Overview', 'Health', 'Workouts', 'Nutrition', 'Reports'].map((item, index) => (
-                <button
-                  key={index}
-                  className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 transform hover:scale-105 ${
-                    activeTab === item.toLowerCase()
-                      ? 'bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                      : 'text-gray-600 hover:bg-white/50'
-                  }`}
-                  onClick={() => setActiveTab(item.toLowerCase())}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-
-            {/* Right Icons */}
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <button 
-                  className="p-2 text-gray-400 hover:text-indigo-600 transition-all duration-300 hover:scale-110 relative group"
-                  onClick={() => setShowNotifications(!showNotifications)}
-                >
-                  <FiBell className="w-5 h-5" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-bounce"></span>
-                </button>
-              </div>
-              <button className="p-2 text-gray-400 hover:text-indigo-600 transition-all duration-300 hover:scale-110">
-                <FiSettings className="w-5 h-5" />
-              </button>
-              <button className="flex items-center space-x-2 bg-white px-1 py-1 rounded-full border-2 border-transparent hover:border-indigo-200 transition-all duration-300 hover:scale-105 shadow-sm">
-                <div className="w-8 h-8 bg-linear-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-                  <FiUser className="w-4 h-4 text-white" />
-                </div>
-                <span className="pr-3 text-sm font-medium text-gray-700 hidden sm:inline">{userData.fullName.split(' ')[0]}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* SECTION 1: Welcome Banner */}
@@ -330,7 +252,7 @@ const Home = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
               <div className="flex items-center space-x-6 flex-1">
                 <div className="relative">
-                  <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                  <div className="w-20 h-20 bg-linear-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                     {userData.fullName.charAt(0)}
                   </div>
                   <button className="absolute -bottom-2 -right-2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-all duration-300 hover:scale-110 border border-gray-200">
@@ -353,13 +275,13 @@ const Home = () => {
                 </div>
               </div>
               <div className="flex flex-wrap gap-3">
-                <span className="px-4 py-2 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 rounded-full text-sm font-semibold border border-green-200">
+                <span className="px-4 py-2 bg-linear-to-r from-green-50 to-emerald-50 text-green-700 rounded-full text-sm font-semibold border border-green-200">
                   🎂 Age: {calculateAge(userData.dob)}
                 </span>
-                <span className="px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 rounded-full text-sm font-semibold border border-blue-200">
+                <span className="px-4 py-2 bg-linear-to-r from-blue-50 to-cyan-50 text-blue-700 rounded-full text-sm font-semibold border border-blue-200">
                   👤 {userData.gender === 'male' ? 'Male' : 'Female'}
                 </span>
-                <span className="px-4 py-2 bg-gradient-to-r from-red-50 to-pink-50 text-red-700 rounded-full text-sm font-semibold border border-red-200">
+                <span className="px-4 py-2 bg-linear-to-r from-red-50 to-pink-50 text-red-700 rounded-full text-sm font-semibold border border-red-200">
                   🩸 {userData.healthData.vitals.bloodGroup}
                 </span>
               </div>
@@ -367,13 +289,13 @@ const Home = () => {
 
             {/* Quick Actions */}
             <div className="mt-6 flex gap-3 pt-6 border-t border-gray-100">
-              <button className="flex-1 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 py-3 rounded-xl text-sm font-semibold text-blue-700 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 shadow-sm">
+              <button className="flex-1 bg-linear-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 py-3 rounded-xl text-sm font-semibold text-blue-700 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 shadow-sm">
                 <FiShare2 className="w-4 h-4" /> Share
               </button>
-              <button className="flex-1 bg-gradient-to-r from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 py-3 rounded-xl text-sm font-semibold text-purple-700 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 shadow-sm">
+              <button className="flex-1 bg-linear-to-r from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 py-3 rounded-xl text-sm font-semibold text-purple-700 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 shadow-sm">
                 <FiBookmark className="w-4 h-4" /> Save
               </button>
-              <button className="flex-1 bg-gradient-to-r from-gray-50 to-slate-50 hover:from-gray-100 hover:to-slate-100 py-3 rounded-xl text-sm font-semibold text-gray-700 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 shadow-sm">
+              <button className="flex-1 bg-linear-to-r from-gray-50 to-slate-50 hover:from-gray-100 hover:to-slate-100 py-3 rounded-xl text-sm font-semibold text-gray-700 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 shadow-sm">
                 <FiMoreVertical className="w-4 h-4" /> More
               </button>
             </div>
@@ -383,7 +305,7 @@ const Home = () => {
         {/* SECTION 3: Health Metrics Grid */}
         <section className="mb-8 animate-fadeInUp">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-            <span className="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-indigo-600 rounded-full"></span>
+            <span className="w-1.5 h-8 bg-linear-to-b from-blue-600 to-indigo-600 rounded-full"></span>
             Health Overview
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -394,7 +316,7 @@ const Home = () => {
                   <p className="text-sm text-gray-500 mb-2 font-medium">BMI</p>
                   <p className="text-4xl font-bold text-gray-800">{userData.healthData.vitals.bmi}</p>
                 </div>
-                <div className="bg-gradient-to-br from-blue-100 to-blue-200 p-3 rounded-xl group-hover:rotate-12 transition-transform">
+                <div className="bg-linear-to-br from-blue-100 to-blue-200 p-3 rounded-xl group-hover:rotate-12 transition-transform">
                   <FiBarChart2 className="w-6 h-6 text-blue-600" />
                 </div>
               </div>
@@ -413,7 +335,7 @@ const Home = () => {
                   <p className="text-sm text-gray-500 mb-2 font-medium">Heart Rate</p>
                   <p className="text-4xl font-bold text-gray-800">{userData.healthData.vitals.heartRate}</p>
                 </div>
-                <div className="bg-gradient-to-br from-red-100 to-pink-200 p-3 rounded-xl group-hover:scale-110 transition-transform">
+                <div className="bg-linear-to-br from-red-100 to-pink-200 p-3 rounded-xl group-hover:scale-110 transition-transform">
                   <FiHeartIcon className="w-6 h-6 text-red-600 animate-pulse" />
                 </div>
               </div>
@@ -428,7 +350,7 @@ const Home = () => {
                   <p className="text-sm text-gray-500 mb-2 font-medium">Blood Pressure</p>
                   <p className="text-4xl font-bold text-gray-800">{userData.healthData.vitals.bloodPressure}</p>
                 </div>
-                <div className="bg-gradient-to-br from-purple-100 to-purple-200 p-3 rounded-xl group-hover:rotate-12 transition-transform">
+                <div className="bg-linear-to-br from-purple-100 to-purple-200 p-3 rounded-xl group-hover:rotate-12 transition-transform">
                   <FiGitPullRequest className="w-6 h-6 text-purple-600" />
                 </div>
               </div>
@@ -443,7 +365,7 @@ const Home = () => {
                   <p className="text-sm text-gray-500 mb-2 font-medium">O2 Saturation</p>
                   <p className="text-4xl font-bold text-gray-800">{userData.healthData.vitals.oxygenSaturation}%</p>
                 </div>
-                <div className="bg-gradient-to-br from-green-100 to-emerald-200 p-3 rounded-xl group-hover:scale-110 transition-transform">
+                <div className="bg-linear-to-br from-green-100 to-emerald-200 p-3 rounded-xl group-hover:scale-110 transition-transform">
                   <FiDroplet className="w-6 h-6 text-green-600" />
                 </div>
               </div>
@@ -460,7 +382,7 @@ const Home = () => {
             {/* Today's Workout */}
             <section>
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <span className="w-1.5 h-8 bg-gradient-to-b from-indigo-600 to-blue-600 rounded-full"></span>
+                <span className="w-1.5 h-8 bg-linear-to-b from-indigo-600 to-blue-600 rounded-full"></span>
                 Today's Workout
               </h2>
               <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100/50 hover:shadow-xl transition-all duration-300">
@@ -469,14 +391,14 @@ const Home = () => {
                     <p className="text-sm text-gray-500 font-medium">{todaysWorkout.day} • {todaysWorkout.focus}</p>
                     <p className="text-xs text-gray-400 mt-2">{todaysWorkout.duration} • {todaysWorkout.difficulty}</p>
                   </div>
-                  <div className="text-right bg-gradient-to-r from-indigo-50 to-blue-50 px-4 py-3 rounded-xl border border-indigo-100">
+                  <div className="text-right bg-linear-to-r from-indigo-50 to-blue-50 px-4 py-3 rounded-xl border border-indigo-100">
                     <p className="text-xs text-gray-500 font-medium">Calories</p>
-                    <p className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">{todaysWorkout.calories}</p>
+                    <p className="text-2xl font-bold bg-linear-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">{todaysWorkout.calories}</p>
                   </div>
                 </div>
 
                 {/* Workout Timer */}
-                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-4 mb-6 flex items-center justify-between border border-indigo-100">
+                <div className="bg-linear-to-r from-indigo-50 to-blue-50 rounded-xl p-4 mb-6 flex items-center justify-between border border-indigo-100">
                   <div className="flex items-center space-x-4">
                     <button 
                       onClick={() => setIsPlaying(!isPlaying)}
@@ -725,7 +647,7 @@ const Home = () => {
                   </div>
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-colors">
+                <button className="w-full bg-linear-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-colors">
                   Save Check-in
                 </button>
               </div>
@@ -737,7 +659,7 @@ const Home = () => {
                 <span className="w-1 h-6 bg-red-600 rounded-full mr-3"></span>
                 Emergency
               </h2>
-              <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl p-6 text-white">
+              <div className="bg-linear-to-r from-red-500 to-pink-500 rounded-2xl p-6 text-white">
                 {userData.healthData.emergencyContacts.map((contact, index) => (
                   <div key={index}>
                     <h3 className="font-bold text-lg mb-1">{contact.name}</h3>
@@ -807,7 +729,7 @@ const Home = () => {
             {/* Today's Meals Preview */}
             <section>
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <span className="w-1.5 h-8 bg-gradient-to-b from-orange-600 to-amber-600 rounded-full"></span>
+                <span className="w-1.5 h-8 bg-linear-to-b from-orange-600 to-amber-600 rounded-full"></span>
                 Today's Meals
               </h2>
               <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100/50 hover:shadow-xl transition-all duration-300">
@@ -852,13 +774,13 @@ const Home = () => {
             {/* Upcoming Workouts */}
             <section>
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <span className="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-cyan-600 rounded-full"></span>
+                <span className="w-1.5 h-8 bg-linear-to-b from-blue-600 to-cyan-600 rounded-full"></span>
                 Upcoming Week
               </h2>
               <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100/50 hover:shadow-xl transition-all duration-300">
                 <div className="space-y-3">
                   {upcomingWorkouts.map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-blue-200 group">
+                    <div key={index} className="flex items-center justify-between p-4 bg-linear-to-r from-gray-50 to-blue-50 rounded-xl hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-blue-200 group">
                       <div className="flex items-center space-x-4">
                         <div className={`w-3 h-3 rounded-full transition-all group-hover:scale-150 ${
                           item.intensity === 'High' ? 'bg-red-500' :
@@ -883,7 +805,7 @@ const Home = () => {
       </main>
 
       {/* CSS Animations */}
-      <style jsx>{`
+      <style jsx="true">{`
         @keyframes blob {
           0%, 100% { transform: translate(0px, 0px) scale(1); }
           33% { transform: translate(30px, -50px) scale(1.1); }
