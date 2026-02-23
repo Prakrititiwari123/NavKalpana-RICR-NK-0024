@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 
 const Progress = () => {
   // Mock data for weight tracking
@@ -117,7 +118,8 @@ const Progress = () => {
   };
 
   return (
-    <div className="progress-page">
+    <DashboardLayout>
+      <div className="progress-page">
       {/* SECTION 1: PAGE HEADER */}
       <div className="page-header">
         <h1 className="page-title">Your Progress Journey</h1>
@@ -630,7 +632,8 @@ const Progress = () => {
           }
         }
       `}</style>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

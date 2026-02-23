@@ -5,6 +5,7 @@ import {
 } from 'react-icons/fi';
 import { IoRestaurant, IoFlame, IoWater } from 'react-icons/io5';
 import { GiWeightLiftingUp } from 'react-icons/gi';
+import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 
 const Diet = () => {
   const [waterIntake, setWaterIntake] = useState(4);
@@ -161,8 +162,9 @@ const Diet = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-green-50 via-emerald-50 to-blue-50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <DashboardLayout>
+      <div className="min-h-screen bg-linear-to-br from-green-50 via-emerald-50 to-blue-50 p-4 md:p-8">
+        <div className="max-w-7xl mx-auto space-y-6">
 
         {/* SECTION 1: PAGE HEADER */}
         <div
@@ -703,7 +705,8 @@ const Diet = () => {
           }
         }
       `}</style>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

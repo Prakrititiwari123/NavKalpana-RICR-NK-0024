@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 
 const Settings = () => {
   // Profile Information State
@@ -188,7 +189,8 @@ const Settings = () => {
   };
 
   return (
-    <div className="settings-page">
+    <DashboardLayout>
+      <div className="settings-page">
       {/* SECTION 1: PAGE HEADER */}
       <div className="page-header">
         <div className="header-left">
@@ -1367,7 +1369,8 @@ const Settings = () => {
           }
         }
       `}</style>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 
