@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion , AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import api from "../../config/Api"
 import toast from 'react-hot-toast';
 import {
   Mail,
@@ -94,39 +95,47 @@ const Login = () => {
     setLoginError(false);
     
     try {
-      // Call service layer
-      const response = await loginUser({
-        email: formData.email,
-        password: formData.password,
-        rememberMe
-      });
-      
-      // Success toast
-      toast.success('Login successful! Redirecting...', {
-        icon: 'ðŸŽ‰',
-        duration: 3000
-      });
-      
-      // Store token if remember me is checked
-      if (rememberMe && response.token) {
-        localStorage.setItem('authToken', response.token);
-      }
-      
-      // Redirect after short delay
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 1500);
-      
-    } catch (error) {
-      // Show error toast
-      toast.error(error.message || 'Invalid email or password', {
-        icon: 'âŒ',
-        duration: 4000
-      });
-      
-      setLoginError(true);
-      setIsLoading(false);
+  setIsLoading(true);
+
+  // Call service layer
+  const response = await api.post("/auth/login", {
+    email: formData.email,
+    password: formData.password,
+    rememberMe: rememberMe
+  });
+
+  // Success toast
+  toast.success("Login successful! Redirecting...", {
+    icon: "🎉",
+    duration: 3000,
+  });
+
+  // Store token if remember me is checked
+  if (rememberMe && response.data.token) {
+    localStorage.setItem("authToken", response.data.token);
+  }
+
+  setIsLoading(false);
+
+  // Redirect after short delay
+  setTimeout(() => {
+    navigate("/dashboard");
+  }, 1500);
+
+} catch (error) {
+  setIsLoading(false);
+
+  // Show error toast
+  toast.error(
+    error.response?.data?.message || "Invalid email or password",
+    {
+      icon: "❌",
+      duration: 4000,
     }
+  );
+
+  setLoginError(true);
+}
   };
 
   // Animation variants
@@ -176,7 +185,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center p-4 overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center p-4 overflow-hidden">
       {/* Animated Background Elements */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -223,7 +232,7 @@ const Login = () => {
           {/* Left Side - Branding & Motivation */}
           <motion.div
             variants={leftVariants}
-            className="lg:w-1/2 bg-gradient-to-br from-blue-600/90 to-purple-600/90 p-12 flex flex-col justify-between relative overflow-hidden"
+            className="lg:w-1/2 bg-linear-to-br from-blue-600/90 to-purple-600/90 p-12 flex flex-col justify-between relative overflow-hidden"
           >
             {/* Animated background shapes */}
             <motion.div
@@ -276,7 +285,7 @@ const Login = () => {
                 className="text-white text-4xl lg:text-5xl font-bold leading-tight"
               >
                 Your Journey to a{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-yellow-300 to-pink-300">
                   Healthier You
                 </span>{' '}
                 Starts Here
@@ -325,7 +334,7 @@ const Login = () => {
                   "FitAI completely transformed my approach to fitness. The personalized plans and AI insights helped me achieve results I never thought possible!"
                 </p>
                 <div className="flex items-center mt-4">
-                  <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-pink-400 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-linear-to-r from-yellow-400 to-pink-400 rounded-full flex items-center justify-center">
                     <span className="text-white font-bold">SJ</span>
                   </div>
                   <div className="ml-3">
@@ -431,7 +440,7 @@ const Login = () => {
                           : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
                         }
                         hover:border-blue-300 focus:ring-4 focus:ring-blue-100`}
-                      placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                      placeholder="Enter your password"
                     />
                     <button
                       type="button"
@@ -514,7 +523,7 @@ const Login = () => {
                   className={`w-full py-4 rounded-xl font-semibold text-white transition-all duration-300 relative overflow-hidden
                     ${!isValid || isLoading
                       ? 'bg-gray-300 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg'
+                      : 'bg-linear-to-r from-blue-500 to-purple-600 hover:shadow-lg'
                     }`}
                 >
                   {isLoading ? (
