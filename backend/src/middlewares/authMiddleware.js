@@ -32,9 +32,60 @@ export const Protect = async (req, res, next) => {
 };
 
 // ----------------------admin Protect------------
+export const AdminProtect = async (req, res, next) => {
+  try {
+    let token;
+
+    // 1. Check token
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "No token provided",
+      });
+    }
+
+    // 2. Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // 3. Find user
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // 4. Optional role check
+    if (req.headers.role && req.headers.role !== user.role) {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied",
+      });
+    }
+
+    // Attach user to request
+    req.user = user;
+
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized",
+    });
+  }
+};
 
 
-// -------------------OTP Protect-----------------------
+// -------------------OTP Protect-----------------
 export const OtpProtect = async (req, res, next) => {
   try {
     const token = req.cookies.otpToken;
