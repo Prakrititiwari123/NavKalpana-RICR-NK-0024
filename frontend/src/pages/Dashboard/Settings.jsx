@@ -282,7 +282,7 @@ const Settings = () => {
             </div>
 
             <div className="form-group">
-              <label>Biological Sex</label>
+              <label>Gender</label>
               <select
                 value={profileData.biologicalSex}
                 onChange={(e) => handleProfileChange('biologicalSex', e.target.value)}
