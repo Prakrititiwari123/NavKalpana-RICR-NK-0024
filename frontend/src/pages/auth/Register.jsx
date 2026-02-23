@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { validateForm, calculateBMI, getPasswordStrength } from '../../Utils/Validations';
 import { registerUser } from '../../Services/authService';
+import api from "../../config/Api"
 
 const Register = () => {
   const navigate = useNavigate();
@@ -81,8 +82,7 @@ const Register = () => {
     
     try {
       // Call service layer
-      const response = await registerUser(formData);
-      
+      const response = await api.post("/auth/register",formData);
       // Show success animation
       setIsSuccess(true);
       toast.success('Account created successfully!');
@@ -139,7 +139,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated Background Elements */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -159,7 +159,7 @@ const Register = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-gradient-to-r from-green-400 to-blue-500 z-50 flex items-center justify-center"
+            className="absolute inset-0 bg-linear-to-r from-green-400 to-blue-500 z-50 flex items-center justify-center"
           >
             <motion.div
               variants={successVariants}
@@ -202,7 +202,7 @@ const Register = () => {
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="lg:w-1/3 bg-gradient-to-br from-blue-600/50 to-purple-600/50 p-8 flex flex-col justify-between"
+            className="lg:w-1/3 bg-linear-to-br from-blue-600/50 to-purple-600/50 p-8 flex flex-col justify-between"
           >
             <div>
               <motion.div
@@ -713,7 +713,7 @@ const Register = () => {
                 className={`w-full py-4 rounded-lg font-semibold text-white transition-all relative overflow-hidden ${
                   !isValid || isSubmitting
                     ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg'
+                    : 'bg-linear-to-r from-blue-500 to-purple-600 hover:shadow-lg'
                 }`}
               >
                 {isSubmitting ? (

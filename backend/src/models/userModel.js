@@ -4,7 +4,6 @@ const userSchema = mongoose.Schema(
   {
     fullName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    mobileNumber: { type: String, required: true },
     password: { type: String, required: true, select: false },
 
     role: {
@@ -59,7 +58,7 @@ const userSchema = mongoose.Schema(
       },
       labReports: [
         {
-          reportName: { type: String, required: true },
+          reportName: { type: String, },
           reportDate: { type: Date, default: Date.now },
           result: { type: String, default: "N/A" },
           fileUrl: { type: String, default: "" },
@@ -75,16 +74,16 @@ const userSchema = mongoose.Schema(
       ],
       vaccinations: [
         {
-          vaccineName: { type: String, required: true },
+          vaccineName: { type: String,  },
           dose: { type: String, default: "N/A" },
           date: { type: Date, default: Date.now },
         },
       ],
       emergencyContacts: [
         {
-          name: { type: String, required: true },
+          name: { type: String,  },
           relation: { type: String, default: "N/A" },
-          phone: { type: String, required: true },
+          phone: { type: String,  },
         },
       ],
     },
