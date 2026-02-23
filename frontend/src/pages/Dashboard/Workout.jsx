@@ -5,6 +5,7 @@ import {
 } from 'react-icons/fi';
 import { GiWeightLiftingUp } from 'react-icons/gi';
 import { IoFlame } from 'react-icons/io5';
+import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 
 const Workout = () => {
   const [completedExercises, setCompletedExercises] = useState([]);
@@ -138,8 +139,9 @@ const Workout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 via-blue-50 to-purple-50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <DashboardLayout>
+      <div className="min-h-screen bg-linear-to-br from-gray-50 via-blue-50 to-purple-50 p-4 md:p-8">
+        <div className="max-w-7xl mx-auto space-y-6">
         
         {/* SECTION 1: PAGE HEADER */}
         <div 
@@ -563,7 +565,8 @@ const Workout = () => {
           }
         }
       `}</style>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

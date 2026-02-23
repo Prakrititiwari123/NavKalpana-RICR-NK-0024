@@ -18,6 +18,7 @@ import {
   ComposedChart,
   Area,
 } from 'recharts';
+import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 
 const Analytics = () => {
   const [dateRange, setDateRange] = useState('30days');
@@ -173,7 +174,8 @@ const Analytics = () => {
   };
 
   return (
-    <div className="analytics-page">
+    <DashboardLayout>
+      <div className="analytics-page">
       {/* SECTION 1: PAGE HEADER */}
       <div className="page-header">
         <div className="header-left">
@@ -926,7 +928,8 @@ const Analytics = () => {
           }
         }
       `}</style>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

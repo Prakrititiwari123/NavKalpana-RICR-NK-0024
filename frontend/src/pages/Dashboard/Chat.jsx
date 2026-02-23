@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 
 const Chat = () => {
   const [messages, setMessages] = useState([
@@ -257,7 +258,8 @@ Your body needs recovery to grow stronger! Listen to it. 💙`;
   };
 
   return (
-    <div className="chat-page">
+    <DashboardLayout>
+      <div className="chat-page">
       {/* SECTION 1: PAGE HEADER */}
       <div className="chat-header">
         <div className="header-left">
@@ -1191,7 +1193,8 @@ Your body needs recovery to grow stronger! Listen to it. 💙`;
           }
         }
       `}</style>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

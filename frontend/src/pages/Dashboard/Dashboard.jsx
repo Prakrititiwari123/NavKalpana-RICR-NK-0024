@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fi';
 import { GiWeightLiftingUp } from 'react-icons/gi';
 import { IoFlame, IoRestaurant } from 'react-icons/io5';
+import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -66,16 +67,17 @@ const Dashboard = () => {
   const progressPercentage = ((userData.currentWeight - userData.startWeight) / (userData.goalWeight - userData.startWeight)) * 100;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-white via-blue-50 to-indigo-50 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-blue-100 mix-blend-multiply filter blur-3xl opacity-30 animate-pulse-slow"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-indigo-100 mix-blend-multiply filter blur-3xl opacity-30 animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 rounded-full bg-purple-100 mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-slow" style={{ animationDelay: '4s' }}></div>
-      </div>
+    <DashboardLayout>
+      <div className="min-h-screen bg-linear-to-br from-white via-blue-50 to-indigo-50 relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-blue-100 mix-blend-multiply filter blur-3xl opacity-30 animate-pulse-slow"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-indigo-100 mix-blend-multiply filter blur-3xl opacity-30 animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-1/2 left-1/2 w-96 h-96 rounded-full bg-purple-100 mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-slow" style={{ animationDelay: '4s' }}></div>
+        </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         
         {/* SECTION 1: WELCOME SECTION */}
         <div className="mb-8 animate-fadeInDown">
@@ -484,7 +486,8 @@ const Dashboard = () => {
           animation: bounce-subtle 2s ease-in-out infinite;
         }
       `}</style>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 
