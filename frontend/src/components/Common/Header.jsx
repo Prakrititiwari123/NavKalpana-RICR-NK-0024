@@ -11,7 +11,7 @@ import {
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const isLandingPage = location.pathname === '/';
+  const isLandingPage = location.pathname === '/' || location.pathname === '/features' || location.pathname === '/benefits' || location.pathname === '/about';
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
   
   const [isScrolled, setIsScrolled] = useState(false);
@@ -147,24 +147,46 @@ const Header = () => {
           {/* Landing Page Navigation */}
           {isLandingPage && !isAuthPage && (
             <nav className="hidden lg:flex items-center space-x-2">
-              <a
-                href="#features"
-                className="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300"
+              <button
+                onClick={() => navigate('/')}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                  location.pathname === '/'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                }`}
+              >
+                Home
+              </button>
+              <button
+                onClick={() => navigate('/features')}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                  location.pathname === '/features'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                }`}
               >
                 Features
-              </a>
-              <a
-                href="#benefits"
-                className="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300"
+              </button>
+              <button
+                onClick={() => navigate('/benefits')}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                  location.pathname === '/benefits'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                }`}
               >
                 Benefits
-              </a>
-              <a
-                href="#about"
-                className="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300"
+              </button>
+              <button
+                onClick={() => navigate('/about')}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                  location.pathname === '/about'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                }`}
               >
                 About
-              </a>
+              </button>
             </nav>
           )}
 
