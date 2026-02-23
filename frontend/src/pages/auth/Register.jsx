@@ -9,7 +9,7 @@ import {
   AlertCircle, CheckCircle, Heart, FileText
 } from 'lucide-react';
 import { validateForm, calculateBMI, getPasswordStrength } from '../../Utils/Validations';
-import { registerUser } from '../../Services/authService';
+import { registerUser } from '../../Services/authService';//
 import api from "../../config/Api"
 
 const Register = () => {
@@ -174,7 +174,7 @@ const Register = () => {
                 transition={{ delay: 0.3 }}
                 className="text-3xl font-bold text-white"
               >
-                Welcome to FitAI!
+                Welcome to HealthNexus!
               </motion.h2>
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
@@ -210,7 +210,7 @@ const Register = () => {
                 className="flex items-center space-x-2 mb-8"
               >
                 <Activity className="w-8 h-8 text-white" />
-                <span className="text-2xl font-bold text-white">FitAI</span>
+                <span className="text-2xl font-bold text-white">HealthNexus</span>
               </motion.div>
               
               <motion.h2
@@ -264,7 +264,7 @@ const Register = () => {
               className="mt-8 p-4 bg-white/10 rounded-lg"
             >
               <p className="text-white/90 text-sm italic">
-                "FitAI completely transformed my approach to fitness. The personalized plans are incredible!"
+                "HealthNexus completely transformed my approach to fitness. The personalized plans are incredible!"
               </p>
               <p className="text-white/70 text-xs mt-2">â€” Sarah Johnson, Lost 30lbs</p>
             </motion.div>
@@ -507,7 +507,7 @@ const Register = () => {
                           : 'border-gray-200 focus:ring-blue-200 focus:border-blue-400'
                       }`}
                     >
-                      <option value="">Sex</option>
+                      <option value="">Gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                       <option value="other">Other</option>

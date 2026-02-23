@@ -149,7 +149,7 @@ const Header = () => {
             <nav className="hidden lg:flex items-center space-x-2">
               <button
                 onClick={() => navigate('/')}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                className={`px-4 py-2 rounded-xl hidden text-sm font-medium transition-all duration-300 ${
                   location.pathname === '/'
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -159,7 +159,7 @@ const Header = () => {
               </button>
               <button
                 onClick={() => navigate('/features')}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                className={`px-4 py-2 rounded-xl text-sm font-medium  hidden transition-all duration-300 ${
                   location.pathname === '/features'
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -169,7 +169,7 @@ const Header = () => {
               </button>
               <button
                 onClick={() => navigate('/benefits')}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                className={`px-4 py-2 rounded-xl text-sm hidden font-medium transition-all duration-300 ${
                   location.pathname === '/benefits'
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -179,7 +179,7 @@ const Header = () => {
               </button>
               <button
                 onClick={() => navigate('/about')}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                className={`px-4 py-2 rounded-xl text-sm font-medium hidden transition-all duration-300 ${
                   location.pathname === '/about'
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
