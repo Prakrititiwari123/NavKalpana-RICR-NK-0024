@@ -12,7 +12,7 @@ import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 const Dashboard = () => {
   const navigate = useNavigate();
   const [userName] = useState('Alex');
-  const [scrollY, setScrollY] = useState(0);
+  // const [scrollY, setScroll] = useState(0);
   const [completedExercises, setCompletedExercises] = useState([]);
 
   // Mock data
