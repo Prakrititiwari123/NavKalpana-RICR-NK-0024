@@ -132,7 +132,7 @@ const About = () => {
         </section>
 
         {/* MISSION & VISION SECTION */}
-        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-gradient-to-b from-gray-50 to-white">
+        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-linear-to-b from-gray-50 to-white">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               {/* Left */}
@@ -190,7 +190,7 @@ const About = () => {
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     <div className={`${value.bgColor} rounded-2xl p-8 h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2`}>
-                      <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${value.color} text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-linear-to-br ${value.color} text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
                         <IconComponent className="w-7 h-7" />
                       </div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
@@ -204,7 +204,7 @@ const About = () => {
         </section>
 
         {/* TIMELINE SECTION */}
-        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-gradient-to-b from-gray-50 to-white">
+        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-linear-to-b from-gray-50 to-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -214,7 +214,7 @@ const About = () => {
 
             <div className="relative">
               {/* Timeline line */}
-              <div className="hidden md:block absolute top-0 left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-600 to-purple-600"></div>
+              <div className="hidden md:block absolute top-0 left-1/2 transform -translate-x-1/2 w-1 h-full bg-linear-to-b from-blue-600 to-purple-600"></div>
 
               <div className="space-y-12">
                 {milestones.map((milestone, index) => {
@@ -234,8 +234,8 @@ const About = () => {
                       </div>
 
                       {/* Timeline dot */}
-                      <div className="flex-shrink-0 flex items-center justify-center">
-                        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 text-white flex items-center justify-center shadow-lg">
+                      <div className="shrink-0 flex items-center justify-center">
+                        <div className="w-14 h-14 rounded-full bg-linear-to-br from-blue-600 to-purple-600 text-white flex items-center justify-center shadow-lg">
                           <IconComponent className="w-7 h-7" />
                         </div>
                       </div>
@@ -269,7 +269,7 @@ const About = () => {
                   className="group bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                 >
                   {/* Avatar */}
-                  <div className={`h-32 bg-gradient-to-br ${member.color} flex items-center justify-center text-6xl`}>
+                  <div className={`h-32 bg-linear-to-br ${member.color} flex items-center justify-center text-6xl`}>
                     {member.avatar}
                   </div>
 
@@ -286,7 +286,7 @@ const About = () => {
         </section>
 
         {/* STATS SECTION */}
-        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-gradient-to-b from-gray-50 to-white">
+        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-linear-to-b from-gray-50 to-white">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
@@ -316,7 +316,7 @@ const About = () => {
         {/* CTA SECTION */}
         <section className="px-4 sm:px-6 lg:px-8 py-20">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-600 rounded-3xl px-8 sm:px-12 md:px-16 py-16 sm:py-20 text-center">
+            <div className="bg-linear-to-r from-indigo-600 via-blue-600 to-cyan-600 rounded-3xl px-8 sm:px-12 md:px-16 py-16 sm:py-20 text-center">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
                 Join Our Mission
               </h2>

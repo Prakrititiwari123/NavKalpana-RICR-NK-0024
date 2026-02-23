@@ -165,7 +165,7 @@ const Benefits = () => {
                   >
                     <div className={`${benefit.bgColor} rounded-2xl p-6 h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 cursor-pointer`}>
                       {/* Icon */}
-                      <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${benefit.color} text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-linear-to-br ${benefit.color} text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
                         <IconComponent className="w-7 h-7" />
                       </div>
 
@@ -187,7 +187,7 @@ const Benefits = () => {
         </section>
 
         {/* STATS SECTION */}
-        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-gradient-to-b from-gray-50 to-white">
+        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-linear-to-b from-gray-50 to-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -204,7 +204,7 @@ const Benefits = () => {
                   key={index}
                   className="group bg-white rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 text-center"
                 >
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-cyan-600 text-white mb-4 mx-auto">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-linear-to-br from-blue-600 to-cyan-600 text-white mb-4 mx-auto">
                     <FiBarChart2 className="w-8 h-8" />
                   </div>
                   <p className="text-5xl font-bold text-gray-900 mb-2">{stat.number}</p>
@@ -257,7 +257,7 @@ const Benefits = () => {
                   className="group bg-white rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-green-100 text-green-600">
                         <FiCheck className="w-6 h-6" />
                       </div>
@@ -274,7 +274,7 @@ const Benefits = () => {
         </section>
 
         {/* TESTIMONIALS SECTION */}
-        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-gradient-to-b from-gray-50 to-white">
+        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-linear-to-b from-gray-50 to-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -293,7 +293,7 @@ const Benefits = () => {
 
                   {/* Author */}
                   <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${testimonial.color} flex items-center justify-center text-2xl`}>
+                    <div className={`w-12 h-12 rounded-full bg-linear-to-br ${testimonial.color} flex items-center justify-center text-2xl`}>
                       {testimonial.avatar}
                     </div>
                     <div>
@@ -317,7 +317,7 @@ const Benefits = () => {
         {/* CTA SECTION */}
         <section className="px-4 sm:px-6 lg:px-8 py-20">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-r from-green-600 via-emerald-600 to-cyan-600 rounded-3xl px-8 sm:px-12 md:px-16 py-16 sm:py-20 text-center">
+            <div className="bg-linear-to-r from-green-600 via-emerald-600 to-cyan-600 rounded-3xl px-8 sm:px-12 md:px-16 py-16 sm:py-20 text-center">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
                 Ready to Experience These Benefits?
               </h2>
