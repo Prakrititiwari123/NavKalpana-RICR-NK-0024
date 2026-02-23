@@ -89,7 +89,7 @@ const Register = () => {
       
       // Redirect after animation
       setTimeout(() => {
-        navigate('/dashboard', { state: { user: response.user } });
+        navigate('/login', { state: { user: response.user } });
       }, 2000);
       
     } catch (error) {
