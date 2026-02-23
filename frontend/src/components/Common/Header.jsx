@@ -27,6 +27,8 @@ const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Mock user data
+
+  
   const userData = {
     fullName: 'Alex Johnson',
     email: 'alex.johnson@email.com',
