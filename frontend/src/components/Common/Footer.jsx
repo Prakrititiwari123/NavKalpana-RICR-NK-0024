@@ -12,6 +12,15 @@ const Footer = () => {
   const navigate = useNavigate();
   const isLandingPage = location.pathname === '/';
   
+  // Dashboard routes where footer should not appear
+  const dashboardRoutes = ['/dashboard', '/workout', '/diet', '/progress', '/analytics', '/chat', '/settings'];
+  const isDashboardPage = dashboardRoutes.includes(location.pathname);
+  
+  // Don't render footer on dashboard pages
+  if (isDashboardPage) {
+    return null;
+  }
+  
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
