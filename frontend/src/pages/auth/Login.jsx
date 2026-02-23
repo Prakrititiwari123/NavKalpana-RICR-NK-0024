@@ -98,12 +98,13 @@ const Login = () => {
   setIsLoading(true);
 
   // Call service layer
-  const response = await api.post("/auth/login", {
-    email: formData.email,
-    password: formData.password,
-    rememberMe: rememberMe
-  });
+  // const response = await api.post("/auth/login", {
+  //   email: formData.email,
+  //   password: formData.password,
+  //   rememberMe: rememberMe
+  // });
 
+  loginUser({ email : formData.email , password : formData.password , rememberMe : false} )
   // Success toast
   toast.success("Login successful! Redirecting...", {
     icon: "🎉",
