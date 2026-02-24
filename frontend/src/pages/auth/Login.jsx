@@ -1,9 +1,8 @@
 ﻿// Login.jsx
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import api from "../../config/Api";
-import toast from "react-hot-toast";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import {
   Mail,
   Lock,
@@ -15,13 +14,15 @@ import {
   CheckCircle,
   Heart,
   Zap,
-  Target,
-} from "lucide-react";
-import { loginUser } from "../../Services/authService";
+  Target
+} from 'lucide-react';
+import { loginUser } from '../../Services/authService';
+import { useAuth } from '../../Context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
   const emailInputRef = useRef(null);
+  const { login } = useAuth();
 
   // State management
   const [formData, setFormData] = useState({
@@ -40,6 +41,8 @@ const Login = () => {
   useEffect(() => {
     emailInputRef.current?.focus();
   }, []);
+
+
 
   const validateForm = useCallback(() => {
     const newErrors = {};
@@ -62,10 +65,13 @@ const Login = () => {
     setIsValid(Object.keys(newErrors).length === 0);
   }, [formData]);
 
+
   // Real-time validation
   useEffect(() => {
     validateForm();
   }, [formData]);
+
+
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -92,40 +98,37 @@ const Login = () => {
     try {
       setIsLoading(true);
 
-      // Call service layer
-      // const response = await api.post("/auth/login", {
-      //   email: formData.email,
-      //   password: formData.password,
-      //   rememberMe: rememberMe
-      // });
 
-      await loginUser({
-        email: formData.email,
-        password: formData.password,
-        rememberMe: false,
-      });
+     await loginUser({ email: formData.email, password: formData.password, rememberMe: false })
+
+      const responce = localStorage.getItem("healthnexus_user");
+      login(JSON.parse(responce))
+      console.log(JSON.parse(responce))
+
+
 
       setIsLoading(false);
 
-      const storedUser = localStorage.getItem("healthnexus_user");
-      const user = storedUser ? JSON.parse(storedUser) : null;
-
-      if (user) {
-          navigate("/dashboard");
+      // Redirect after short delay
+      setTimeout(() => {
+        // Success toast
         toast.success("Login successful! Redirecting...", {
           icon: "🎉",
           duration: 3000,
         });
-      }
+        navigate("/dashboard");
+      }, 1500);
+
     } catch (error) {
       setIsLoading(false);
 
+      // Show error toast
       toast.error(
         error.response?.data?.message || "Invalid email or password",
         {
           icon: "❌",
           duration: 4000,
-        },
+        }
       );
 
       setLoginError(true);
@@ -286,8 +289,8 @@ const Login = () => {
                 variants={itemVariants}
                 className="text-white/80 text-lg mt-6 leading-relaxed"
               >
-                Experience the power of AI-driven fitness intelligence. Get
-                personalized workouts, nutrition plans, and real-time insights
+                Experience the power of AI-driven fitness intelligence.
+                Get personalized workouts, nutrition plans, and real-time insights
                 tailored to your unique goals.
               </motion.p>
 
@@ -378,12 +381,11 @@ const Login = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`w-full pl-10 pr-4 py-3 border-2 rounded-xl transition-all duration-300 outline-none
-                        ${
-                          touched.email && errors.email
-                            ? "border-red-300 bg-red-50 focus:border-red-500"
-                            : loginError
-                              ? "border-red-300 bg-red-50"
-                              : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
+                        ${touched.email && errors.email
+                          ? 'border-red-300 bg-red-50 focus:border-red-500'
+                          : loginError
+                            ? 'border-red-300 bg-red-50'
+                            : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
                         }
                         hover:border-blue-300 focus:ring-4 focus:ring-blue-100`}
                       placeholder="you@example.com"
@@ -420,12 +422,11 @@ const Login = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`w-full pl-10 pr-12 py-3 border-2 rounded-xl transition-all duration-300 outline-none
-                        ${
-                          touched.password && errors.password
-                            ? "border-red-300 bg-red-50 focus:border-red-500"
-                            : loginError
-                              ? "border-red-300 bg-red-50"
-                              : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
+                        ${touched.password && errors.password
+                          ? 'border-red-300 bg-red-50 focus:border-red-500'
+                          : loginError
+                            ? 'border-red-300 bg-red-50'
+                            : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
                         }
                         hover:border-blue-300 focus:ring-4 focus:ring-blue-100`}
                       placeholder="Enter your password"
