@@ -14,6 +14,10 @@ import {
   CheckCircle,
   Heart,
   Zap,
+  Target,
+} from "lucide-react";
+import { loginUser } from "../../Services/authService";
+import ForgetPasswordModal from "./modals/ForgetPasswordModal";
   Target
 } from 'lucide-react';
 import { loginUser } from '../../Services/authService';
@@ -23,6 +27,9 @@ const Login = () => {
   const navigate = useNavigate();
   const emailInputRef = useRef(null);
   const { login } = useAuth();
+
+  const [isForgetPasswordModelOpen, setIsForgetPasswordModelOpen] =
+      useState(false);
 
   // State management
   const [formData, setFormData] = useState({
@@ -443,9 +450,15 @@ const Login = () => {
                     </span>
                   </label>
 
-                  <motion.button
-                    whileHover={{ x: 3 }}
+                   <div className="flex justify-end">
+                  <button
                     type="button"
+                    onClick={() => setIsForgetPasswordModelOpen(true)}
+                    className="text-[#f97316] hover:text-[#fb923c] text-sm font-medium transition"
+                  >
+                    Forgot Password?
+                  </button>
+              </div>
                     onClick={() => navigate("/forgot-password")}
                     className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center self-start sm:self-auto"
                   >
@@ -515,6 +528,11 @@ const Login = () => {
           </motion.div>
         </div>
       </motion.div>
+       {isForgetPasswordModelOpen && (
+        <ForgetPasswordModal
+          onClose={() => setIsForgetPasswordModelOpen(false)}
+        />
+      )}
     </div>
   );
 };
