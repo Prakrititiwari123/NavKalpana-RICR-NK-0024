@@ -131,7 +131,7 @@ const Header = () => {
             </button>
 
             <button 
-              onClick={() => navigate('/')}
+              onClick={() => navigate(isLandingPage ? '/' : '/dashboard')}
               className="flex items-center space-x-2 group"
             >
               <div className="bg-linear-to-r from-blue-500 to-indigo-500 p-2 rounded-xl transform group-hover:rotate-12 transition-all duration-500 group-hover:scale-110">
