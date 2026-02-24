@@ -102,7 +102,7 @@ const Sidebar = () => {
         }`}
       >
         {/* Navigation Menu */}
-        <nav className="p-4 mt-4 space-y-2 overflow-y-auto max-h-[calc(100vh-300px)]">
+        <nav className="p-5 mt-5 space-y-2 overflow-y-auto max-h-[calc(100vh-300px)]">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
