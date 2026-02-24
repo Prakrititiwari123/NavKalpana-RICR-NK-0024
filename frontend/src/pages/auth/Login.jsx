@@ -19,50 +19,10 @@ import {
 import { loginUser } from '../../Services/authService';
 import { useAuth } from '../../Context/AuthContext';
 
-// Memoized Background Component with responsive sizes
-const BackgroundElements = React.memo(() => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    <div className="animate-slow-spin absolute -top-20 -left-20 md:top-20 md:left-20 w-64 h-64 md:w-96 md:h-96 bg-white/10 rounded-full blur-2xl will-change-transform" />
-    <div className="animate-slower-spin absolute -bottom-20 -right-20 md:bottom-20 md:right-20 w-64 h-64 md:w-96 md:h-96 bg-purple-300/10 rounded-full blur-2xl will-change-transform" />
-    <style jsx>{`
-      @keyframes slow-spin {
-        0% { transform: rotate(0deg) scale(1); }
-        50% { transform: rotate(180deg) scale(1.1); }
-        100% { transform: rotate(360deg) scale(1); }
-      }
-      @keyframes slower-spin {
-        0% { transform: rotate(0deg) scale(1); }
-        50% { transform: rotate(-180deg) scale(1.15); }
-        100% { transform: rotate(-360deg) scale(1); }
-      }
-      .animate-slow-spin {
-        animation: slow-spin 20s linear infinite;
-      }
-      .animate-slower-spin {
-        animation: slower-spin 25s linear infinite;
-      }
-    `}</style>
-  </div>
-));
-
-BackgroundElements.displayName = "BackgroundElements";
-
-// Memoized Feature Item
-const FeatureItem = React.memo(({ icon: Icon, text }) => (
-  <div className="flex items-center space-x-2 md:space-x-3 group">
-    <div className="bg-white/20 p-1.5 md:p-2 rounded-lg shrink-0 group-hover:scale-110 transition-transform duration-300">
-      <Icon className="w-3 h-3 md:w-4 md:h-4 text-white" />
-    </div>
-    <span className="text-white/80 md:text-white/90 text-sm md:text-base">{text}</span>
-  </div>
-));
-
-FeatureItem.displayName = "FeatureItem";
-
 const Login = () => {
   const navigate = useNavigate();
   const emailInputRef = useRef(null);
-  const formRef = useRef(null);
+  const { login } = useAuth();
 
   // State management
   const [formData, setFormData] = useState({
@@ -75,15 +35,11 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState(false);
+  const [isValid, setIsValid] = useState(false);
 
-  // Initialize AOS
+  // Auto-focus email field on mount
   useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-      offset: 100,
-      easing: 'ease-in-out',
-    });
+    emailInputRef.current?.focus();
   }, []);
 
   // Memoized validation
@@ -92,13 +48,13 @@ const Login = () => {
 
     if (!formData.email) {
       newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(data.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
 
     if (!formData.password) {
       newErrors.password = "Password is required";
-    } else if (data.password.length < 6) {
+    } else if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
 
@@ -130,11 +86,7 @@ const Login = () => {
     e.preventDefault();
     setTouched({ email: true, password: true });
 
-    // Final validation before submit
-    const finalErrors = validateFormData(formData);
-    setErrors(finalErrors);
-
-    if (Object.keys(finalErrors).length > 0 || isLoading) return;
+    if (!isValid || isLoading) return;
 
     setIsLoading(true);
     setLoginError(false);
@@ -158,7 +110,8 @@ const Login = () => {
 
       setTimeout(() => {
         navigate("/dashboard");
-      }
+      }, 1500);
+
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Invalid email or password",
@@ -245,7 +198,7 @@ const Login = () => {
   ], []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden">
       {BackgroundElements}
 
       <motion.div
@@ -258,7 +211,7 @@ const Login = () => {
           {/* Left Side - Branding */}
           <motion.div
             variants={itemVariants}
-            className="lg:w-1/2 hidden lg:block bg-gradient-to-br from-blue-600/90 to-purple-600/90 p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden"
+            className="lg:w-1/2 hidden lg:block bg-linear-to-br from-blue-600/90 to-purple-600/90 p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden"
           >
             {/* Animated background */}
             <motion.div
@@ -292,7 +245,7 @@ const Login = () => {
                 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
               >
                 Your Journey to a{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-yellow-300 to-pink-300">
                   Healthier You
                 </span>
               </motion.h1>
@@ -320,7 +273,7 @@ const Login = () => {
                     <span className="text-white/90 text-xs sm:text-sm">{feature.text}</span>
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
 
             {/* Testimonial - Hidden on mobile */}
@@ -333,7 +286,7 @@ const Login = () => {
                   "FitAI transformed my fitness approach. Achieved results I never thought possible!"
                 </p>
                 <div className="flex items-center mt-3 sm:mt-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-yellow-400 to-pink-400 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-r from-yellow-400 to-pink-400 rounded-full flex items-center justify-center">
                     <span className="text-white font-bold text-xs sm:text-sm">SJ</span>
                   </div>
                   <div className="ml-2 sm:ml-3">
@@ -342,8 +295,8 @@ const Login = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Right Side - Login Form */}
           <motion.div
@@ -390,7 +343,6 @@ const Login = () => {
                         }
                         hover:border-blue-300 focus:ring-2 focus:ring-blue-100`}
                       placeholder="you@example.com"
-                      disabled={isLoading}
                     />
                   </div>
 
@@ -431,13 +383,11 @@ const Login = () => {
                         }
                         hover:border-blue-300 focus:ring-2 focus:ring-blue-100`}
                       placeholder="Enter your password"
-                      disabled={isLoading}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                      disabled={isLoading}
                     >
                       {showPassword ? (
                         <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -471,7 +421,7 @@ const Login = () => {
                       exit={{ opacity: 0, y: -10 }}
                       className="bg-red-50 border border-red-200 rounded-lg p-2.5 sm:p-3 flex items-center space-x-2"
                     >
-                      <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0" />
+                      <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 shrink-0" />
                       <p className="text-xs sm:text-sm text-red-600">
                         Invalid email or password
                       </p>
@@ -493,7 +443,8 @@ const Login = () => {
                     </span>
                   </label>
 
-                  <button
+                  <motion.button
+                    whileHover={{ x: 3 }}
                     type="button"
                     onClick={() => navigate("/forgot-password")}
                     className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center self-start sm:self-auto"
@@ -512,7 +463,7 @@ const Login = () => {
                   className={`w-full py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base text-white transition-all duration-200
                     ${!isValid || isLoading
                       ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-md"
+                      : "bg-linear-to-r from-blue-500 to-purple-600 hover:shadow-md"
                     }`}
                 >
                   {isLoading ? (
@@ -529,7 +480,7 @@ const Login = () => {
                       <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-1.5 sm:ml-2" />
                     </span>
                   )}
-                </button>
+                </motion.button>
 
                 {/* Sign Up Link */}
                 <motion.p variants={itemVariants} className="text-center text-xs sm:text-sm text-gray-600">
@@ -563,7 +514,7 @@ const Login = () => {
             </div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
