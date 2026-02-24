@@ -119,7 +119,7 @@ const Home = () => {
                     <span className="relative z-10 flex items-center justify-center gap-2">
                       Get Started <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-r from-blue-700 to-indigo-700 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
                   </button>
                   
                   <button 
@@ -149,8 +149,8 @@ const Home = () => {
 
               {/* Right Side - Animated Hero Image */}
               <div className="relative animate-float">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-3xl blur-2xl animate-pulse"></div>
-                <div className="relative bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl p-8 text-white shadow-2xl">
+                <div className="absolute inset-0 bg-linear-to-r from-blue-600/20 to-purple-600/20 rounded-3xl blur-2xl animate-pulse"></div>
+                <div className="relative bg-linear-to-br from-blue-500 to-indigo-600 rounded-3xl p-8 text-white shadow-2xl">
                   <div className="space-y-6">
                     {/* Mock Dashboard */}
                     <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
@@ -188,7 +188,7 @@ const Home = () => {
         </section>
 
         {/* FEATURES SECTION */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-transparent via-blue-50/50 to-transparent">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-transparent via-blue-50/50 to-transparent">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16 animate-fadeInUp">
               <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">Powerful Features</h2>
@@ -232,7 +232,7 @@ const Home = () => {
         {/* CTA SECTION */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center animate-fadeInUp">
-            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-12 text-white relative overflow-hidden shadow-2xl">
+            <div className="bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-12 text-white relative overflow-hidden shadow-2xl">
               <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
               

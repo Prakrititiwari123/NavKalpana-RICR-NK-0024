@@ -187,7 +187,7 @@ const Register = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -223,7 +223,7 @@ const Register = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-gradient-to-r from-green-400 to-blue-500 z-50 flex items-center justify-center"
+            className="fixed inset-0 bg-linear-to-r from-green-400 to-blue-500 z-50 flex items-center justify-center"
           >
             <motion.div
               initial={{ scale: 0, rotate: -180 }}
@@ -771,7 +771,7 @@ const Register = () => {
                   </div>
 
                   {/* Summary Card */}
-                  <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-4 rounded-lg">
+                  <div className="bg-linear-to-r from-blue-500/20 to-purple-500/20 p-4 rounded-lg">
                     <h4 className="text-white font-semibold mb-3 flex items-center">
                       <FileText className="w-4 h-4 mr-2" />
                       Registration Summary
