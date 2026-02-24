@@ -18,7 +18,8 @@ import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [scrollY, setScrollY] = useState(0);
+  const [userName] = useState('Alex');
+  // const [scrollY, setScroll] = useState(0);
   const [completedExercises, setCompletedExercises] = useState([]);
 
   const Userdata = localStorage.getItem("healthnexus_user");
