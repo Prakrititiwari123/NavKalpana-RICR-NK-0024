@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import AOS from "aos";
@@ -28,34 +28,135 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <ErrorBoundary>
       <BrowserRouter>
-        <Toaster />
-        <ScrollToTop />
-        <Routes>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+            success: {
+              duration: 3000,
+              iconTheme: {
+                primary: '#10b981',
+                secondary: '#fff',
+              },
+            },
+            error: {
+              duration: 4000,
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+              },
+            },
+          }}
+        />
+
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* Public Routes */}
+            <Route element={<PublicLayout />}>
+              <Route
+                path="/"
+                element={
+                  <PublicRoute>
+                    <Home />
+                  </PublicRoute>
+                }
+              />
+
+            </Route>
+
+            {/* Private Routes */}
+            <Route element={<PrivateLayout />}>
+
+              <Route
+                path="/login"
+                element={
+                  <PublicRoute>
+                    <Login />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <PublicRoute>
+                    <Register />
+                  </PublicRoute>
+                }
+              />
 
 
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Route>
+              <Route
+                path="/dashboard"
+                element={
+                  // <ProtectedRoute>
+                  <Dashboard />
+                  // </ProtectedRoute>
+                }
+              />
 
+              <Route
+                path="/workout"
+                element={
+                  // <ProtectedRoute>
+                  <Workout />
+                  // </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/diet"
+                element={
+                  // <ProtectedRoute>
+                  <Diet />
+                  // </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/progress"
+                element={
+                  // <ProtectedRoute>
+                  <Progress />
+                  // </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/analytics"
+                element={
+                  // <ProtectedRoute>
+                  <Analytics />
+                  // </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/chat"
+                element={
+                  // <ProtectedRoute>
+                  <Chat />
+                  // </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  // <ProtectedRoute>
+                  <Settings />
+                  // </ProtectedRoute>
+                }
+              />
+            </Route>
 
-          <Route element={<PrivateLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/workout" element={<Workout />} />
-            <Route path="/diet" element={<Diet />} />
-            <Route path="/progress" element={<Progress />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/settings" element={<Settings />} />
-          </Route>
-
-        </Routes>
+            {/* 404 Route - Catch all unmatched routes */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
+    </ErrorBoundary>
+  );
+};
 
-    </>
-  )
-}
 export default App;

@@ -16,9 +16,10 @@ import {
   CheckCircle,
   Heart,
   Zap,
-  Target,
-} from "lucide-react";
-import { loginUser } from "../../Services/authService";
+  Target
+} from 'lucide-react';
+import { loginUser } from '../../Services/authService';
+import { useAuth } from '../../Context/AuthContext';
 
 // Memoized Background Component with responsive sizes
 const BackgroundElements = React.memo(() => (
@@ -133,6 +134,8 @@ const Login = () => {
     };
   }, [formData, debouncedValidate]);
 
+
+
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -187,7 +190,7 @@ const Login = () => {
         {
           icon: "❌",
           duration: 4000,
-        },
+        }
       );
       setLoginError(true);
     } finally {
@@ -240,7 +243,7 @@ const Login = () => {
                 className="text-white text-3xl xl:text-4xl 2xl:text-5xl font-bold leading-tight"
               >
                 Your Journey to a{" "}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-yellow-300 to-pink-300">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">
                   Healthier You
                 </span>{" "}
                 Starts Here
@@ -251,8 +254,8 @@ const Login = () => {
                 data-aos-delay="200"
                 className="text-white/80 text-base xl:text-lg mt-4 xl:mt-6 leading-relaxed"
               >
-                Experience the power of AI-driven fitness intelligence. Get
-                personalized workouts, nutrition plans, and real-time insights
+                Experience the power of AI-driven fitness intelligence.
+                Get personalized workouts, nutrition plans, and real-time insights
                 tailored to your unique goals.
               </p>
 
