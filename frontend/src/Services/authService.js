@@ -1,11 +1,11 @@
 // services/authService.js
-import axiosInstance from '../config/Api';
+import axiosInstance from "../config/Api";
 
 
 export const loginUser = async ({ email, password, rememberMe }) => {
   try {
     if (!email || !password) {
-      throw new Error('Email and password are required');
+      throw new Error("Email and password are required");
     }
 
     const response = await axiosInstance.post('/auth/login', {
@@ -287,23 +287,10 @@ export const registerUser = async (userData) => {
     return {
       success: true,
       user,
-      token,
-      refreshToken,
-      expiresIn,
-      message: response.data.message || 'Registration successful'
+      message: data.message || "Login successful",
     };
 
   } catch (error) {
-    // Handle axios errors
-    if (error.code === 'ECONNABORTED') {
-      throw new Error('Request timeout. Please try again.');
-    }
-
-    if (error.message === 'Network Error') {
-      throw new Error('Unable to connect to server. Please check your internet connection.');
-    }
-
-    // Handle HTTP errors
     if (error.response) {
       const status = error.response.status;
       const serverMessage = error.response.data?.message || error.response.data?.error;
@@ -331,8 +318,7 @@ export const registerUser = async (userData) => {
       }
     }
 
-    // Re-throw validation errors
-    throw error;
+    throw new Error(error.message || "Login failed");
   }
 };
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FiStar, FiActivity, FiCheck, FiArrowRight,
   FiEdit3, FiTrendingUp, FiTrendingDown, FiZap,
@@ -24,7 +24,7 @@ const Dashboard = () => {
     weightChange: -2.3,
     calories: 1850,
     caloriesTarget: 2200,
-    workoutFocus: 'Chest & Triceps',
+    workoutFocus: "Chest & Triceps",
     exercisesToday: 6,
     streak: 15,
     startWeight: 85,
@@ -43,12 +43,18 @@ const Dashboard = () => {
   };
 
   const todayExercises = [
-    { id: 1, name: 'Bench Press', sets: 4, reps: 8, focus: 'Chest' },
-    { id: 2, name: 'Incline Dumbbell Press', sets: 3, reps: 10, focus: 'Chest' },
-    { id: 3, name: 'Cable Flyes', sets: 3, reps: 12, focus: 'Chest' },
-    { id: 4, name: 'Tricep Dips', sets: 3, reps: 10, focus: 'Triceps' },
-    { id: 5, name: 'Rope Pushdowns', sets: 3, reps: 12, focus: 'Triceps' },
-    { id: 6, name: 'Overhead Extension', sets: 3, reps: 12, focus: 'Triceps' }
+    { id: 1, name: "Bench Press", sets: 4, reps: 8, focus: "Chest" },
+    {
+      id: 2,
+      name: "Incline Dumbbell Press",
+      sets: 3,
+      reps: 10,
+      focus: "Chest",
+    },
+    { id: 3, name: "Cable Flyes", sets: 3, reps: 12, focus: "Chest" },
+    { id: 4, name: "Tricep Dips", sets: 3, reps: 10, focus: "Triceps" },
+    { id: 5, name: "Rope Pushdowns", sets: 3, reps: 12, focus: "Triceps" },
+    { id: 6, name: "Overhead Extension", sets: 3, reps: 12, focus: "Triceps" },
   ];
 
   // Load user data
@@ -80,10 +86,10 @@ const Dashboard = () => {
   };
 
   const today = new Date();
-  const formattedDate = today.toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric'
+  const formattedDate = today.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
   });
 
   // Calculate weight progress

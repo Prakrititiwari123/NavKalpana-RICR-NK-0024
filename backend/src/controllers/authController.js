@@ -59,19 +59,20 @@ export const UserRegister = async (req, res, next) => {
 
 
 
-
 // -----------------UserLogin---------------------
 export const UserLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    console.log("email " + email, "Password " + password);
+    
     if (!email || !password) {
       const error = new Error("All fields required");
       error.statusCode = 400;
       return next(error);
     }
 
-    // include password explicitly
+    // Use findOne instead of find to get a single user object
     const existingUser = await User.findOne({ email }).select("+password");
 
     if (!existingUser) {
@@ -95,7 +96,7 @@ export const UserLogin = async (req, res, next) => {
 
     res.status(200).json({
       message: "Login Successful",
-      data: existingUser,
+      user: existingUser,
     });
 
   } catch (error) {

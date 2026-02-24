@@ -26,8 +26,8 @@ const Login = () => {
 
   // State management
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
@@ -49,16 +49,16 @@ const Login = () => {
 
     // Email validation
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = "Please enter a valid email address";
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     setErrors(newErrors);
@@ -75,13 +75,13 @@ const Login = () => {
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setLoginError(false); // Clear login error on input change
   }, []);
 
   const handleBlur = useCallback((e) => {
     const { name } = e.target;
-    setTouched(prev => ({ ...prev, [name]: true }));
+    setTouched((prev) => ({ ...prev, [name]: true }));
   }, []);
 
   const handleSubmit = async (e) => {
@@ -142,9 +142,9 @@ const Login = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const leftVariants = {
@@ -152,8 +152,8 @@ const Login = () => {
     visible: {
       x: 0,
       opacity: 1,
-      transition: { type: 'spring', duration: 1, bounce: 0.3 }
-    }
+      transition: { type: "spring", duration: 1, bounce: 0.3 },
+    },
   };
 
   const rightVariants = {
@@ -161,8 +161,8 @@ const Login = () => {
     visible: {
       x: 0,
       opacity: 1,
-      transition: { type: 'spring', duration: 1, bounce: 0.3 }
-    }
+      transition: { type: "spring", duration: 1, bounce: 0.3 },
+    },
   };
 
   const itemVariants = {
@@ -170,15 +170,15 @@ const Login = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: 'spring', stiffness: 300, damping: 24 }
-    }
+      transition: { type: "spring", stiffness: 300, damping: 24 },
+    },
   };
 
   const shakeAnimation = {
     shake: {
       x: [0, -10, 10, -10, 10, 0],
-      transition: { duration: 0.4 }
-    }
+      transition: { duration: 0.4 },
+    },
   };
 
   return (
@@ -194,12 +194,12 @@ const Login = () => {
           animate={{
             scale: [1, 1.2, 1],
             rotate: [0, 90, 0],
-            borderRadius: ['50%', '30%', '50%']
+            borderRadius: ["50%", "30%", "50%"],
           }}
           transition={{
             duration: 20,
             repeat: Infinity,
-            ease: "linear"
+            ease: "linear",
           }}
           className="absolute top-20 left-20 w-96 h-96 bg-white rounded-full blur-3xl"
         />
@@ -207,12 +207,12 @@ const Login = () => {
           animate={{
             scale: [1, 1.3, 1],
             rotate: [0, -90, 0],
-            borderRadius: ['50%', '30%', '50%']
+            borderRadius: ["50%", "30%", "50%"],
           }}
           transition={{
             duration: 25,
             repeat: Infinity,
-            ease: "linear"
+            ease: "linear",
           }}
           className="absolute bottom-20 right-20 w-96 h-96 bg-purple-300 rounded-full blur-3xl"
         />
@@ -236,12 +236,12 @@ const Login = () => {
               animate={{
                 scale: [1, 1.2, 1],
                 x: [0, 50, 0],
-                y: [0, 30, 0]
+                y: [0, 30, 0],
               }}
               transition={{
                 duration: 15,
                 repeat: Infinity,
-                ease: "linear"
+                ease: "linear",
               }}
               className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"
             />
@@ -249,21 +249,18 @@ const Login = () => {
               animate={{
                 scale: [1, 1.3, 1],
                 x: [0, -30, 0],
-                y: [0, 50, 0]
+                y: [0, 50, 0],
               }}
               transition={{
                 duration: 18,
                 repeat: Infinity,
-                ease: "linear"
+                ease: "linear",
               }}
               className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"
             />
 
             {/* Logo */}
-            <motion.div
-              variants={itemVariants}
-              className="relative z-10"
-            >
+            <motion.div variants={itemVariants} className="relative z-10">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center space-x-3"
@@ -281,10 +278,10 @@ const Login = () => {
                 variants={itemVariants}
                 className="text-white text-4xl lg:text-5xl font-bold leading-tight"
               >
-                Your Journey to a{' '}
+                Your Journey to a{" "}
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-yellow-300 to-pink-300">
                   Healthier You
-                </span>{' '}
+                </span>{" "}
                 Starts Here
               </motion.h1>
 
@@ -298,14 +295,11 @@ const Login = () => {
               </motion.p>
 
               {/* Feature List */}
-              <motion.div
-                variants={itemVariants}
-                className="mt-8 space-y-4"
-              >
+              <motion.div variants={itemVariants} className="mt-8 space-y-4">
                 {[
-                  { icon: Heart, text: 'Personalized AI Workouts' },
-                  { icon: Zap, text: 'Smart Nutrition Tracking' },
-                  { icon: Target, text: 'Real-time Progress Analytics' }
+                  { icon: Heart, text: "Personalized AI Workouts" },
+                  { icon: Zap, text: "Smart Nutrition Tracking" },
+                  { icon: Target, text: "Real-time Progress Analytics" },
                 ].map((feature, index) => (
                   <motion.div
                     key={index}
@@ -322,13 +316,12 @@ const Login = () => {
             </div>
 
             {/* Testimonial */}
-            <motion.div
-              variants={itemVariants}
-              className="relative z-10 mt-12"
-            >
+            <motion.div variants={itemVariants} className="relative z-10 mt-12">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <p className="text-white/90 text-sm italic">
-                  "FitAI completely transformed my approach to fitness. The personalized plans and AI insights helped me achieve results I never thought possible!"
+                  "FitAI completely transformed my approach to fitness. The
+                  personalized plans and AI insights helped me achieve results I
+                  never thought possible!"
                 </p>
                 <div className="flex items-center mt-4">
                   <div className="w-10 h-10 bg-linear-to-r from-yellow-400 to-pink-400 rounded-full flex items-center justify-center">
@@ -336,7 +329,9 @@ const Login = () => {
                   </div>
                   <div className="ml-3">
                     <p className="text-white font-semibold">Sarah Johnson</p>
-                    <p className="text-white/60 text-xs">Lost 30lbs in 6 months</p>
+                    <p className="text-white/60 text-xs">
+                      Lost 30lbs in 6 months
+                    </p>
                   </div>
                 </div>
               </div>
@@ -348,10 +343,7 @@ const Login = () => {
             variants={rightVariants}
             className="lg:w-1/2 bg-white p-8 lg:p-12"
           >
-            <motion.div
-              variants={itemVariants}
-              className="max-w-md mx-auto"
-            >
+            <motion.div variants={itemVariants} className="max-w-md mx-auto">
               {/* Header */}
               <div className="text-center lg:text-left">
                 <motion.h2
@@ -424,7 +416,7 @@ const Login = () => {
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
-                      type={showPassword ? 'text' : 'password'}
+                      type={showPassword ? "text" : "password"}
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
@@ -503,7 +495,7 @@ const Login = () => {
                   <motion.button
                     whileHover={{ x: 3 }}
                     type="button"
-                    onClick={() => navigate('/forgot-password')}
+                    onClick={() => navigate("/forgot-password")}
                     className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center"
                   >
                     Forgot password?
@@ -518,9 +510,10 @@ const Login = () => {
                   type="submit"
                   disabled={!isValid || isLoading}
                   className={`w-full py-4 rounded-xl font-semibold text-white transition-all duration-300 relative overflow-hidden
-                    ${!isValid || isLoading
-                      ? 'bg-gray-300 cursor-not-allowed'
-                      : 'bg-linear-to-r from-blue-500 to-purple-600 hover:shadow-lg'
+                    ${
+                      !isValid || isLoading
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-linear-to-r from-blue-500 to-purple-600 hover:shadow-lg"
                     }`}
                 >
                   {isLoading ? (
@@ -529,7 +522,10 @@ const Login = () => {
                       animate={{ opacity: 1 }}
                       className="flex items-center justify-center"
                     >
-                      <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                      <svg
+                        className="animate-spin h-5 w-5 mr-3"
+                        viewBox="0 0 24 24"
+                      >
                         <circle
                           className="opacity-25"
                           cx="12"
@@ -560,11 +556,11 @@ const Login = () => {
                   variants={itemVariants}
                   className="text-center text-sm text-gray-600"
                 >
-                  Don't have an account?{' '}
+                  Don't have an account?{" "}
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     type="button"
-                    onClick={() => navigate('/register')}
+                    onClick={() => navigate("/register")}
                     className="font-semibold text-blue-600 hover:text-blue-700 transition-colors relative group"
                   >
                     Sign up for free
@@ -582,7 +578,8 @@ const Login = () => {
                     Demo Credentials:
                   </p>
                   <p className="text-xs text-gray-600">
-                    Email: demo@fitai.com<br />
+                    Email: demo@fitai.com
+                    <br />
                     Password: demo123
                   </p>
                 </motion.div>

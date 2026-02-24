@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 
 const DashboardLayout = ({ children }) => {
   return (
-    <div className="flex min-h-screen pt-20">
+    <div className="flex min-h-screen ">
       {/* Sidebar - starts below navbar (pt-20 accounts for navbar height) */}
       <Sidebar />
       
