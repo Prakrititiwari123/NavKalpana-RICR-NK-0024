@@ -59,7 +59,6 @@ export const UserRegister = async (req, res, next) => {
 
 
 
-
 // -----------------UserLogin---------------------
 export const UserLogin = async (req, res, next) => {
   try {
