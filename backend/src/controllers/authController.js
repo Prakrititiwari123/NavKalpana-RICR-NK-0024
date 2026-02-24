@@ -80,6 +80,8 @@ export const UserLogin = async (req, res, next) => {
       error.statusCode = 401;
       return next(error);
     }
+    console.log("Hi Im "+   existingUser);
+    
 
     const isVerified = await bcrypt.compare(password, existingUser.password);
 

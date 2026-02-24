@@ -8,26 +8,33 @@ export const loginUser = async ({ email, password, rememberMe }) => {
       throw new Error("Email and password are required");
     }
 
+    
+    
     const response = await axiosInstance.post('/auth/login', {
       email: email.trim().toLowerCase(),
       password: password,
       rememberMe: rememberMe || false
     });
-
-
+    
+    
     // Check if response is successful
     if (response.status !== 200 || !response.data) {
       throw new Error("Invalid response from server");
     }
-
+    
     // Extract data from response structure
-    const responseData = response.data.data;
+    const responseData = response.data.user;
     const responseMessage = response.data.data?.message || response.data.message;
-
+    
+    console.log(responseData);
+    console.log(responseMessage);
+    
     if (!responseData || !responseData._id) {
       throw new Error("Invalid response format from server");
     }
 
+
+    
     // Destructure user data
     const {
       _id,
@@ -44,7 +51,7 @@ export const loginUser = async ({ email, password, rememberMe }) => {
       pin,
       isActive,
     } = responseData;
-
+    
     const userData = {
       id: _id,
       fullName: fullName || '',
@@ -60,7 +67,7 @@ export const loginUser = async ({ email, password, rememberMe }) => {
       pin: pin || 'N/A',
       isActive: isActive || 'active'
     };
-
+    
     localStorage.setItem('healthnexus_user', JSON.stringify(userData));
 
     return {

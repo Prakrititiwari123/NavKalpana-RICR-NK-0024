@@ -19,6 +19,8 @@ const Settings = () => {
     city: '',
     pin: '',
   });
+  console.log(profileData);
+  
 
   // Body Parameters State (from healthData.vitals)
   const [bodyData, setBodyData] = useState({
@@ -529,7 +531,7 @@ const Settings = () => {
                     type="tel"
                     value={profileData.phone}
                     onChange={(e) => handleProfileChange('phone', e.target.value)}
-                    placeholder="+1 234 567 8900"
+                    placeholder="+91 934 567 89**"
                   />
                 </div>
 
