@@ -18,10 +18,14 @@ import {
   Target,
 } from "lucide-react";
 import { loginUser } from "../../Services/authService";
+import ForgetPasswordModal from "./modals/ForgetPasswordModal";
 
 const Login = () => {
   const navigate = useNavigate();
   const emailInputRef = useRef(null);
+
+  const [isForgetPasswordModelOpen, setIsForgetPasswordModelOpen] =
+      useState(false);
 
   // State management
   const [formData, setFormData] = useState({
@@ -491,15 +495,15 @@ const Login = () => {
                     </span>
                   </label>
 
-                  <motion.button
-                    whileHover={{ x: 3 }}
+                   <div className="flex justify-end">
+                  <button
                     type="button"
-                    onClick={() => navigate("/forgot-password")}
-                    className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center"
+                    onClick={() => setIsForgetPasswordModelOpen(true)}
+                    className="text-[#f97316] hover:text-[#fb923c] text-sm font-medium transition"
                   >
-                    Forgot password?
-                    <ArrowRight className="w-4 h-4 ml-1" />
-                  </motion.button>
+                    Forgot Password?
+                  </button>
+              </div>
                 </div>
 
                 {/* Login Button */}
@@ -587,6 +591,11 @@ const Login = () => {
           </motion.div>
         </div>
       </motion.div>
+       {isForgetPasswordModelOpen && (
+        <ForgetPasswordModal
+          onClose={() => setIsForgetPasswordModelOpen(false)}
+        />
+      )}
     </div>
   );
 };

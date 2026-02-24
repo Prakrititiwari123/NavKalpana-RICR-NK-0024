@@ -1,6 +1,8 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import { genOtpToken,genToken } from "../utils/authToken.js";
+import OTP from "../models/otpModel.js"
+import { sendOTPEmail } from "../utils/emailService.js";
 
 
 // ----------------UserRegister-----------------
@@ -137,7 +139,7 @@ export const UserGenOTP = async (req, res, next) => {
     }
 
     //Check if user is otp is there or not
-    const existingUserOTP = await OTP.findOne({ email });
+    const existingUserOTP = await  OTP.findOne({ email });
     if (existingUserOTP) {
       await existingUserOTP.deleteOne();
     }
