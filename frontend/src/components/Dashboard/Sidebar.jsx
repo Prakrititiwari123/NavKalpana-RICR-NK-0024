@@ -132,7 +132,7 @@ const Sidebar = () => {
         </nav>
 
         {/* Sidebar Footer - Logout Button */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gradient-to-t from-white to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-linear-to-t from-white to-transparent">
           <button
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-linear-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 group"
