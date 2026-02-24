@@ -1,8 +1,7 @@
 ﻿// Login.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion , AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import api from "../../config/Api"
 import toast from 'react-hot-toast';
 import {
   Mail,
@@ -18,11 +17,13 @@ import {
   Target
 } from 'lucide-react';
 import { loginUser } from '../../Services/authService';
+import { useAuth } from '../../Context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
   const emailInputRef = useRef(null);
-  
+  const { login } = useAuth();
+
   // State management
   const [formData, setFormData] = useState({
     email: '',
@@ -41,37 +42,37 @@ const Login = () => {
     emailInputRef.current?.focus();
   }, []);
 
- 
+
 
   const validateForm = useCallback(() => {
     const newErrors = {};
-    
+
     // Email validation
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    
+
     // Password validation
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-    
+
     setErrors(newErrors);
     setIsValid(Object.keys(newErrors).length === 0);
   }, [formData]);
 
 
-   // Real-time validation
+  // Real-time validation
   useEffect(() => {
     validateForm();
   }, [formData]);
 
 
-  
+
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -85,58 +86,53 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Mark all fields as touched to show validation errors
     setTouched({ email: true, password: true });
-    
+
     if (!isValid || isLoading) return;
-    
+
     setIsLoading(true);
     setLoginError(false);
-    
+
     try {
-  setIsLoading(true);
+      setIsLoading(true);
 
-  // Call service layer
-  // const response = await api.post("/auth/login", {
-  //   email: formData.email,
-  //   password: formData.password,
-  //   rememberMe: rememberMe
-  // });
 
-  loginUser({ email : formData.email , password : formData.password , rememberMe : false} )
-  // Success toast
-  toast.success("Login successful! Redirecting...", {
-    icon: "🎉",
-    duration: 3000,
-  });
+     await loginUser({ email: formData.email, password: formData.password, rememberMe: false })
 
-  // Store token if remember me is checked
-  if (rememberMe && response.data.token) {
-    localStorage.setItem("authToken", response.data.token);
-  }
+      const responce = localStorage.getItem("healthnexus_user");
+      login(JSON.parse(responce))
+      console.log(JSON.parse(responce))
 
-  setIsLoading(false);
 
-  // Redirect after short delay
-  setTimeout(() => {
-    navigate("/dashboard");
-  }, 1500);
 
-} catch (error) {
-  setIsLoading(false);
+      setIsLoading(false);
 
-  // Show error toast
-  toast.error(
-    error.response?.data?.message || "Invalid email or password",
-    {
-      icon: "❌",
-      duration: 4000,
+      // Redirect after short delay
+      setTimeout(() => {
+        // Success toast
+        toast.success("Login successful! Redirecting...", {
+          icon: "🎉",
+          duration: 3000,
+        });
+        navigate("/dashboard");
+      }, 1500);
+
+    } catch (error) {
+      setIsLoading(false);
+
+      // Show error toast
+      toast.error(
+        error.response?.data?.message || "Invalid email or password",
+        {
+          icon: "❌",
+          duration: 4000,
+        }
+      );
+
+      setLoginError(true);
     }
-  );
-
-  setLoginError(true);
-}
   };
 
   // Animation variants
@@ -296,8 +292,8 @@ const Login = () => {
                 variants={itemVariants}
                 className="text-white/80 text-lg mt-6 leading-relaxed"
               >
-                Experience the power of AI-driven fitness intelligence. 
-                Get personalized workouts, nutrition plans, and real-time insights 
+                Experience the power of AI-driven fitness intelligence.
+                Get personalized workouts, nutrition plans, and real-time insights
                 tailored to your unique goals.
               </motion.p>
 
@@ -362,7 +358,7 @@ const Login = () => {
                   variants={itemVariants}
                   className="text-3xl font-bold text-gray-800"
                 >
-                  Welcome Back! 
+                  Welcome Back!
                 </motion.h2>
                 <motion.p
                   variants={itemVariants}
@@ -396,14 +392,14 @@ const Login = () => {
                         ${touched.email && errors.email
                           ? 'border-red-300 bg-red-50 focus:border-red-500'
                           : loginError
-                          ? 'border-red-300 bg-red-50'
-                          : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
+                            ? 'border-red-300 bg-red-50'
+                            : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
                         }
                         hover:border-blue-300 focus:ring-4 focus:ring-blue-100`}
                       placeholder="you@example.com"
                     />
                   </div>
-                  
+
                   {/* Error Message */}
                   <AnimatePresence>
                     {touched.email && errors.email && (
@@ -437,8 +433,8 @@ const Login = () => {
                         ${touched.password && errors.password
                           ? 'border-red-300 bg-red-50 focus:border-red-500'
                           : loginError
-                          ? 'border-red-300 bg-red-50'
-                          : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
+                            ? 'border-red-300 bg-red-50'
+                            : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
                         }
                         hover:border-blue-300 focus:ring-4 focus:ring-blue-100`}
                       placeholder="Enter your password"
@@ -455,7 +451,7 @@ const Login = () => {
                       )}
                     </button>
                   </div>
-                  
+
                   {/* Error Message */}
                   <AnimatePresence>
                     {touched.password && errors.password && (
@@ -503,7 +499,7 @@ const Login = () => {
                       Remember me
                     </span>
                   </label>
-                  
+
                   <motion.button
                     whileHover={{ x: 3 }}
                     type="button"

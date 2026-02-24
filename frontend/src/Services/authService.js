@@ -1,83 +1,73 @@
 // services/authService.js
 import axiosInstance from '../config/Api';
 
-/**
- * Login user with email and password
- * @param {Object} credentials - User login credentials
- * @param {string} credentials.email - User email
- * @param {string} credentials.password - User password
- * @param {boolean} credentials.rememberMe - Remember me option
- * @returns {Promise} - Response with user data and token
- */
+
 export const loginUser = async ({ email, password, rememberMe }) => {
   try {
-    // Validate inputs before making API call
     if (!email || !password) {
       throw new Error('Email and password are required');
     }
 
-    // Make API request using axios instance
     const response = await axiosInstance.post('/auth/login', {
       email: email.trim().toLowerCase(),
       password: password,
       rememberMe: rememberMe || false
     });
 
-    // Check if response contains required data
-    if (!response.data) {
-      throw new Error('Invalid response from server');
+
+    // Check if response is successful
+    if (response.status !== 200 || !response.data) {
+      throw new Error("Invalid response from server");
     }
 
-    // Destructure response data
-    const { 
-      user, 
-      token, 
-      refreshToken, 
-      expiresIn,
-      requiresTwoFactor = false 
-    } = response.data;
+    // Extract data from response structure
+    const responseData = response.data.data;
+    const responseMessage = response.data.data?.message || response.data.message;
 
-    // Validate response data
-    if (!user || !token) {
-      throw new Error('Invalid response format from server');
+    if (!responseData || !responseData._id) {
+      throw new Error("Invalid response format from server");
     }
 
-    // Store tokens securely
-    if (token) {
-      localStorage.setItem('fitai_token', token);
-      
-      // Store refresh token if provided and remember me is checked
-      if (rememberMe && refreshToken) {
-        localStorage.setItem('fitai_refresh_token', refreshToken);
-      }
-      
-      // Store token expiry if provided
-      if (expiresIn) {
-        const expiryTime = new Date().getTime() + (expiresIn * 1000);
-        localStorage.setItem('fitai_token_expiry', expiryTime.toString());
-      }
-    }
+    // Destructure user data
+    const {
+      _id,
+      fullName,
+      email: userEmail,
+      role,
+      photo,
+      healthData,
+      documents,
+      dob,
+      gender,
+      address,
+      city,
+      pin,
+      isActive,
+    } = responseData;
 
-    // Store basic user info (without sensitive data)
-    const safeUserData = {
-      id: user.id,
-      email: user.email,
-      fullName: user.fullName || user.name,
-      preferences: user.preferences || {},
-      stats: user.stats || {}
+    const userData = {
+      id: _id,
+      fullName: fullName || '',
+      email: userEmail || '',
+      role: role || 'user',
+      photo: photo || { url: '', publicID: '' },
+      healthData: healthData || {},
+      documents: documents || {},
+      dob: dob || 'N/A',
+      gender: gender || 'N/A',
+      address: address || 'N/A',
+      city: city || 'N/A',
+      pin: pin || 'N/A',
+      isActive: isActive || 'active'
     };
-    
-    localStorage.setItem('fitai_user', JSON.stringify(safeUserData));
 
-    // Return formatted response
+    localStorage.setItem('healthnexus_user', JSON.stringify(userData));
+
     return {
       success: true,
-      user: user,
-      token: token,
-      refreshToken: refreshToken,
-      expiresIn: expiresIn,
-      requiresTwoFactor: requiresTwoFactor,
-      message: response.data.message || 'Login successful'
+      user: JSON.stringify(userData),
+      message: responseMessage || 'Login successful',
+      isActive: isActive === 'active'
     };
 
   } catch (error) {
@@ -94,54 +84,57 @@ export const loginUser = async ({ email, password, rememberMe }) => {
     // Handle HTTP error responses
     if (error.response) {
       const status = error.response.status;
-      const serverMessage = error.response.data?.message || error.response.data?.error;
+      const responseData = error.response.data?.data;
+      const serverMessage = error.response.data?.message ||
+        error.response.data?.error ||
+        responseData?.message;
 
       switch (status) {
         case 400:
           throw new Error(serverMessage || 'Invalid request. Please check your input.');
-        
+
         case 401:
           throw new Error(serverMessage || 'Invalid email or password');
-        
+
         case 403:
-          if (error.response.data?.requiresVerification) {
+          if (responseData?.requiresVerification) {
             throw {
               type: 'VERIFICATION_REQUIRED',
               message: serverMessage || 'Please verify your email before logging in',
               email: email
             };
           }
-          if (error.response.data?.accountLocked) {
+          if (responseData?.accountLocked || responseData?.isActive === 'inactive') {
             throw {
               type: 'ACCOUNT_LOCKED',
-              message: serverMessage || 'Account is locked. Please reset your password or contact support',
-              lockDuration: error.response.data?.lockDuration
+              message: serverMessage || 'Account is locked. Please contact support',
+              lockDuration: responseData?.lockDuration
             };
           }
           throw new Error(serverMessage || 'Access denied');
-        
+
         case 404:
           throw new Error(serverMessage || 'Account not found');
-        
+
         case 422:
           throw new Error(serverMessage || 'Invalid input data');
-        
+
         case 429:
           throw new Error('Too many login attempts. Please try again later.');
-        
+
         case 500:
         case 502:
         case 503:
           throw new Error('Server error. Please try again later.');
-        
+
         default:
           throw new Error(serverMessage || `Login failed with status ${status}`);
       }
-    } 
+    }
     // Handle request errors (no response received)
     else if (error.request) {
       throw new Error('No response from server. Please check your connection.');
-    } 
+    }
     // Handle other errors
     else {
       throw new Error(error.message || 'An unexpected error occurred during login');
@@ -149,13 +142,6 @@ export const loginUser = async ({ email, password, rememberMe }) => {
   }
 };
 
-/**
- * Verify two-factor authentication code after login
- * @param {string} userId - User ID
- * @param {string} code - 2FA code
- * @param {string} tempToken - Temporary token from initial login
- * @returns {Promise} - Final login response
- */
 export const verifyTwoFactorLogin = async (userId, code, tempToken) => {
   try {
     const response = await axiosInstance.post('/api/auth/2fa/verify-login', {
@@ -177,17 +163,13 @@ export const verifyTwoFactorLogin = async (userId, code, tempToken) => {
   }
 };
 
-/**
- * Resend verification email
- * @param {string} email - User email
- * @returns {Promise} - Resend confirmation
- */
+
 export const resendVerificationEmail = async (email) => {
   try {
     const response = await axiosInstance.post('/api/auth/resend-verification', {
       email: email.trim().toLowerCase()
     });
-    
+
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -198,11 +180,7 @@ export const resendVerificationEmail = async (email) => {
 };
 
 
-/**
- * Register a new user
- * @param {Object} userData - User registration data
- * @returns {Promise} - Response with user data and token
- */
+
 export const registerUser = async (userData) => {
   try {
     // Validate required fields
@@ -281,11 +259,11 @@ export const registerUser = async (userData) => {
     // Store tokens
     if (token) {
       localStorage.setItem('fitai_token', token);
-      
+
       if (refreshToken) {
         localStorage.setItem('fitai_refresh_token', refreshToken);
       }
-      
+
       if (expiresIn) {
         const expiryTime = new Date().getTime() + (expiresIn * 1000);
         localStorage.setItem('fitai_token_expiry', expiryTime.toString());
@@ -303,7 +281,7 @@ export const registerUser = async (userData) => {
           notifications: true
         }
       };
-      localStorage.setItem('fitai_user', JSON.stringify(safeUserData));
+      localStorage.setItem('healthnexus_user', JSON.stringify(safeUserData));
     }
 
     return {
@@ -333,21 +311,21 @@ export const registerUser = async (userData) => {
       switch (status) {
         case 400:
           throw new Error(serverMessage || 'Invalid registration data');
-        
+
         case 409:
           throw new Error(serverMessage || 'Email already exists');
-        
+
         case 422:
           throw new Error(serverMessage || 'Validation failed');
-        
+
         case 429:
           throw new Error('Too many registration attempts. Please try again later.');
-        
+
         case 500:
         case 502:
         case 503:
           throw new Error('Server error. Please try again later.');
-        
+
         default:
           throw new Error(serverMessage || `Registration failed with status ${status}`);
       }
@@ -357,3 +335,57 @@ export const registerUser = async (userData) => {
     throw error;
   }
 };
+
+
+
+export const getUserData = () => {
+  try {
+    const raw = localStorage.getItem("healthnexus_user");
+
+    if (!raw) return null;
+
+    const user = JSON.parse(raw);
+
+    return user;
+  } catch (error) {
+    console.error("Invalid user data in localStorage", error);
+
+    // Optional hard reset
+    localStorage.removeItem("healthnexus_user");
+
+    return null; // ❗ DON'T throw here
+  }
+};
+
+
+
+export const updateUserData = async (updatedData) => {
+  try {
+
+    const response = await axiosInstance.post('/user/updateddata', updatedData);
+
+    if (response.data?.data) {  
+    const newUserData = response.data.data;
+    localStorage.setItem('healthnexus_user', JSON.stringify(newUserData));
+    return newUserData;
+    }
+
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    throw new Error('Failed to update user data');
+  }
+}
+
+
+
+
+
+export const logoutUser = () => {
+  try {
+    localStorage.removeItem('healthnexus_user');
+    return { success: true, message: 'Logout successful' };
+  } catch (error) {
+    console.error('Error during logout:', error);
+    throw new Error('Failed to logout. Please try again.');
+  }
+}
