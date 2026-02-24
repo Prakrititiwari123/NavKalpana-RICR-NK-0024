@@ -1,9 +1,17 @@
 import express from "express";
-import { updateUserProfile } from "../controllers/userController.js";
+import {
+  updateUserProfile,
+  UserChangePhoto,
+  UserResetPassword,
+} from "../controllers/userController.js";
+import {  Protect } from "../middlewares/authMiddleware.js";
+import multer from "multer";
 
 const router = express.Router();
+const Uploads = multer();
 
 router.post("/updateddata", updateUserProfile);
-
-
+router.patch("/changePhoto", Protect, Uploads.single("image"), UserChangePhoto);
+router.patch("/resetPassword", Protect, UserResetPassword);
+    
 export default router;

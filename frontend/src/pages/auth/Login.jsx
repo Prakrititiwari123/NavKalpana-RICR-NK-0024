@@ -23,7 +23,7 @@ import {
   Target,
 } from "lucide-react";
 import { loginUser } from "../../Services/authService";
-import ForgetPasswordModal from "./modals/ForgetPasswordModal";
+import ForgetPasswordModal from "../../modals/ForgetPasswordModal";
 import { useAuth } from "../../Context/AuthContext";
 
 const Login = () => {

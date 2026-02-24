@@ -123,7 +123,7 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation - Only visible on desktop and when not authenticated */}
-          {!isAuthenticated && (
+          {/* {!isAuthenticated && (
             <nav className="hidden lg:flex items-center space-x-1">
               <button
                 onClick={() => handleNavigation('/')}
@@ -162,7 +162,7 @@ const Header = () => {
                 About
               </button>
             </nav>
-          )}
+          )} */}
 
           {/* Right Section */}
           <div className="flex items-center space-x-2 sm:space-x-3">

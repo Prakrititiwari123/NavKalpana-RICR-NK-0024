@@ -192,17 +192,6 @@ export const updateUserProfile = async (req, res, next) => {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
 // ================= CHANGE PROFILE PHOTO =================
 export const UserChangePhoto = async (req, res, next) => {
   try {
@@ -255,14 +244,12 @@ export const UserChangePhoto = async (req, res, next) => {
     next(error);
   }
 };
-
-
-
 // ================= RESET PASSWORD =================
+
 export const UserResetPassword = async (req, res, next) => {
   try {
     const { oldPassword, newPassword } = req.body;
-    const currentUser = req.user;
+    const userId = req.user._id; // from Protect middleware
 
     if (!oldPassword || !newPassword) {
       const error = new Error("All fields required");
@@ -270,24 +257,30 @@ export const UserResetPassword = async (req, res, next) => {
       return next(error);
     }
 
-    const isVerified = await bcrypt.compare(oldPassword, currentUser.password);
+    // Fetch user with password field
+    const user = await User.findById(userId).select('+password');
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      return next(error);
+    }
 
+    const isVerified = await bcrypt.compare(oldPassword, user.password);
     if (!isVerified) {
       const error = new Error("Old password did not match");
       error.statusCode = 401;
       return next(error);
     }
 
+    // Hash and save new password
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashPassword;
+    await user.save();
 
-    currentUser.password = hashPassword;
-    await currentUser.save();
-
-    res.status(200).json({
-      message: "Password Reset Successful",
-    });
+    res.status(200).json({ message: "Password Reset Successful" });
   } catch (error) {
     next(error);
   }
 };
+

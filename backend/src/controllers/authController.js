@@ -244,3 +244,31 @@ export const UserForgetPassword = async (req, res, next) => {
     next(error);
   }
 };
+
+
+// ----------------------Delete Account---------------
+
+export const deleteAccount = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    console.log("Deleting user with ID:", userId); // 👈 Check ID
+    
+    // Pehle check karo user exists karta hai?
+    const existingUser = await User.findById(userId);
+    console.log("Existing user:", existingUser); // 👈 Should show user data
+    
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Delete attempt
+    const deletedUser = await User.deleteOne({_id: userId});
+    console.log("Deleted user result:", deletedUser); // 👈 Should show deleted user
+    
+    res.clearCookie('health');
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.error("Delete error:", error); // 👈 Check actual error
+    next(error);
+  }
+};

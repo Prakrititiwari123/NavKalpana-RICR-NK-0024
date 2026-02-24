@@ -96,9 +96,8 @@ const userSchema = mongoose.Schema(
     },
 
     isActive: {
-      type: String,
-      enum: ["active", "inactive", "blocked"],
-      default: "active",
+      type: Boolean,
+      default: "true",
     },
   },
   { timestamps: true },
