@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 
 export const updateUserProfile = async (req, res, next) => {
 
-  // console.log("Update User Profile Called", { body: req.body });
   try {
     const {
       fullName,
@@ -64,7 +63,6 @@ export const updateUserProfile = async (req, res, next) => {
         return next(error);
       }
     }
-    console.log("Here");
 
     // Check if email already exists (if changing email)
     if (email !== currentUser.email) {
@@ -78,10 +76,9 @@ export const updateUserProfile = async (req, res, next) => {
 
 
       
-    // ===== UPDATE BASIC INFO =====
     currentUser.fullName = fullName;
     currentUser.email = email.toLowerCase();
-    currentUser.mobileNumber = phone; // Map phone to mobileNumber
+    currentUser.phone = phone; 
     currentUser.dob = dob || currentUser.dob || "N/A";
     currentUser.gender = gender || currentUser.gender || "N/A";
     currentUser.address = address || currentUser.address || "N/A";
@@ -193,6 +190,17 @@ export const updateUserProfile = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 // ================= CHANGE PROFILE PHOTO =================

@@ -64,7 +64,7 @@ const Header = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [isProfileMenuOpen, isMobileMenuOpen]);
 
- 
+
 
   // Handle navigation
   const handleNavigation = (path) => {
@@ -95,26 +95,15 @@ const Header = () => {
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-lg py-2'
-          : 'bg-white/80 backdrop-blur-sm py-3'
+        ? 'bg-white/95 backdrop-blur-md shadow-lg py-2'
+        : 'bg-white/80 backdrop-blur-sm py-3'
         }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo Section - Always visible */}
           <div className="flex items-center space-x-3">
-            {/* Mobile Menu Button - Only visible on mobile */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-all duration-300 mobile-menu-button"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? (
-                <FiX className="w-5 h-5 text-gray-600" />
-              ) : (
-                <FiMenu className="w-5 h-5 text-gray-600" />
-              )}
-            </button>
+
 
             {/* Logo */}
             <button
@@ -139,8 +128,8 @@ const Header = () => {
               <button
                 onClick={() => handleNavigation('/')}
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${location.pathname === '/'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                   }`}
               >
                 Home
@@ -148,8 +137,8 @@ const Header = () => {
               <button
                 onClick={() => handleNavigation('/features')}
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${location.pathname === '/features'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                   }`}
               >
                 Features
@@ -157,8 +146,8 @@ const Header = () => {
               <button
                 onClick={() => handleNavigation('/benefits')}
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${location.pathname === '/benefits'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                   }`}
               >
                 Benefits
@@ -166,8 +155,8 @@ const Header = () => {
               <button
                 onClick={() => handleNavigation('/about')}
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${location.pathname === '/about'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                   }`}
               >
                 About
@@ -197,7 +186,11 @@ const Header = () => {
                     <FiUserPlus className="w-4 h-4 sm:hidden" />
                     <span className="hidden sm:inline">Get Started</span>
                   </button>
+
+
                 </div>
+
+
               </>
             ) : (
               /* Logged In - Show User Menu */
@@ -205,7 +198,7 @@ const Header = () => {
 
 
                 {/* User Menu */}
-                <div className="relative profile-menu">
+                <div className="flex gap-4 relative profile-menu">
                   <button
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                     className="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-indigo-50 p-1 rounded-xl hover:bg-blue-100 transition-all duration-300 group"
@@ -238,6 +231,19 @@ const Header = () => {
 
                     <FiChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-500 transition-transform duration-300 mr-1 ${isProfileMenuOpen ? 'rotate-180' : ''
                       }`} />
+                  </button>
+
+                  {/* Mobile Menu Button - Only visible on mobile */}
+                  <button
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-all duration-300 mobile-menu-button"
+                    aria-label="Toggle menu"
+                  >
+                    {isMobileMenuOpen ? (
+                      <FiX className="w-5 h-5 text-gray-600" />
+                    ) : (
+                      <FiMenu className="w-5 h-5 text-gray-600" />
+                    )}
                   </button>
 
                   {/* Dropdown Menu */}
@@ -288,9 +294,10 @@ const Header = () => {
                         <div className="border-t border-gray-100 my-2"></div>
 
                         <button
-                          onClick={() => { logout() ,
+                          onClick={() => {
+                            logout(),
                             navigate("/")
-                           }}
+                          }}
                           className="flex items-center space-x-3 w-full px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm text-red-600 hover:bg-red-50 rounded-lg transition-all duration-300 group"
                         >
                           <FiLogOut className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -307,13 +314,13 @@ const Header = () => {
 
         {/* Mobile Menu - Only visible when menu is open */}
         {isMobileMenuOpen && !isAuthenticated && (
-          <div className="lg:hidden mt-4 pb-3 border-t border-gray-100 animate-slideDown mobile-menu">
+          <div className="lg:hidden  mt-4 pb-3 border-t border-gray-100 animate-slideDown mobile-menu">
             <div className="flex flex-col space-y-1 pt-3">
               <button
                 onClick={() => handleNavigation('/')}
                 className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${location.pathname === '/'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                   }`}
               >
                 Home
@@ -321,8 +328,8 @@ const Header = () => {
               <button
                 onClick={() => handleNavigation('/features')}
                 className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${location.pathname === '/features'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                   }`}
               >
                 Features
@@ -330,8 +337,8 @@ const Header = () => {
               <button
                 onClick={() => handleNavigation('/benefits')}
                 className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${location.pathname === '/benefits'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                   }`}
               >
                 Benefits
@@ -339,8 +346,8 @@ const Header = () => {
               <button
                 onClick={() => handleNavigation('/about')}
                 className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${location.pathname === '/about'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                   }`}
               >
                 About
