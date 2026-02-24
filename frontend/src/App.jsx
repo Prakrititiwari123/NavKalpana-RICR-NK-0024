@@ -1,32 +1,183 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import Login from './pages/auth/Login.jsx'
-import Register from './pages/auth/Register.jsx'
-import Home from './pages/Home.jsx';
+import React, { Suspense, lazy, useEffect, useState } from "react";
 
-import Dashboard from './pages/Dashboard/Dashboard.jsx';
-import Workout from './pages/Dashboard/Workout.jsx';
-import Diet from './pages/Dashboard/Diet.jsx';
-import Progress from "./pages/Dashboard/Progress.jsx";
-import Analytics from "./pages/Dashboard/Analytics.jsx";
-import Chat from "./pages/Dashboard/Chat.jsx";
-import Settings from "./pages/Dashboard/Settings.jsx";
-import ScrollToTop from './context/ScrollToTop.jsx';
-import PublicLayout from "./Layout.jsx/PublicLayout.jsx";
-import PrivateLayout from "./Layout.jsx/PrivateLayout.jsx";
+// Layouts
+import PublicLayout from "./Layout/PublicLayout";
+import PrivateLayout from "./Layout/PrivateLayout";
+import { PageLoader } from "./components/Common/Loaders";
+import { useAuth } from "./Context/AuthContext";
+// Lazy load pages for better performance
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/auth/Login"));
+const Register = lazy(() => import("./pages/auth/Register"));
+const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
+const Workout = lazy(() => import("./pages/Dashboard/Workout"));
+const Diet = lazy(() => import("./pages/Dashboard/Diet"));
+const Progress = lazy(() => import("./pages/Dashboard/Progress"));
+const Analytics = lazy(() => import("./pages/Dashboard/Analytics"));
+const Chat = lazy(() => import("./pages/Dashboard/Chat"));
+const Settings = lazy(() => import("./pages/Dashboard/Settings"));
 
-const App = () => {
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("Error caught by boundary:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <div className="text-center p-8 max-w-md">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Something went wrong</h2>
+            <p className="text-gray-600 mb-6">
+              We're sorry, but something unexpected happened. Please try refreshing the page.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Refresh Page
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+
+
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    AOS.init({
-      duration: 1000,     // animation duration (ms)
-      once: true,         // animation happens only once
-      offset: 100,        // offset from original trigger point
-    });
+    const checkAuth = () => {
+      try {
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+
+        // Validate token and user data
+        if (token && user) {
+          try {
+            JSON.parse(user); // Validate user data is valid JSON
+            setIsAuthenticated(true);
+          } catch (e) {
+            console.error(e + "Invalid user data in localStorage");
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            setIsAuthenticated(false);
+          }
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
+  const { loading } = useAuth()
+
+  if (isLoading || loading) {
+    return <PageLoader />;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace state={{ from: window.location.pathname }} />;
+  }
+
+  return children;
+};
+
+// Public Route Component (redirects to dashboard if already authenticated)
+const PublicRoute = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      try {
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+
+        if (token && user) {
+          try {
+            JSON.parse(user);
+            setIsAuthenticated(true);
+          } catch (e) {
+
+            console.log(e);
+
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            setIsAuthenticated(false);
+          }
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  if (isLoading) {
+    return <PageLoader />;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+};
+
+
+
+
+const NotFound = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="text-center p-8 max-w-md">
+      <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
+      <h2 className="text-2xl font-semibold text-gray-700 mb-4">Page Not Found</h2>
+      <p className="text-gray-600 mb-6">
+        The page you're looking for doesn't exist or has been moved.
+      </p>
+      <button
+        onClick={() => window.location.href = '/'}
+        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Go Home
+      </button>
+    </div>
+  </div>
+);
+
+const App = () => {
   return (
     <ErrorBoundary>
       <BrowserRouter>

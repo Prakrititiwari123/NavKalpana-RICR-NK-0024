@@ -110,11 +110,11 @@ const Header = () => {
               onClick={() => handleNavigation('/')}
               className="flex items-center space-x-2 group"
             >
-              <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-1.5 rounded-xl transform group-hover:rotate-12 transition-all duration-500 group-hover:scale-110">
+              <div className="bg-linear-to-r from-blue-500 to-indigo-500 p-1.5 rounded-xl transform group-hover:rotate-12 transition-all duration-500 group-hover:scale-110">
                 <FiActivity className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                <span className="text-lg sm:text-xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   HealthNexus
                 </span>
                 <span className="text-[10px] sm:text-xs text-gray-500 hidden sm:block">Your Health Companion</span>
@@ -201,11 +201,11 @@ const Header = () => {
                 <div className="flex gap-4 relative profile-menu">
                   <button
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                    className="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-indigo-50 p-1 rounded-xl hover:bg-blue-100 transition-all duration-300 group"
+                    className="flex items-center space-x-2 bg-linear-to-r from-blue-50 to-indigo-50 p-1 rounded-xl hover:bg-blue-100 transition-all duration-300 group"
                     aria-label="User menu"
                   >
                     {/* User Avatar */}
-                    <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center overflow-hidden">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 bg-linear-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center overflow-hidden">
                       {userData?.photo?.url ? (
                         <img
                           src={userData.photo.url}
@@ -250,7 +250,7 @@ const Header = () => {
                   {isProfileMenuOpen && (
                     <div className="absolute right-0 mt-2 w-56 sm:w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-slideDown z-50">
                       {/* User Info Header */}
-                      <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-3 sm:p-4 text-white">
+                      <div className="bg-linear-to-r from-blue-500 to-indigo-500 p-3 sm:p-4 text-white">
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center text-white font-bold text-sm sm:text-lg">
                             {getUserInitials()}
