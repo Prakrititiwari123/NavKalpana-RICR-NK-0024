@@ -1,5 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import Login from './pages/auth/Login.jsx'
 import Register from './pages/auth/Register.jsx'
 import Home from './pages/Home.jsx';
@@ -16,6 +19,14 @@ import PublicLayout from "./Layout.jsx/PublicLayout.jsx";
 import PrivateLayout from "./Layout.jsx/PrivateLayout.jsx";
 
 const App = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,     // animation duration (ms)
+      once: true,         // animation happens only once
+      offset: 100,        // offset from original trigger point
+    });
+  }, []);
+
   return (
     <>
       <BrowserRouter>
