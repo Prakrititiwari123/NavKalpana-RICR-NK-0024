@@ -137,7 +137,7 @@ const Features = () => {
                   >
                     <div className={`${feature.bgColor} rounded-2xl p-8 h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 cursor-pointer`}>
                       {/* Icon */}
-                      <div className={`inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                      <div className={`inline-flex items-center justify-center w-16 h-16 rounded-xl bg-linear-to-br ${feature.color} text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
                         <IconComponent className="w-8 h-8" />
                       </div>
 
@@ -150,7 +150,7 @@ const Features = () => {
                       <ul className="space-y-4">
                         {feature.highlights.map((highlight, idx) => (
                           <li key={idx} className="flex items-start gap-3">
-                            <div className={`flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br ${feature.color} text-white flex items-center justify-center mt-0.5`}>
+                            <div className={`yshrink-0 w-5 h-5 rounded-full bg-linear-to-br ${feature.color} text-white flex items-center justify-center mt-0.5`}>
                               <FiCheck className="w-3 h-3" />
                             </div>
                             <span className="text-gray-700">
@@ -168,7 +168,7 @@ const Features = () => {
         </section>
 
         {/* DETAILED FEATURES SECTION */}
-        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-gradient-to-b from-gray-50 to-white">
+        <section className="px-4 sm:px-6 lg:px-8 py-20 bg-linear-to-b from-gray-50 to-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -183,7 +183,7 @@ const Features = () => {
               {/* Left - Features List */}
               <div className="space-y-6">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0">
+                  <div className="yshrink-0">
                     <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-blue-100 text-blue-600">
                       <FiCheck className="w-6 h-6" />
                     </div>
@@ -195,7 +195,7 @@ const Features = () => {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0">
+                  <div className="yshrink-0">
                     <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-green-100 text-green-600">
                       <FiCheck className="w-6 h-6" />
                     </div>
@@ -207,7 +207,7 @@ const Features = () => {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0">
+                  <div className="yshrink-0">
                     <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-purple-100 text-purple-600">
                       <FiCheck className="w-6 h-6" />
                     </div>
@@ -219,7 +219,7 @@ const Features = () => {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0">
+                  <div className="yshrink-0">
                     <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-orange-100 text-orange-600">
                       <FiCheck className="w-6 h-6" />
                     </div>
@@ -233,19 +233,19 @@ const Features = () => {
 
               {/* Right - Stats */}
               <div className="grid grid-cols-1 gap-6">
-                <div className="group bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl p-8 text-white cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                <div className="group bg-linear-to-br from-blue-600 to-cyan-600 rounded-2xl p-8 text-white cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                   <p className="text-5xl font-bold mb-2">1000+</p>
                   <p className="text-xl opacity-90">Workout Programs</p>
                   <p className="text-sm opacity-75 mt-2">Updated regularly based on fitness science</p>
                 </div>
 
-                <div className="group bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-8 text-white cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                <div className="group bg-linear-to-br from-green-600 to-emerald-600 rounded-2xl p-8 text-white cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                   <p className="text-5xl font-bold mb-2">5000+</p>
                   <p className="text-xl opacity-90">Meal Plans</p>
                   <p className="text-sm opacity-75 mt-2">Customized for different diets and goals</p>
                 </div>
 
-                <div className="group bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-8 text-white cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                <div className="group bg-linear-to-br from-purple-600 to-pink-600 rounded-2xl p-8 text-white cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                   <p className="text-5xl font-bold mb-2">100K+</p>
                   <p className="text-xl opacity-90">Happy Users</p>
                   <p className="text-sm opacity-75 mt-2">Achieving their fitness goals daily</p>
@@ -258,7 +258,7 @@ const Features = () => {
         {/* CTA SECTION */}
         <section className="px-4 sm:px-6 lg:px-8 py-20">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-r from-blue-600 via-cyan-600 to-purple-600 rounded-3xl px-8 sm:px-12 md:px-16 py-16 sm:py-20 text-center">
+            <div className="bg-linear-to-r from-blue-600 via-cyan-600 to-purple-600 rounded-3xl px-8 sm:px-12 md:px-16 py-16 sm:py-20 text-center">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
                 Ready to Transform Your Fitness Journey?
               </h2>
@@ -309,7 +309,7 @@ const Features = () => {
                   key={index}
                   className="bg-white rounded-xl p-6 flex items-center gap-4 hover:shadow-lg transition-shadow duration-300"
                 >
-                  <div className={`flex-shrink-0 w-12 h-12 rounded-full bg-${item.color}-100 text-${item.color}-600 flex items-center justify-center text-xl font-bold`}>
+                  <div className={`yshrink-0 w-12 h-12 rounded-full bg-${item.color}-100 text-${item.color}-600 flex items-center justify-center text-xl font-bold`}>
                     {item.value}
                   </div>
                   <span className="text-lg font-semibold text-gray-900">{item.label}</span>

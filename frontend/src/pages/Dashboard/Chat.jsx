@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const Chat = () => {
   const [messages, setMessages] = useState([
@@ -19,6 +22,7 @@ const Chat = () => {
   
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const navigate = useNavigate();
 
   // User data (in real app, this would come from context/API)
   const userData = {
@@ -53,6 +57,16 @@ const Chat = () => {
     { id: 5, text: "🥗 Meal ideas", icon: '🥗' },
     { id: 6, text: "🔥 Motivation", icon: '🔥' }
   ];
+
+  // Initialize AOS
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100,
+      easing: 'ease-in-out',
+    });
+  }, []);
 
   // Auto-scroll to bottom when new message arrives
   useEffect(() => {
@@ -236,85 +250,36 @@ To give you the best advice, could you specify:
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-purple-200/30 to-transparent rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-blue-200/30 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-linear-to-br from-purple-200/30 to-transparent rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-linear-to-tl from-blue-200/30 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-xl shadow-lg sticky top-0 z-10 border-b border-purple-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <button 
-                onClick={() => setShowHistory(!showHistory)}
-                className="p-2 rounded-xl hover:bg-purple-100 transition-all duration-300 hover:scale-110 group"
-              >
-                <svg className="w-6 h-6 text-gray-600 group-hover:text-purple-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-              <div className="flex items-center space-x-3">
-                <div className="relative">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-                    <span className="text-xl">🤖</span>
-                  </div>
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                    FitAI Coach
-                  </h1>
-                  <p className="text-xs text-green-500 font-medium flex items-center">
-                    <span className="w-2 h-2 bg-green-400 rounded-full mr-1.5 animate-pulse"></span>
-                    Online & Ready
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <button 
-                onClick={() => setShowContext(!showContext)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-md ${
-                  showContext 
-                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-purple-200' 
-                    : 'bg-white text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                {showContext ? '📊 Hide Stats' : '📊 Show Stats'}
-              </button>
-              <button 
-                onClick={() => {
-                  setMessages([{
-                    id: 1,
-                    type: 'ai',
-                    text: "👋 Hello! I'm your FitAI Coach. How can I help with your fitness journey today?",
-                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    options: ['Track Progress', 'Workout Help', 'Diet Advice', 'Motivation']
-                  }]);
-                }}
-                className="p-2.5 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl"
-                title="New chat"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Back Button */}
+      <button
+        onClick={() => navigate('/dashboard')}
+        className="absolute left-5 top-50 md:left-10 md:top-10 p-2.5 rounded-xl bg-linear-to-br from-gray-500 to-gray-600 text-white hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl z-20"
+        title="Back to Dashboard"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10">
         <div className="flex gap-6">
           {/* Chat History Sidebar */}
           {showHistory && (
-            <div className="w-72 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl p-5 h-[calc(100vh-140px)] overflow-y-auto border border-purple-100 transform transition-all duration-500 animate-slideInLeft">
+            <div
+              data-aos="fade-right"
+              data-aos-duration="800"
+              className="w-72 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl p-5 h-[calc(100vh-140px)] overflow-y-auto border border-purple-100"
+            >
               <h3 className="font-bold text-gray-800 mb-4 text-lg flex items-center">
-                <span className="w-1 h-6 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full mr-3"></span>
+                <span className="w-1 h-6 bg-linear-to-b from-purple-500 to-pink-500 rounded-full mr-3"></span>
                 Recent Chats
               </h3>
               <div className="space-y-2.5">
@@ -324,8 +289,8 @@ To give you the best advice, could you specify:
                     onClick={() => loadChatHistory(chat)}
                     className={`p-4 rounded-xl cursor-pointer transition-all duration-300 transform hover:scale-105 ${
                       selectedChat === chat.id 
-                        ? 'bg-gradient-to-r from-purple-100 to-pink-100 shadow-md border-2 border-purple-300' 
-                        : 'bg-gray-50 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 border-2 border-transparent'
+                        ? 'bg-linear-to-r from-purple-100 to-pink-100 shadow-md border-2 border-purple-300' 
+                        : 'bg-gray-50 hover:bg-linear-to-r hover:from-purple-50 hover:to-pink-50 border-2 border-transparent'
                     }`}
                   >
                     <p className="font-semibold text-sm text-gray-800 truncate mb-1">{chat.title}</p>
@@ -342,12 +307,20 @@ To give you the best advice, could you specify:
           )}
 
           {/* Main Chat Area */}
-          <div className={`flex-1 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-purple-100 transition-all duration-500 ${
-            showHistory ? '' : 'max-w-5xl mx-auto'
-          }`}>
+          <div
+            data-aos="fade-up"
+            data-aos-duration="1000"
+            className={`flex-1 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-purple-100 transition-all duration-500 ${
+              showHistory ? '' : 'max-w-5xl mx-auto'
+            }`}
+          >
             {/* Context Panel (User Stats) */}
             {showContext && (
-              <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 p-6 text-white relative overflow-hidden">
+              <div
+                data-aos="fade-down"
+                data-aos-duration="800"
+                className="bg-linear-to-r from-purple-600 via-pink-600 to-purple-600 p-6 text-white relative overflow-hidden"
+              >
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-2xl"></div>
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full -ml-32 -mb-32 blur-2xl"></div>
@@ -408,7 +381,7 @@ To give you the best advice, could you specify:
             )}
 
             {/* Messages Container */}
-            <div className="h-[500px] overflow-y-auto p-6 space-y-4 bg-gradient-to-b from-gray-50/50 to-white" style={{ maxHeight: 'calc(100vh - 320px)' }}>
+            <div className="h-[calc(100vh-320px)] overflow-y-auto p-6 space-y-4 bg-linear-to-b from-gray-50/50 to-white">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -416,12 +389,12 @@ To give you the best advice, could you specify:
                 >
                   <div className={`max-w-[80%] group ${
                     message.type === 'user' 
-                      ? 'bg-gradient-to-br from-purple-600 to-pink-600 text-white rounded-2xl rounded-tr-sm shadow-lg hover:shadow-xl' 
+                      ? 'bg-linear-to-br from-purple-600 to-pink-600 text-white rounded-2xl rounded-tr-sm shadow-lg hover:shadow-xl' 
                       : 'bg-white text-gray-800 rounded-2xl rounded-tl-sm shadow-md hover:shadow-lg border border-gray-100'
                   } p-4 transition-all duration-300 transform hover:scale-[1.02]`}>
                     {message.type === 'ai' && (
                       <div className="flex items-center space-x-2 mb-3 pb-2 border-b border-gray-100">
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-sm">
+                        <div className="w-7 h-7 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-sm">
                           <span className="text-sm">🤖</span>
                         </div>
                         <span className="text-xs font-semibold text-gray-500">FitAI Coach</span>
@@ -440,7 +413,7 @@ To give you the best advice, could you specify:
                             onClick={() => handleOptionClick(option)}
                             className={`text-xs px-4 py-2 rounded-full font-medium transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md ${
                               message.type === 'ai'
-                                ? 'bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 hover:from-purple-100 hover:to-pink-100 border border-purple-200'
+                                ? 'bg-linear-to-r from-purple-50 to-pink-50 text-purple-700 hover:from-purple-100 hover:to-pink-100 border border-purple-200'
                                 : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm'
                             }`}
                           >
@@ -464,13 +437,13 @@ To give you the best advice, could you specify:
                 <div className="flex justify-start animate-fadeInUp">
                   <div className="bg-white text-gray-800 rounded-2xl rounded-tl-sm p-4 shadow-md border border-gray-100">
                     <div className="flex items-center space-x-3">
-                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-sm">
+                      <div className="w-7 h-7 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-sm">
                         <span className="text-sm">🤖</span>
                       </div>
                       <div className="flex space-x-1.5">
-                        <div className="w-2.5 h-2.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-bounce"></div>
-                        <div className="w-2.5 h-2.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
-                        <div className="w-2.5 h-2.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+                        <div className="w-2.5 h-2.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full animate-bounce"></div>
+                        <div className="w-2.5 h-2.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
+                        <div className="w-2.5 h-2.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
                       </div>
                     </div>
                   </div>
@@ -481,7 +454,7 @@ To give you the best advice, could you specify:
             </div>
 
             {/* Quick Questions */}
-            <div className="px-6 py-4 bg-gradient-to-r from-purple-50/50 to-pink-50/50 border-t border-purple-100">
+            <div className="px-6 py-4 bg-linear-to-r from-purple-50/50 to-pink-50/50 border-t border-purple-100">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-sm font-semibold text-gray-700 flex items-center">
                   <svg className="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -499,7 +472,7 @@ To give you the best advice, could you specify:
                   <button
                     key={q.id}
                     onClick={() => handleQuickQuestion(q)}
-                    className="px-4 py-2.5 bg-white hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 rounded-xl text-sm text-gray-700 hover:text-purple-700 transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md border border-gray-200 hover:border-purple-300 font-medium"
+                    className="px-4 py-2.5 bg-white hover:bg-linear-to-r hover:from-purple-50 hover:to-pink-50 rounded-xl text-sm text-gray-700 hover:text-purple-700 transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md border border-gray-200 hover:border-purple-300 font-medium"
                   >
                     <span className="mr-1.5">{q.icon}</span>
                     <span>{q.text}</span>
@@ -532,7 +505,7 @@ To give you the best advice, could you specify:
                   className={`px-8 py-3.5 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
                     !inputMessage.trim() || isTyping
                       ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
-                      : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 hover:shadow-xl'
+                      : 'bg-linear-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 hover:shadow-xl'
                   }`}
                 >
                   {isTyping ? (
@@ -556,7 +529,7 @@ To give you the best advice, could you specify:
         </div>
       </div>
 
-      {/* Custom CSS for animations */}
+      {/* Custom CSS for animations (kept for message animations) */}
       <style jsx>{`
         @keyframes fadeInUp {
           from {
@@ -569,23 +542,8 @@ To give you the best advice, could you specify:
           }
         }
 
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
         .animate-fadeInUp {
           animation: fadeInUp 0.5s ease-out;
-        }
-
-        .animate-slideInLeft {
-          animation: slideInLeft 0.5s ease-out;
         }
 
         /* Custom scrollbar */
@@ -600,12 +558,12 @@ To give you the best advice, could you specify:
         }
 
         ::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #a855f7, #ec4899);
+          background: linear-linear(to bottom, #a855f7, #ec4899);
           border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #9333ea, #db2777);
+          background: linear-linear(to bottom, #9333ea, #db2777);
         }
       `}</style>
     </div>
