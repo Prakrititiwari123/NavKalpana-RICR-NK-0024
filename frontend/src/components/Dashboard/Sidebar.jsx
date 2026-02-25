@@ -7,7 +7,7 @@ import {
   FiMenu,
   FiX,
   FiSettings,
-  FiLogOut
+  FiUser
 } from 'react-icons/fi';
 import { GiWeightLiftingUp } from 'react-icons/gi';
 import { IoRestaurant } from 'react-icons/io5';
@@ -19,25 +19,32 @@ const Sidebar = () => {
 
   const menuItems = [
     {
+      id: 0,
+      label: 'Profile',
+      icon: FiUser,
+      path: '/profile',
+      color: 'text-pink-600'
+    },
+    {
       id: 1,
+      label: 'Tracking',
+      icon: FiTrendingUp,
+      path: '/tracking',
+      color: 'text-purple-600'
+    },
+    {
+      id: 2,
       label: 'Analytics',
       icon: FiBarChart2,
       path: '/analytics',
       color: 'text-blue-600'
     },
     {
-      id: 2,
+      id: 3,
       label: 'Chat',
       icon: FiMessageSquare,
       path: '/chat',
       color: 'text-purple-600'
-    },
-    {
-      id: 3,
-      label: 'Progress',
-      icon: FiTrendingUp,
-      path: '/progress',
-      color: 'text-green-600'
     },
     {
       id: 4,
@@ -67,16 +74,6 @@ const Sidebar = () => {
     setIsOpen(false);
   };
 
-  const handleLogout = () => {
-    // Clear authentication data from localStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('authToken');
-    
-    // Redirect to login page
-    navigate('/login');
-  };
-
   const isActive = (path) => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
@@ -102,7 +99,7 @@ const Sidebar = () => {
         }`}
       >
         {/* Navigation Menu */}
-        <nav className="p-5 mt-5 space-y-2 overflow-y-auto max-h-[calc(100vh-300px)]">
+        <nav className="p-5 mt-5 space-y-2 overflow-y-auto max-h-[calc(100vh-160px)]">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -130,17 +127,6 @@ const Sidebar = () => {
             );
           })}
         </nav>
-
-        {/* Sidebar Footer - Logout Button */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-linear-to-t from-white to-transparent">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-linear-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 group"
-          >
-            <FiLogOut className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-            <span>Logout</span>
-          </button>
-        </div>
       </aside>
 
       {/* Mobile Overlay */}

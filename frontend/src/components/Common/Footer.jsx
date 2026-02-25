@@ -13,7 +13,7 @@ const Footer = () => {
   const isLandingPage = location.pathname === '/';
   
   // Dashboard routes where footer should not appear
-  const dashboardRoutes = ['/dashboard', '/workout', '/diet', '/progress', '/analytics', '/chat', '/settings'];
+  const dashboardRoutes = ['/dashboard', '/profile', '/tracking', '/workout', '/diet', '/progress', '/analytics', '/chat', '/settings'];
   const isDashboardPage = dashboardRoutes.includes(location.pathname);
   
   // Don't render footer on dashboard pages
