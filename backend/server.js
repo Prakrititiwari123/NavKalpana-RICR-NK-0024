@@ -20,6 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
+
 app.use("/auth", AuthRouter);
 app.use("/user", UserRouter);
 app.use("/api/v1/ai", aiRoutes)

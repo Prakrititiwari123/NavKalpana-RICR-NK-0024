@@ -55,11 +55,19 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
   };
 
+  // AuthContext.js (MODIFICATION ONLY)
+
+const updateUser = (updatedUser) => {
+  setUser(updatedUser);
+};
+
+  
   return (
     <AuthContext.Provider
       value={{
         user,
         accessToken,
+        updateUser,
         isAuthenticated,
         login,
         logout,

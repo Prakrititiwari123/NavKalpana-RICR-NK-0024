@@ -60,23 +60,36 @@ export const UserRegister = async (req, res, next) => {
   }
 };
 
+export const refresh = async (req, res) => {
+  try {
+    const token = req.cookies.refreshToken;
 
-export const refresh = (req, res) => {
-  const token = req.cookies.refreshToken;
+    if (!token) {
+      return res.status(401).json({ message: "No refresh token" });
+    }
 
-  if (!token) return res.sendStatus(401);
+    const decoded = jwt.verify(token, process.env.REFRESH_SECRET);
 
-  jwt.verify(token, process.env.REFRESH_SECRET, (err, decoded) => {
-    if (err) return res.sendStatus(403);
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
 
     const newAccessToken = jwt.sign(
-      { id: decoded.id },
+      { id: user._id },
       process.env.ACCESS_SECRET,
       { expiresIn: "10m" }
     );
 
-    res.json({ accessToken: newAccessToken });
-  });
+    res.status(200).json({
+      accessToken: newAccessToken,
+      user, // ⭐ MOST IMPORTANT LINE
+    });
+    
+  } catch (err) {
+    res.status(401).json({ message: "Invalid refresh token" });
+  }
 };
 
 
@@ -292,6 +305,7 @@ export const UserForgetPassword = async (req, res, next) => {
 
 export const deleteAccount = async (req, res, next) => {
   try {
+    console.log("Delete account request received");
     const userId = req.user._id;
     console.log("Deleting user with ID:", userId); // 👈 Check ID
     

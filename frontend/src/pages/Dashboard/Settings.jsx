@@ -12,7 +12,6 @@ const Settings = () => {
     useState(false);
      const [deleteConfirmText, setDeleteConfirmText] = useState('');
   
-  
   // Profile Information State
   const [profileData, setProfileData] = useState({
     fullName: '',
@@ -385,7 +384,7 @@ const Settings = () => {
       };
 
       // Update in localStorage
-      updateUserData(updatedUserData);
+      updateUserData(updatedUserData );
       
       toast.success('Settings saved successfully!');
       setHasChanges(false);
@@ -397,9 +396,9 @@ const Settings = () => {
     }
   };
 
-  const handleChangePassword = () => {
-    toast.success('Password change functionality coming soon!');
-  };
+  console.log(documents);
+  
+  
 
   const handleExportData = () => {
     const dataStr = JSON.stringify(userData, null, 2);

@@ -1,106 +1,134 @@
 import mongoose from "mongoose";
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
-    fullName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, select: false },
-   
+    // ✅ REQUIRED (Signup)
+    fullName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
+
+    // ✅ OPTIONAL (Editable later)
     role: {
       type: String,
       enum: ["admin", "user"],
       default: "user",
     },
 
-    dob: { type: String, default: "N/A" },
+    dob: { type: String },
     gender: {
       type: String,
       enum: ["male", "female", "others", "N/A"],
-      default: "N/A",
-    },
-     phone: { type: String  },  
-    address: { type: String, default: "N/A" },
-    city: { type: String, default: "N/A" },
-    pin: { type: String, default: "N/A" },
-    photo: {
-      url: { type: String, default: "" },
-      publicID: { type: String, default: "" },
     },
 
+    phone: { type: String },
+    address: { type: String },
+    city: { type: String },
+    pin: { type: String },
+
+    photo: {
+      url: { type: String },
+      publicID: { type: String },
+    },
+
+    // ✅ Health Data (Optional – profile completion phase)
     healthData: {
       vitals: {
-        height: { type: Number, default: null }, // cm
-        weight: { type: Number, default: null }, // kg
-        bmi: { type: Number, default: null },
-        bloodGroup: { type: String, default: "N/A" },
-        heartRate: { type: Number, default: null },
-        bloodPressure: { type: String, default: "N/A" }, // systolic/diastolic
-        oxygenSaturation: { type: Number, default: null },
-        temperature: { type: Number, default: null },
+        height: Number,
+        weight: Number,
+        bmi: Number,
+        bloodGroup: String,
+        heartRate: Number,
+        bloodPressure: String,
+        oxygenSaturation: Number,
+        temperature: Number,
       },
+
       medicalHistory: {
-        chronicDiseases: { type: [String], default: [] },
-        surgeries: { type: [String], default: [] },
-        allergies: { type: [String], default: [] },
+        chronicDiseases: [String],
+        surgeries: [String],
+        allergies: [String],
       },
+
       medications: {
-        currentMedications: { type: [String], default: [] },
-        pastMedications: { type: [String], default: [] },
+        currentMedications: [String],
+        pastMedications: [String],
       },
+
       lifestyle: {
-        smoking: { type: Boolean, default: false },
-        alcohol: { type: Boolean, default: false },
+        smoking: Boolean,
+        alcohol: Boolean,
         exerciseFrequency: {
           type: String,
           enum: ["None", "Occasional", "Regular"],
-          default: "None",
         },
-        diet: { type: String, default: "N/A" },
+        diet: String,
       },
+
       labReports: [
         {
-          reportName: { type: String, },
-          reportDate: { type: Date, default: Date.now },
-          result: { type: String, default: "N/A" },
-          fileUrl: { type: String, default: "" },
+          reportName: String,
+          reportDate: Date,
+          result: String,
+          fileUrl: String,
         },
       ],
+
       appointments: [
         {
-          doctorName: { type: String, default: "N/A" },
-          specialization: { type: String, default: "N/A" },
-          appointmentDate: { type: Date, default: Date.now },
-          notes: { type: String, default: "" },
+          doctorName: String,
+          specialization: String,
+          appointmentDate: Date,
+          notes: String,
         },
       ],
+
       vaccinations: [
         {
-          vaccineName: { type: String,  },
-          dose: { type: String, default: "N/A" },
-          date: { type: Date, default: Date.now },
+          vaccineName: String,
+          dose: String,
+          date: Date,
         },
       ],
+
       emergencyContacts: [
         {
-          name: { type: String,  },
-          relation: { type: String, default: "N/A" },
-          phone: { type: String,  },
+          name: String,
+          relation: String,
+          phone: String,
         },
       ],
     },
 
+    // ✅ Documents (Optional)
     documents: {
-      gst: { type: String, default: "N/A" },
-      uidai: { type: String, default: "N/A" },
-      pan: { type: String, default: "N/A" },
+      gst: String,
+      uidai: String,
+      pan: String,
     },
 
+    // ✅ System flags
     isActive: {
       type: Boolean,
-      default: "true",
+      default: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);

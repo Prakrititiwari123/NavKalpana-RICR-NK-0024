@@ -5,7 +5,7 @@ import User from "../models/userModel.js";
 // ----------------------Protect------------------
 export const Protect = async (req, res, next) => {
   try {
-    const token = req.cookies.health; // 👈 changed from Nexus to health
+    const token = req.cookies.refreshToken; 
     console.log("Token received in Cookies:", token);
 
     if (!token) {
