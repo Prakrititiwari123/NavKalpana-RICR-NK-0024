@@ -14,10 +14,12 @@ const Register = lazy(() => import("./pages/auth/Register"));
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
 const Workout = lazy(() => import("./pages/Dashboard/Workout"));
 const Diet = lazy(() => import("./pages/Dashboard/Diet"));
-const Progress = lazy(() => import("./pages/Dashboard/Progress"));
+const Tracking = lazy(() => import("./pages/Dashboard/Tracking"));
+// const Progress = lazy(() => import("./pages/Dashboard/Progress"));
 const Analytics = lazy(() => import("./pages/Dashboard/Analytics"));
 const Chat = lazy(() => import("./pages/Dashboard/Chat"));
 const Settings = lazy(() => import("./pages/Dashboard/Settings"));
+const Profile = lazy(() => import("./pages/Dashboard/Profile"));
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -252,6 +254,15 @@ const App = () => {
               />
 
               <Route
+                path="/profile"
+                element={
+                  // <ProtectedRoute>
+                  <Profile />
+                  // </ProtectedRoute>
+                }
+              />
+
+              <Route
                 path="/workout"
                 element={
                   // <ProtectedRoute>
@@ -268,13 +279,21 @@ const App = () => {
                 }
               />
               <Route
+                path="/tracking"
+                element={
+                  // <ProtectedRoute>
+                  <Tracking />
+                  // </ProtectedRoute>
+                }
+              />
+              {/* <Route
                 path="/progress"
                 element={
                   // <ProtectedRoute>
                   <Progress />
                   // </ProtectedRoute>
                 }
-              />
+              /> */}
               <Route
                 path="/analytics"
                 element={
