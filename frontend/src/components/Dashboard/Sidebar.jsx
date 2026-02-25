@@ -11,6 +11,8 @@ import {
 } from 'react-icons/fi';
 import { GiWeightLiftingUp } from 'react-icons/gi';
 import { IoRestaurant } from 'react-icons/io5';
+import { GiFlexibleLamp } from 'react-icons/gi';
+import { GiTreeGrowth } from 'react-icons/gi';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -66,6 +68,20 @@ const Sidebar = () => {
       icon: GiWeightLiftingUp,
       path: '/workout',
       color: 'text-indigo-600'
+    },
+    {
+      id: 5.5,
+      label: 'Overtraining',
+      icon: GiFlexibleLamp,
+      path: '/overtraining',
+      color: 'text-red-600'
+    },
+    {
+      id: 5.75,
+      label: 'Sustainability',
+      icon: GiTreeGrowth,
+      path: '/sustainability',
+      color: 'text-teal-600'
     },
     {
       id: 6,
