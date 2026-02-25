@@ -22,6 +22,8 @@ const Chat = lazy(() => import("./pages/Dashboard/Chat"));
 const Settings = lazy(() => import("./pages/Dashboard/Settings"));
 const Profile = lazy(() => import("./pages/Dashboard/Profile"));
 const Reports = lazy(() => import("./pages/Dashboard/reports"));
+const Overtraining = lazy(() => import("./pages/Dashboard/Overtraining"));
+const Sustainability = lazy(() => import("./pages/Dashboard/Sustainability"));
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -326,6 +328,22 @@ const App = () => {
                 element={
                   // <ProtectedRoute>
                   <Reports />
+                  // </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/overtraining"
+                element={
+                  // <ProtectedRoute>
+                  <Overtraining />
+                  // </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/sustainability"
+                element={
+                  // <ProtectedRoute>
+                  <Sustainability />
                   // </ProtectedRoute>
                 }
               />
