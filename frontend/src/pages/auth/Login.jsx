@@ -149,9 +149,11 @@ const Login = () => {
         rememberMe,
       });
 
-      const userData = localStorage.getItem("healthnexus_user");
-      if (userData) {
-        login(JSON.parse(userData));
+      if (response?.success) {
+        login({
+          user: response.user,
+          accessToken: response.accessToken,
+        });
       }
 
       toast.success("Login successful! Redirecting...", {
@@ -416,12 +418,11 @@ const Login = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 border-2 rounded-lg sm:rounded-xl transition-all duration-200 outline-none text-sm sm:text-base
-                        ${
-                          touched.email && errors.email
-                            ? "border-red-300 bg-red-50 focus:border-red-500"
-                            : loginError
-                              ? "border-red-300 bg-red-50"
-                              : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
+                        ${touched.email && errors.email
+                          ? "border-red-300 bg-red-50 focus:border-red-500"
+                          : loginError
+                            ? "border-red-300 bg-red-50"
+                            : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
                         }
                         hover:border-blue-300 focus:ring-2 focus:ring-blue-100`}
                       placeholder="you@example.com"
@@ -457,12 +458,11 @@ const Login = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`w-full pl-9 sm:pl-10 pr-9 sm:pr-12 py-2.5 sm:py-3 border-2 rounded-lg sm:rounded-xl transition-all duration-200 outline-none text-sm sm:text-base
-                        ${
-                          touched.password && errors.password
-                            ? "border-red-300 bg-red-50 focus:border-red-500"
-                            : loginError
-                              ? "border-red-300 bg-red-50"
-                              : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
+                        ${touched.password && errors.password
+                          ? "border-red-300 bg-red-50 focus:border-red-500"
+                          : loginError
+                            ? "border-red-300 bg-red-50"
+                            : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
                         }
                         hover:border-blue-300 focus:ring-2 focus:ring-blue-100`}
                       placeholder="Enter your password"
@@ -544,10 +544,9 @@ const Login = () => {
                   type="submit"
                   disabled={!isValid || isLoading}
                   className={`w-full py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base text-white transition-all duration-200
-                    ${
-                      !isValid || isLoading
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-linear-to-r from-blue-500 to-purple-600 hover:shadow-md"
+                    ${!isValid || isLoading
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-linear-to-r from-blue-500 to-purple-600 hover:shadow-md"
                     }`}
                 >
                   {isLoading ? (

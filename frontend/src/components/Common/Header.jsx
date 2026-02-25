@@ -16,32 +16,6 @@ const Header = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const userData = user;
 
-  // Check authentication status on mount and when localStorage changes
-
-
-  // const checkAuthStatus = () => {
-
-  //   const user = getUserData()
-
-
-  //   if (!user) {
-  //     setUserData(null);
-  //     return;
-  //   }
-
-  //   try {
-  //     setUserData(user);
-  //   } catch (error) {
-  //     console.error('Invalid user data in localStorage:', error);
-  //     // localStorage.removeItem('healthnexus_user');
-  //     setUserData(null);
-  //   }
-  // };
-
-
-
-
-  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -94,7 +68,7 @@ const Header = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled
+      className={`sticky top-0 z-50 transition-all duration-500 shadow-xl shadow-gray-400 ${isScrolled
         ? 'bg-white/95 backdrop-blur-md shadow-lg py-2'
         : 'bg-white/80 backdrop-blur-sm py-3'
         }`}
@@ -122,55 +96,12 @@ const Header = () => {
             </button>
           </div>
 
-          {/* Desktop Navigation - Only visible on desktop and when not authenticated */}
-          {/* {!isAuthenticated && (
-            <nav className="hidden lg:flex items-center space-x-1">
-              <button
-                onClick={() => handleNavigation('/')}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${location.pathname === '/'
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
-              >
-                Home
-              </button>
-              <button
-                onClick={() => handleNavigation('/features')}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${location.pathname === '/features'
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
-              >
-                Features
-              </button>
-              <button
-                onClick={() => handleNavigation('/benefits')}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${location.pathname === '/benefits'
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
-              >
-                Benefits
-              </button>
-              <button
-                onClick={() => handleNavigation('/about')}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${location.pathname === '/about'
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
-              >
-                About
-              </button>
-            </nav>
-          )} */}
-
+    
           {/* Right Section */}
           <div className="flex items-center space-x-2 sm:space-x-3">
-            {/* Show based on authentication status */}
+
             {!isAuthenticated ? (
-              /* Not Logged In - Show Sign In and Get Started buttons */
               <>
-                {/* Mobile - Show compact buttons */}
                 <div className="flex items-center gap-1 sm:gap-2">
                   <button
                     onClick={() => handleNavigation('/login')}

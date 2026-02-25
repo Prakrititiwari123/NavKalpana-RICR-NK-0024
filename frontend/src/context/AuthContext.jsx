@@ -1,39 +1,70 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); // 👈 IMPORTANT
+  const [loading, setLoading] = useState(true);
 
-  // 🔁 REHYDRATION LOGIC
+  // 🔁 REHYDRATION FROM BACKEND (BEST PRACTICE)
   useEffect(() => {
-    const storedUser = localStorage.getItem("healthnexus_user");
+    const refreshAuth = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:4500/auth/refresh",
+          { withCredentials: true }
+        );
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
-    }
+        setAccessToken(res.data.accessToken);
+        setUser(res.data.user); // optional if backend sends user
+        setIsAuthenticated(true);
+      } catch (err) {
+        setUser(null);
+        setAccessToken(null);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false); // 👈 IMPORTANT
+      }
+    };
 
-    setLoading(false); // 👈 hydration complete
+    refreshAuth();
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
+  // 🔐 LOGIN
+  const login = (data) => {
+    setUser(data.user);
+    setAccessToken(data.accessToken);
     setIsAuthenticated(true);
-    localStorage.setItem("healthnexus_user", JSON.stringify(userData));
   };
 
-  const logout = () => {
+  // 🚪 LOGOUT
+  const logout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:4500/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+    } catch (_) {}
+
     setUser(null);
+    setAccessToken(null);
     setIsAuthenticated(false);
-    localStorage.removeItem("healthnexus_user");
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout, loading }}
+      value={{
+        user,
+        accessToken,
+        isAuthenticated,
+        login,
+        logout,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>

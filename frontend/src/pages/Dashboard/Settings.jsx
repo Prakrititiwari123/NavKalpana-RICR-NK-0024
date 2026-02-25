@@ -140,9 +140,9 @@ const Settings = () => {
       setLoading(true);
       await deleteAccount();
       toast.success('Your account has been deleted. Redirecting...');
-      localStorage.removeItem('user');
+      localStorage.removeItem('healthnexus_user');
       setTimeout(() => {
-        window.location.href = '/login';
+        window.location.href = '/';
       }, 2000);
     } catch (error) {
       toast.error(error?.response?.data?.message || 'Failed to delete account');
