@@ -9,6 +9,8 @@ import cookieParser from "cookie-parser";
 import connectDB from "./src/config/db.js";
 import AuthRouter from "./src/routers/authRouter.js";
 import UserRouter from "./src/routers/UserRouter.js"
+import aiRoutes from "./src/routers/aiRouter.js"
+
 
 
 const app = express();
@@ -20,6 +22,7 @@ app.use(morgan("dev"));
 
 app.use("/auth", AuthRouter);
 app.use("/user", UserRouter);
+app.use("/api/v1/ai", aiRoutes)
 
 
 app.get("/", (req, res) => {
