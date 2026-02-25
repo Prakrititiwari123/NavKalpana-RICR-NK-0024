@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BsArrowClockwise, BsEnvelope, BsShieldLock, BsLock } from "react-icons/bs";
-import api from "../../../config/Api";
+import api from "../config/Api";
 import toast from "react-hot-toast";
 
 const ForgetPasswordModal = ({ onClose }) => {

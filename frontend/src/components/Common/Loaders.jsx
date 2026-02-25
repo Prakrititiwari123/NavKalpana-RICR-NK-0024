@@ -45,7 +45,7 @@ const Loader = ({ fullScreen = true, text = "Loading your health data..." }) => 
         <div className="absolute inset-0 bg-blue-400 rounded-full opacity-20 animate-ping" />
         
         {/* Main logo container */}
-        <div className="relative bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-2xl shadow-xl hover:scale-110 transition-transform duration-300">
+        <div className="relative bg-linear-to-r from-blue-500 to-indigo-600 p-4 rounded-2xl shadow-xl hover:scale-110 transition-transform duration-300">
           <svg 
             className="w-12 h-12 text-white animate-pulse" 
             fill="none" 
@@ -92,7 +92,7 @@ const Loader = ({ fullScreen = true, text = "Loading your health data..." }) => 
 
       {/* Brand Name with Animation */}
       <div className="text-center">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent animate-pulse">
+        <h2 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent animate-pulse">
           HealthNexus
         </h2>
         <p className="text-gray-500 text-sm mt-1">Your Health Companion</p>
@@ -101,7 +101,7 @@ const Loader = ({ fullScreen = true, text = "Loading your health data..." }) => 
       {/* Progress Bar */}
       <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
         <div 
-          className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-300 ease-out"
+          className="h-full bg-linear-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-300 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -208,7 +208,7 @@ export const MinimalLoader = ({ size = 'md', color = 'blue' }) => {
 };
 
 export const PageLoader = () => (
-  <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50 z-50 flex items-center justify-center">
+  <div className="fixed inset-0 bg-linear-to-br from-blue-50 via-white to-indigo-50 z-50 flex items-center justify-center">
     <div className="relative">
       {/* ECG Line Animation */}
       <div className="absolute top-0 left-0 w-full h-32 opacity-20">
@@ -228,7 +228,7 @@ export const PageLoader = () => (
         {/* Pulse animation */}
         <div className="relative">
           <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-20" />
-          <div className="relative bg-gradient-to-br from-blue-500 to-indigo-600 p-5 rounded-2xl">
+          <div className="relative bg-linear-to-br from-blue-500 to-indigo-600 p-5 rounded-2xl">
             <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>

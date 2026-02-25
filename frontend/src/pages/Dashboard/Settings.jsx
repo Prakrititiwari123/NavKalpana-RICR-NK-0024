@@ -2,10 +2,16 @@ import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 import { getUserData, updateUserData } from '../../Services/authService';
 import toast from 'react-hot-toast';
+import ResetPasswordModal from '../../modals/ResetPasswordModal';
+import api from "../../config/Api"
 
 const Settings = () => {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+   const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
+    useState(false);
+     const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  
   
   // Profile Information State
   const [profileData, setProfileData] = useState({
@@ -118,6 +124,38 @@ const Settings = () => {
     loadUserData();
   }, []);
 
+
+   const deleteAccount = async () => {
+    try {
+      const response = await api.delete('/auth/delete-account');
+      return response.data;
+    } catch (error) {
+      console.error("API call failed:", error);
+      throw error;
+    }
+  };
+
+   const handleDeleteAccount = async() => {
+    try {
+      setLoading(true);
+      await deleteAccount();
+      toast.success('Your account has been deleted. Redirecting...');
+      localStorage.removeItem('user');
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 2000);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Failed to delete account');
+      setLoading(false);
+    } finally {
+      setShowDeleteModal(false);
+      setDeleteConfirmText('');
+    }
+  };
+
+
+
+  
   const loadUserData = () => {
     try {
       const user = getUserData();
@@ -385,10 +423,10 @@ const Settings = () => {
     toast.success('Account deactivated successfully');
   };
 
-  const handleDeleteAccount = () => {
-    setShowDeleteModal(false);
-    toast.success('Account deletion initiated');
-  };
+  
+
+ 
+
 
   if (loading) {
     return (
@@ -1115,9 +1153,13 @@ const Settings = () => {
                   <div className="action-label">🔒 Change Password</div>
                   <div className="action-description">Update your account password</div>
                 </div>
-                <button className="btn btn-secondary" onClick={handleChangePassword}>
-                  Change
-                </button>
+                <button
+                type="button"
+                onClick={() => setIsResetPasswordModalOpen(true)}
+                className="px-6 py-2 rounded-md bg-[#6626c0] text-white hover:scale-105 hover:shadow-2xl hover:bg-[#481b86] transition duration-300"
+              >
+                Change
+              </button>
               </div>
 
               <div className="action-item">
@@ -1201,7 +1243,8 @@ const Settings = () => {
                 </div>
                 <button 
                   className="btn btn-danger"
-                  onClick={() => setShowDeleteModal(true)}
+                  onClick={()=>handleDeleteAccount()}
+                  
                 >
                   Delete Account
                 </button>
@@ -1263,6 +1306,47 @@ const Settings = () => {
             </div>
           </div>
         )}
+
+       
+        {isResetPasswordModalOpen && (
+          <ResetPasswordModal onClose={() =>
+            setIsResetPasswordModalOpen(false)
+          } />
+        )}
+
+        {showDeleteModal && (
+  <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
+    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <h3>Delete Account Permanently?</h3>
+      <p>⚠️ This action is irreversible. All your data will be permanently deleted.</p>
+      <p className="danger-text">Type <strong>DELETE</strong> to confirm:</p>
+      <input
+        type="text"
+        className="confirm-input"
+        placeholder="Type DELETE"
+        value={deleteConfirmText}
+        onChange={(e) => setDeleteConfirmText(e.target.value)}
+      />
+      <div className="modal-actions">
+        <button className="btn btn-secondary" onClick={() => {
+          setShowDeleteModal(false);
+          setDeleteConfirmText('');
+        }}>
+          Cancel
+        </button>
+        <button
+          className="btn btn-danger"
+          disabled={deleteConfirmText !== 'DELETE'}
+          onClick={handleDeleteAccount}
+        >
+          Permanently Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}  
+
+
       </div>
 
       <style jsx="true">{`
