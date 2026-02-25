@@ -8,7 +8,7 @@ const Chat = () => {
     {
       id: 1,
       type: 'ai',
-      text: "👋 Hello! I'm your FitAI Coach. How can I help with your fitness journey today?",
+      text: "👋 Hello! I'm your HealthNexus Coach. How can I help with your fitness journey today?",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       options: ['Track Progress', 'Workout Help', 'Diet Advice', 'Motivation']
     }
@@ -397,7 +397,7 @@ To give you the best advice, could you specify:
                         <div className="w-7 h-7 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-sm">
                           <span className="text-sm">🤖</span>
                         </div>
-                        <span className="text-xs font-semibold text-gray-500">FitAI Coach</span>
+                        <span className="text-xs font-semibold text-gray-500">HealthNexus Coach</span>
                         <span className="text-xs text-gray-400">•</span>
                         <span className="text-xs text-gray-400">{message.timestamp}</span>
                       </div>
