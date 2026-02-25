@@ -46,6 +46,47 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [isValid, setIsValid] = useState(false);
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+
+  // Testimonials array
+  const testimonials = useMemo(
+    () => [
+      {
+        quote: "HealthNexus transformed my fitness approach. Achieved results I never thought possible!",
+        author: "Sarah Johnson",
+        initials: "SJ",
+        achievement: "Lost 30lbs in 6 months",
+      },
+      {
+        quote: "The AI-powered workouts are incredibly personalized. My strength increased by 40% in 3 months!",
+        author: "Michael Chen",
+        initials: "MC",
+        achievement: "40% strength increase",
+      },
+      {
+        quote: "Best investment for my health journey. The nutrition tracking feature alone is worth it!",
+        author: "Emma Rodriguez",
+        initials: "ER",
+        achievement: "Consistent results",
+      },
+      {
+        quote: "Finally found a fitness app that actually understands my goals. Highly recommended!",
+        author: "James Wilson",
+        initials: "JW",
+        achievement: "Achieved all fitness goals",
+      },
+    ],
+    [],
+  );
+
+  // Testimonial carousel effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length);
+    }, 2000);
+
+    return () => clearInterval(timer);
+  }, [testimonials.length]);
 
   // Auto-focus email field on mount
   useEffect(() => {
@@ -250,7 +291,7 @@ const Login = () => {
                   <Activity className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
                 </div>
                 <span className="text-white text-2xl sm:text-3xl font-bold">
-                  FitAI
+                  HealthNexus
                 </span>
               </motion.div>
             </motion.div>
@@ -298,32 +339,40 @@ const Login = () => {
               </motion.div>
             </div>
 
-            {/* Testimonial - Hidden on mobile */}
+            {/* Testimonial Carousel - Hidden on mobile */}
             <motion.div
               variants={itemVariants}
               className="relative z-10 mt-8 sm:mt-10 md:mt-12 hidden sm:block"
             >
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-5 md:p-6 border border-white/20">
-                <p className="text-white/90 text-xs sm:text-sm italic">
-                  "FitAI transformed my fitness approach. Achieved results I
-                  never thought possible!"
-                </p>
-                <div className="flex items-center mt-3 sm:mt-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-r from-yellow-400 to-pink-400 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-xs sm:text-sm">
-                      SJ
-                    </span>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentTestimonialIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-5 md:p-6 border border-white/20"
+                >
+                  <p className="text-white/90 text-xs sm:text-sm italic">
+                    "{testimonials[currentTestimonialIndex].quote}"
+                  </p>
+                  <div className="flex items-center mt-3 sm:mt-4">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-r from-yellow-400 to-pink-400 rounded-full flex items-center justify-center">
+                      <span className="text-white font-bold text-xs sm:text-sm">
+                        {testimonials[currentTestimonialIndex].initials}
+                      </span>
+                    </div>
+                    <div className="ml-2 sm:ml-3">
+                      <p className="text-white font-semibold text-xs sm:text-sm">
+                        {testimonials[currentTestimonialIndex].author}
+                      </p>
+                      <p className="text-white/60 text-xs">
+                        {testimonials[currentTestimonialIndex].achievement}
+                      </p>
+                    </div>
                   </div>
-                  <div className="ml-2 sm:ml-3">
-                    <p className="text-white font-semibold text-xs sm:text-sm">
-                      Sarah Johnson
-                    </p>
-                    <p className="text-white/60 text-xs">
-                      Lost 30lbs in 6 months
-                    </p>
-                  </div>
-                </div>
-              </div>
+                </motion.div>
+              </AnimatePresence>
             </motion.div>
           </motion.div>
 
@@ -558,7 +607,7 @@ const Login = () => {
                     Demo Credentials:
                   </p>
                   <p className="text-xs text-gray-600">
-                    Email: demo@fitai.com
+                    Email: demo@HealthNexus.com
                     <br />
                     Password: demo123
                   </p>
