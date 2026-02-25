@@ -7,6 +7,7 @@ export const loginUser = async ({ email, password, rememberMe }) => {
     if (!email || !password) {
       throw new Error("Email and password are required");
     }
+    
 
     const response = await axiosInstance.post(
       "/auth/login",
@@ -287,23 +288,38 @@ export const getUserData = () => {
 
 
 
-export const updateUserData = async (updatedData) => {
+export const updateUserData = async (updatedFields = {}) => {
   try {
-
-    const response = await axiosInstance.post('/user/updateddata', updatedData);
-
-    if (response.data?.data) {  
-    const newUserData = response.data.data;
-    localStorage.setItem('healthnexus_user', JSON.stringify(newUserData));
-    return newUserData;
+    if (!updatedFields || Object.keys(updatedFields).length === 0) {
+      throw new Error("No fields to update");
     }
 
-  } catch (error) {
-    console.error('Error updating user data:', error);
-    throw new Error('Failed to update user data');
-  }
-}
 
+    
+    const response = await axiosInstance.patch(
+      "/user/update-profile",
+      updatedFields
+    );
+
+
+    if (!response.data?.data) {
+      throw new Error("Invalid server response");
+    }
+
+    const updatedUser = response.data.data;
+
+    console.log(updatedUser);
+    
+
+    return updatedUser;
+  } catch (error) {
+    console.error(
+      "Update user failed:",
+      error?.response?.data || error.message
+    );
+    throw error;
+  }
+};
 
 
 

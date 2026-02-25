@@ -10,7 +10,7 @@ import multer from "multer";
 const router = express.Router();
 const Uploads = multer();
 
-router.post("/updateddata", updateUserProfile);
+router.patch("/update-profile", updateUserProfile);
 router.patch("/changePhoto", Protect, Uploads.single("image"), UserChangePhoto);
 router.patch("/resetPassword", Protect, UserResetPassword);
     

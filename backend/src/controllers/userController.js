@@ -2,14 +2,20 @@ import cloudinary from "../config/cloudinary.js";
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 
-
 export const updateUserProfile = async (req, res, next) => {
 
   try {
+
+    const userId = req.body?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const updates = {};
     const {
       fullName,
       email,
-      phone, // Note: frontend sends 'phone', backend expects 'mobileNumber'
+      phone,
       dob,
       gender,
       address,
@@ -20,176 +26,116 @@ export const updateUserProfile = async (req, res, next) => {
       documents,
     } = req.body;
 
-    const userId = req.user?._id || req.body.id || req.body._id;
-    if (!userId) {
-      const error = new Error("User id is required");
-      error.statusCode = 400;
-      return next(error);
+    /* ================= BASIC FIELDS ================= */
+
+    if (fullName !== undefined) updates.fullName = fullName;
+
+    if (email !== undefined) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ message: "Invalid email format" });
+      }
+
+      const emailExists = await User.findOne({
+        email: email.toLowerCase(),
+        _id: { $ne: userId },
+      });
+
+      if (emailExists) {
+        return res.status(409).json({ message: "Email already in use" });
+      }
+
+      updates.email = email.toLowerCase();
     }
 
-    const currentUser = await User.findById(userId);
-    if (!currentUser) {
-      const error = new Error("User not found");
-      error.statusCode = 404;
-      return next(error);
+    if (phone !== undefined) {
+      if (!/^\d{10}$/.test(phone.replace(/\D/g, ""))) {
+        return res.status(400).json({ message: "Phone must be 10 digits" });
+      }
+      updates.phone = phone;
     }
 
-    // ===== BASIC VALIDATION =====
-    if (!fullName || !email || !phone) {
-      const error = new Error("Full Name, Email, and Phone are required");
-      error.statusCode = 400;
-      return next(error);
-    }
-    
+    if (dob !== undefined) updates.dob = dob;
+    if (gender !== undefined) updates.gender = gender;
+    if (address !== undefined) updates.address = address;
+    if (city !== undefined) updates.city = city;
 
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      const error = new Error("Invalid email format");
-      error.statusCode = 400;
-      return next(error);
-    }
-
-    if (!/^\d{10}$/.test(phone.replace(/\D/g, ""))) {
-      const error = new Error("Phone number must be 10 digits");
-      error.statusCode = 400;
-      return next(error);
-    }
-
-    // PIN validation - only if provided and not N/A
-    if (pin && pin !== "N/A" && pin.trim() !== "") {
+    if (pin !== "N/A" && pin !== null && pin !== undefined) {
       if (!/^\d{6}$/.test(pin)) {
-        const error = new Error("PIN code must be 6 digits");
-        error.statusCode = 400;
-        return next(error);
+        return res.status(400).json({ message: "Invalid PIN" });
       }
+      updates.pin = pin;
     }
 
-    // Check if email already exists (if changing email)
-    if (email !== currentUser.email) {
-      const existingUser = await User.findOne({ email: email.toLowerCase() });
-      if (existingUser) {
-        const error = new Error("Email already in use");
-        error.statusCode = 409;
-        return next(error);
-      }
-    }
+    /* ================= PHOTO ================= */
 
-
-      
-    currentUser.fullName = fullName;
-    currentUser.email = email.toLowerCase();
-    currentUser.phone = phone; 
-    currentUser.dob = dob || currentUser.dob || "N/A";
-    currentUser.gender = gender || currentUser.gender || "N/A";
-    currentUser.address = address || currentUser.address || "N/A";
-    currentUser.city = city || currentUser.city || "N/A";
-    currentUser.pin = pin || currentUser.pin || "N/A";
-
-    // ===== UPDATE PHOTO =====
-    if (photo) {
-      currentUser.photo = {
-        url: photo.url || currentUser.photo?.url || "",
-        publicID: photo.publicID || currentUser.photo?.publicID || ""
+    if (photo !== undefined) {
+      updates.photo = {
+        url: photo.url || "",
+        publicID: photo.publicID || "",
       };
     }
 
-    // ===== UPDATE DOCUMENTS =====
-    if (documents) {
-      // Validate PAN if provided and not N/A
+    /* ================= DOCUMENTS ================= */
+    // if (documents !== N/A) {
+
+    //   if (documents?.pan) {
+    //     const pan = documents.pan.trim().toUpperCase();
+
+    //     if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan)) {
+    //       return res.status(400).json({ message: "Invalid PAN format" });
+    //     }
+
+    //     documents.pan = pan;
+    //   }
+
+    //   updates.documents = {
+    //     ...documents,
+    //   };
+    // }
+
+
+    /* ================= HEALTH DATA ================= */
+
+    if (healthData !== undefined) {
+      updates.healthData = healthData;
+
+      // Auto BMI calculation (if vitals present)
       if (
-        documents.pan &&
-        documents.pan !== "N/A" &&
-        !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(documents.pan)
+        healthData?.vitals?.height &&
+        healthData?.vitals?.weight
       ) {
-        const error = new Error("Invalid PAN format (e.g., ABCDE1234F)");
-        error.statusCode = 400;
-        return next(error);
-      }
-
-      currentUser.documents = {
-        gst: documents.gst || currentUser.documents?.gst || "N/A",
-        uidai: documents.uidai || currentUser.documents?.uidai || "N/A",
-        pan: documents.pan || currentUser.documents?.pan || "N/A",
-      };
-    }
-
-    // ===== UPDATE HEALTH DATA =====
-    if (healthData) {
-      if (!currentUser.healthData) {
-        currentUser.healthData = {};
-      }
-
-      // Update vitals
-      if (healthData.vitals) {
-        currentUser.healthData.vitals = {
-          ...currentUser.healthData?.vitals,
-          height: healthData.vitals.height || currentUser.healthData?.vitals?.height || null,
-          weight: healthData.vitals.weight || currentUser.healthData?.vitals?.weight || null,
-          bloodGroup: healthData.vitals.bloodGroup || currentUser.healthData?.vitals?.bloodGroup || "N/A",
-          heartRate: healthData.vitals.heartRate || currentUser.healthData?.vitals?.heartRate || null,
-          bloodPressure: healthData.vitals.bloodPressure || currentUser.healthData?.vitals?.bloodPressure || "N/A",
-          oxygenSaturation: healthData.vitals.oxygenSaturation || currentUser.healthData?.vitals?.oxygenSaturation || null,
-          temperature: healthData.vitals.temperature || currentUser.healthData?.vitals?.temperature || null,
-        };
-
-        // Calculate BMI if height and weight are provided
-        if (currentUser.healthData.vitals.height && currentUser.healthData.vitals.weight) {
-          const heightInMeters = currentUser.healthData.vitals.height / 100;
-          const bmi = currentUser.healthData.vitals.weight / (heightInMeters * heightInMeters);
-          currentUser.healthData.vitals.bmi = Math.round(bmi * 10) / 10;
-        }
-      }
-
-      // Update medical history
-      if (healthData.medicalHistory) {
-        currentUser.healthData.medicalHistory = {
-          chronicDiseases: healthData.medicalHistory.chronicDiseases || currentUser.healthData?.medicalHistory?.chronicDiseases || [],
-          surgeries: healthData.medicalHistory.surgeries || currentUser.healthData?.medicalHistory?.surgeries || [],
-          allergies: healthData.medicalHistory.allergies || currentUser.healthData?.medicalHistory?.allergies || [],
-        };
-      }
-
-      // Update lifestyle
-      if (healthData.lifestyle) {
-        currentUser.healthData.lifestyle = {
-          smoking: healthData.lifestyle.smoking !== undefined ? healthData.lifestyle.smoking : currentUser.healthData?.lifestyle?.smoking || false,
-          alcohol: healthData.lifestyle.alcohol !== undefined ? healthData.lifestyle.alcohol : currentUser.healthData?.lifestyle?.alcohol || false,
-          exerciseFrequency: healthData.lifestyle.exerciseFrequency || currentUser.healthData?.lifestyle?.exerciseFrequency || "None",
-          diet: healthData.lifestyle.diet || currentUser.healthData?.lifestyle?.diet || "N/A",
-        };
-      }
-
-      // Update emergency contacts
-      if (healthData.emergencyContacts) {
-        currentUser.healthData.emergencyContacts = healthData.emergencyContacts.map(contact => ({
-          name: contact.name || "",
-          relation: contact.relationship || contact.relation || "N/A",
-          phone: contact.phone || "",
-        }));
+        const h = healthData.vitals.height / 100;
+        updates.healthData.vitals.bmi =
+          Math.round((healthData.vitals.weight / (h * h)) * 10) / 10;
       }
     }
 
-    // Save to MongoDB
-    await currentUser.save();
+    /* ================= SAVE ================= */
 
-    // Remove sensitive data before sending response
-    const userResponse = currentUser.toObject();
-    delete userResponse.password;
-    delete userResponse.__v;
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updates },
+      { new: true, runValidators: true }
+    ).select("-password -__v");
 
     res.status(200).json({
-      message: "User Updated Successfully",
-      data: userResponse,
+      message: "Profile updated successfully",
+      data: updatedUser,
     });
   } catch (error) {
-    // Handle MongoDB duplicate key error
-    if (error.code === 11000) {
-      error.message = "Email already exists";
-      error.statusCode = 409;
-    }
     next(error);
   }
 };
+
+
+
+
+
+
+
+
+
+
 
 
 // ================= CHANGE PROFILE PHOTO =================
