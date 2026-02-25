@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import api from "../../config/Api";
 
 const Chat = () => {
   const [messages, setMessages] = useState([
@@ -58,17 +57,6 @@ const Chat = () => {
     { id: 6, text: "🔥 Motivation", icon: '🔥' }
   ];
 
-  // Initialize AOS
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-      offset: 100,
-      easing: 'ease-in-out',
-    });
-  }, []);
-
-  // Auto-scroll to bottom when new message arrives
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -82,113 +70,173 @@ const Chat = () => {
     inputRef.current?.focus();
   }, []);
 
-  // Simulate AI typing and response
-  const simulateAIResponse = (userMessage) => {
-    setIsTyping(true);
+  // Get AI response from backend
+ const getAIResponse = async (userMessage) => {
+  setIsTyping(true);
+  
+  try {
+    // Add user context to the message for better responses
+    const contextualMessage = `
+      User Context:
+      - Current Weight: ${userData.currentWeight}kg
+      - Goal Weight: ${userData.goalWeight}kg
+      - Habit Score: ${userData.habitScore}/100
+      - Today's Calories: ${userData.todayCalories}/${userData.calorieTarget}
+      - Workout Today: ${userData.workoutToday}
+      - Streak: ${userData.streak} days
+      - Protein: ${userData.protein.current}/${userData.protein.target}g
+      - Carbs: ${userData.carbs.current}/${userData.carbs.target}g
+      - Fat: ${userData.fat.current}/${userData.fat.target}g
+
+      User Question: ${userMessage}
+
+      Please provide a helpful fitness response based on this context. Keep it concise and actionable.
+    `;
+
+    console.log('Sending request to:', '/api/v1/ai/ask-ai'); // Debug log
     
-    setTimeout(() => {
-      let response = '';
-      let options = [];
+    // FIXED: Correct endpoint path
+    const { data } = await api.post("/api/v1/ai/ask-ai", {
+      message: contextualMessage,
+    });
+
+    console.log('Response received:', data); // Debug log
+
+    // Determine options based on response content
+    let options = [];
+    const responseLower = data.reply.toLowerCase();
+    
+    if (responseLower.includes('weight') || responseLower.includes('calorie')) {
+      options = ['Show meal plan', 'Adjust calories', 'Cardio exercises'];
+    } else if (responseLower.includes('protein') || responseLower.includes('diet') || responseLower.includes('eat')) {
+      options = ['Create meal plan', 'More protein foods', 'Protein powder advice'];
+    } else if (responseLower.includes('workout') || responseLower.includes('exercise')) {
+      options = ['Modify workout', 'Alternative exercises', 'Form tips'];
+    } else if (responseLower.includes('tired') || responseLower.includes('fatigue')) {
+      options = ['Take rest day', 'Increase calories', 'Stretching routine'];
+    } else if (responseLower.includes('progress')) {
+      options = ['View detailed stats', 'Set new goal', 'Share progress'];
+    } else if (responseLower.includes('motivation')) {
+      options = ['More motivation', 'Success stories', 'Weekly challenge'];
+    } else {
+      options = ['Ask about workouts', 'Ask about diet', 'Check progress'];
+    }
+
+    const newMessage = {
+      id: messages.length + 2,
+      type: 'ai',
+      text: data.reply,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      options: options
+    };
+
+    setMessages(prev => [...prev, newMessage]);
+  } catch (error) {
+    console.error('Error getting AI response:', error);
+    console.error('Error details:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+      config: error.config // This will show the full URL that was called
+    });
+    
+    // Fallback error message
+    const errorMessage = {
+      id: messages.length + 2,
+      type: 'ai',
+      text: `I'm having trouble connecting right now. (Error: ${error.response?.status || 'Network'})`,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      options: ['Try again', 'Contact support']
+    };
+    
+    setMessages(prev => [...prev, errorMessage]);
+  } finally {
+    setIsTyping(false);
+  }
+};
+
+  // Optional: Stream response implementation
+ const getAIStreamResponse = async (userMessage) => {
+  setIsTyping(true);
+  
+  try {
+    const tempMessageId = messages.length + 2;
+    setMessages(prev => [...prev, {
+      id: tempMessageId,
+      type: 'ai',
+      text: '',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      isStreaming: true
+    }]);
+
+    const contextualMessage = `
+      User Context:
+      - Current Weight: ${userData.currentWeight}kg
+      - Goal Weight: ${userData.goalWeight}kg
+      - Habit Score: ${userData.habitScore}/100
+      - Today's Calories: ${userData.todayCalories}/${userData.calorieTarget}
+      - Workout Today: ${userData.workoutToday}
+      - Streak: ${userData.streak} days
+      - Protein: ${userData.protein.current}/${userData.protein.target}g
+      - Carbs: ${userData.carbs.current}/${userData.carbs.target}g
+      - Fat: ${userData.fat.current}/${userData.fat.target}g
+
+      User Question: ${userMessage}
+    `;
+
+    const response = await fetch('http://localhost:5000/api/v1/ai/ask-ai-stream', { // FIXED: Added /api/v1/
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: contextualMessage }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
       
-      // Simple response logic based on user message
-      if (userMessage.toLowerCase().includes('weight') || userMessage.toLowerCase().includes('lose')) {
-        response = `Based on your data:
-• Current weight: ${userData.currentWeight}kg
-• Goal weight: ${userData.goalWeight}kg
-• Weekly loss: 0.3kg
-• Calorie deficit: 300kcal/day
+      const chunk = decoder.decode(value);
+      fullText += chunk;
+      
+      setMessages(prev => prev.map(msg => 
+        msg.id === tempMessageId 
+          ? { ...msg, text: fullText }
+          : msg
+      ));
+    }
 
-📌 Recommendation: Try increasing protein intake to ${userData.protein.target}g/day and add 2 cardio sessions per week.`;
-        options = ['Show meal plan', 'Adjust calories', 'Cardio exercises'];
-      }
-      else if (userMessage.toLowerCase().includes('protein') || userMessage.toLowerCase().includes('diet')) {
-        response = `Your current protein intake: ${userData.protein.current}g / ${userData.protein.target}g
+    setMessages(prev => prev.map(msg => 
+      msg.id === tempMessageId 
+        ? { 
+            ...msg, 
+            isStreaming: false,
+            options: ['Ask another question', 'Get more details', 'Save this advice']
+          }
+        : msg
+    ));
 
-🥚 High-protein foods:
-• Chicken breast (31g/100g)
-• Eggs (13g/2 eggs)
-• Greek yogurt (10g/100g)
-• Lentils (9g/100g)
-• Paneer (18g/100g)
+  } catch (error) {
+    console.error('Error streaming AI response:', error);
+  } finally {
+    setIsTyping(false);
+  }
+};
 
-Want me to create a high-protein meal plan for today?`;
-        options = ['Create meal plan', 'More protein foods', 'Protein powder advice'];
-      }
-      else if (userMessage.toLowerCase().includes('workout') || userMessage.toLowerCase().includes('exercise')) {
-        response = `Today's workout: ${userData.workoutToday}
-Completion: 2/4 exercises done
 
-💪 Would you like to:
-• Modify today's workout
-• See alternative exercises
-• Get form tips for current exercises`;
-        options = ['Modify workout', 'Alternative exercises', 'Form tips'];
-      }
-      else if (userMessage.toLowerCase().includes('tired') || userMessage.toLowerCase().includes('fatigue')) {
-        response = `I notice you've marked 'tired' 3 times this week.
 
-😴 Possible reasons:
-• Calorie intake too low (currently ${userData.todayCalories}/${userData.calorieTarget})
-• Not enough sleep (aim for 7-8 hours)
-• Overtraining (you've worked out 6 days straight)
-
-🔄 Suggestions:
-• Take a rest day tomorrow
-• Add 200 more calories to your diet
-• Try light stretching today`;
-        options = ['Take rest day', 'Increase calories', 'Stretching routine'];
-      }
-      else if (userMessage.toLowerCase().includes('progress')) {
-        response = `📈 Your Progress Summary:
-
-⚖️ Weight: ${userData.currentWeight}kg (${userData.currentWeight > userData.goalWeight ? '↓' : '↑'} ${Math.abs(userData.currentWeight - userData.goalWeight)}kg to goal)
-🔥 Habit Score: ${userData.habitScore}/100
-📊 Workout Adherence: 85%
-🍽️ Diet Adherence: 78%
-⭐ Current Streak: ${userData.streak} days
-
-${userData.habitScore > 80 ? 'Great job staying consistent! 🎉' : 'You can improve consistency this week! 💪'}`;
-        options = ['View detailed stats', 'Set new goal', 'Share progress'];
-      }
-      else if (userMessage.toLowerCase().includes('motivation') || userMessage.toLowerCase().includes('motivate')) {
-        response = `🌟 You're doing amazing!
-
-• ${userData.streak} day streak! 🔥
-• Lost ${userData.currentWeight - userData.goalWeight}kg so far
-• Better than 80% of users your age
-
-Remember why you started! Every workout brings you closer to your goal. 
-
-"You don't have to be extreme, just consistent."`;
-        options = ['More motivation', 'Success stories', 'Weekly challenge'];
-      }
-      else {
-        response = `I understand you're asking about "${userMessage}". 
-
-To give you the best advice, could you specify:
-• Are you asking about workouts, diet, or progress?
-• Is this about a specific goal?`;
-
-        options = ['Ask about workouts', 'Ask about diet', 'Check progress'];
-      }
-
-      const newMessage = {
-        id: messages.length + 2,
-        type: 'ai',
-        text: response,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        options: options
-      };
-
-      setMessages(prev => [...prev, newMessage]);
-      setIsTyping(false);
-    }, 1500); // Simulate 1.5 second thinking time
-  };
-
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e?.preventDefault();
     
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || isTyping) return;
 
     // Add user message
     const userMessage = {
@@ -199,10 +247,12 @@ To give you the best advice, could you specify:
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const messageToSend = inputMessage;
     setInputMessage('');
 
-    // Simulate AI response
-    simulateAIResponse(inputMessage);
+    // Get AI response (you can switch between regular and stream)
+    await getAIResponse(messageToSend);
+    // await getAIStreamResponse(messageToSend); // Uncomment for streaming
   };
 
   const handleQuickQuestion = (question) => {
@@ -216,13 +266,13 @@ To give you the best advice, could you specify:
 
     setMessages(prev => [...prev, userMessage]);
 
-    // Simulate AI response
-    simulateAIResponse(question.text);
+    // Get AI response
+    getAIResponse(question.text);
   };
 
   const handleOptionClick = (option) => {
     setInputMessage(option);
-    // Optional: auto-submit after a short delay
+    // Auto-submit after a short delay
     setTimeout(() => {
       handleSendMessage(new Event('submit'));
     }, 100);
@@ -232,7 +282,7 @@ To give you the best advice, could you specify:
     setSelectedChat(chat.id);
     setShowHistory(false);
     
-    // In real app, you'd load the actual chat messages
+    // In real app, you'd load the actual chat messages from backend
     setMessages([
       {
         id: 1,
@@ -400,12 +450,18 @@ To give you the best advice, could you specify:
                         <span className="text-xs font-semibold text-gray-500">HealthNexus Coach</span>
                         <span className="text-xs text-gray-400">•</span>
                         <span className="text-xs text-gray-400">{message.timestamp}</span>
+                        {message.isStreaming && (
+                          <>
+                            <span className="text-xs text-gray-400">•</span>
+                            <span className="text-xs text-purple-500 animate-pulse">Typing...</span>
+                          </>
+                        )}
                       </div>
                     )}
                     <p className="whitespace-pre-line leading-relaxed">{message.text}</p>
                     
                     {/* Options Buttons */}
-                    {message.options && message.options.length > 0 && (
+                    {message.options && message.options.length > 0 && !message.isStreaming && (
                       <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-gray-100">
                         {message.options.map((option, index) => (
                           <button
@@ -433,7 +489,7 @@ To give you the best advice, could you specify:
               ))}
               
               {/* Typing Indicator */}
-              {isTyping && (
+              {isTyping && !messages.some(m => m.isStreaming) && (
                 <div className="flex justify-start animate-fadeInUp">
                   <div className="bg-white text-gray-800 rounded-2xl rounded-tl-sm p-4 shadow-md border border-gray-100">
                     <div className="flex items-center space-x-3">
@@ -473,6 +529,7 @@ To give you the best advice, could you specify:
                     key={q.id}
                     onClick={() => handleQuickQuestion(q)}
                     className="px-4 py-2.5 bg-white hover:bg-linear-to-r hover:from-purple-50 hover:to-pink-50 rounded-xl text-sm text-gray-700 hover:text-purple-700 transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md border border-gray-200 hover:border-purple-300 font-medium"
+                    disabled={isTyping}
                   >
                     <span className="mr-1.5">{q.icon}</span>
                     <span>{q.text}</span>
@@ -492,6 +549,7 @@ To give you the best advice, could you specify:
                     onChange={(e) => setInputMessage(e.target.value)}
                     placeholder="Ask me anything about fitness..."
                     className="w-full px-5 py-3.5 pr-12 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 bg-white shadow-sm hover:shadow-md placeholder-gray-400"
+                    disabled={isTyping}
                   />
                   <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -529,7 +587,7 @@ To give you the best advice, could you specify:
         </div>
       </div>
 
-      {/* Custom CSS for animations (kept for message animations) */}
+      {/* Custom CSS for animations */}
       <style jsx>{`
         @keyframes fadeInUp {
           from {
@@ -558,12 +616,12 @@ To give you the best advice, could you specify:
         }
 
         ::-webkit-scrollbar-thumb {
-          background: linear-linear(to bottom, #a855f7, #ec4899);
+          background: linear-gradient(to bottom, #a855f7, #ec4899);
           border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-          background: linear-linear(to bottom, #9333ea, #db2777);
+          background: linear-gradient(to bottom, #9333ea, #db2777);
         }
       `}</style>
     </div>
