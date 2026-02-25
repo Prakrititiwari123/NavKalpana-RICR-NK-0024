@@ -1,16 +1,84 @@
-# React + Vite
+# Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite client for the HealthNexus app. Provides public pages and authenticated dashboard views, and talks to the Express backend API.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19
+- Vite 7
+- Tailwind CSS 4
+- Axios
+- React Router
+- Framer Motion
 
-## React Compiler
+## Requirements
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js (LTS recommended)
+- npm
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+```
+
+## Run (Dev)
+
+```bash
+npm run dev
+```
+
+Vite runs at http://localhost:5173 by default.
+
+## Build
+
+```bash
+npm run build
+```
+
+## Preview
+
+```bash
+npm run preview
+```
+
+## Lint
+
+```bash
+npm run lint
+```
+
+## API Configuration
+
+The API base URL is defined in `src/config/Api.jsx`.
+
+Current default:
+
+```js
+baseURL: "http://localhost:4500"
+```
+
+If your backend runs on a different host or port, update this value. The backend defaults to port 5000 unless overridden with `PORT`.
+
+## Project Structure
+
+```
+src/
+	assets/
+	components/
+		Common/
+		Dashboard/
+	config/
+	context/
+	Layout/
+	modals/
+	pages/
+		auth/
+		Dashboard/
+	Services/
+	Utils/
+```
+
+## Notes
+
+- If you change the frontend port, update CORS in the backend to allow the new origin.
