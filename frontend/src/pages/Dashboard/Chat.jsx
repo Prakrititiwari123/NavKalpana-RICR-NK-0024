@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from "../../config/Api";
+import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 
 const Chat = () => {
   const [messages, setMessages] = useState([
@@ -300,7 +301,8 @@ const Chat = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
+    <DashboardLayout>
+      <div className="min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden p-4 md:p-8">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-linear-to-br from-purple-200/30 to-transparent rounded-full blur-3xl animate-pulse"></div>
@@ -310,7 +312,7 @@ const Chat = () => {
       {/* Back Button */}
       <button
         onClick={() => navigate('/dashboard')}
-        className="absolute left-5 top-50 md:left-10 md:top-10 p-2.5 rounded-xl bg-linear-to-br from-gray-500 to-gray-600 text-white hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl z-20"
+        className="absolute left-5 top-24 md:left-10 md:top-20 p-2.5 rounded-xl bg-linear-to-br from-gray-500 to-gray-600 text-white hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl z-20 md:hidden"
         title="Back to Dashboard"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -588,7 +590,7 @@ const Chat = () => {
       </div>
 
       {/* Custom CSS for animations */}
-      <style jsx>{`
+      <style jsx="true">{`
         @keyframes fadeInUp {
           from {
             opacity: 0;
@@ -625,6 +627,7 @@ const Chat = () => {
         }
       `}</style>
     </div>
+    </DashboardLayout>
   );
 };
 
