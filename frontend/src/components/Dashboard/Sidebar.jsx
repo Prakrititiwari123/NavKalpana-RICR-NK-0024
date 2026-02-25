@@ -40,6 +40,13 @@ const Sidebar = () => {
       color: 'text-blue-600'
     },
     {
+      id: 2.5,
+      label: 'Reports',
+      icon: FiBarChart2,
+      path: '/reports',
+      color: 'text-green-600'
+    },
+    {
       id: 3,
       label: 'Chat',
       icon: FiMessageSquare,
