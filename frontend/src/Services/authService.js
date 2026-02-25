@@ -8,144 +8,79 @@ export const loginUser = async ({ email, password, rememberMe }) => {
       throw new Error("Email and password are required");
     }
 
-    
-    
-    const response = await axiosInstance.post('/auth/login', {
-      email: email.trim().toLowerCase(),
-      password: password,
-      rememberMe: rememberMe || false
-    });
-    
-    
-    // Check if response is successful
+    const response = await axiosInstance.post(
+      "/auth/login",
+      {
+        email: email.trim().toLowerCase(),
+        password,
+        rememberMe: rememberMe || false,
+      },
+      {
+        withCredentials: true, // ⭐ refresh token cookie
+      }
+    );
+
     if (response.status !== 200 || !response.data) {
       throw new Error("Invalid response from server");
     }
-    
-    // Extract data from response structure
-    const responseData = response.data.user;
-    const responseMessage = response.data.data?.message || response.data.message;
-    
-    console.log(responseData);
-    console.log(responseMessage);
-    
-    if (!responseData || !responseData._id) {
-      throw new Error("Invalid response format from server");
+
+    const { user, accessToken, message } = response.data;
+
+    if (!user || !accessToken) {
+      throw new Error("Invalid login response structure");
     }
 
-
-    
-    // Destructure user data
-    const {
-      _id,
-      fullName,
-      email: userEmail,
-      role,
-      photo,
-      healthData,
-      documents,
-      dob,
-      gender,
-      address,
-      city,
-      pin,
-      isActive,
-    } = responseData;
-    
-    const userData = {
-      id: _id,
-      fullName: fullName || '',
-      email: userEmail || '',
-      role: role || 'user',
-      photo: photo || { url: '', publicID: '' },
-      healthData: healthData || {},
-      documents: documents || {},
-      dob: dob || 'N/A',
-      gender: gender || 'N/A',
-      address: address || 'N/A',
-      city: city || 'N/A',
-      pin: pin || 'N/A',
-      isActive: isActive || 'active'
-    };
-    
-    localStorage.setItem('healthnexus_user', JSON.stringify(userData));
-
+    // ✅ RETURN DATA (AuthContext will store in memory)
     return {
       success: true,
-      user: JSON.stringify(userData),
-      message: responseMessage || 'Login successful',
-      isActive: isActive === 'active'
+      user,
+      accessToken,
+      message: message || "Login successful",
+      isActive: user.isActive === "active",
     };
 
   } catch (error) {
-    // Handle axios specific errors
-    if (error.code === 'ECONNABORTED') {
-      throw new Error('Request timeout. Please try again.');
+    // ⏱ Timeout
+    if (error.code === "ECONNABORTED") {
+      throw new Error("Request timeout. Please try again.");
     }
 
-    // Handle network errors
-    if (error.message === 'Network Error') {
-      throw new Error('Unable to connect to server. Please check your internet connection.');
+    // 🌐 Network
+    if (error.message === "Network Error") {
+      throw new Error("Unable to connect to server.");
     }
 
-    // Handle HTTP error responses
+    // 📡 Server response
     if (error.response) {
       const status = error.response.status;
-      const responseData = error.response.data?.data;
-      const serverMessage = error.response.data?.message ||
-        error.response.data?.error ||
-        responseData?.message;
+      const serverMessage =
+        error.response.data?.message ||
+        error.response.data?.error;
 
       switch (status) {
         case 400:
-          throw new Error(serverMessage || 'Invalid request. Please check your input.');
-
+          throw new Error(serverMessage || "Invalid request");
         case 401:
-          throw new Error(serverMessage || 'Invalid email or password');
-
+          throw new Error(serverMessage || "Invalid email or password");
         case 403:
-          if (responseData?.requiresVerification) {
-            throw {
-              type: 'VERIFICATION_REQUIRED',
-              message: serverMessage || 'Please verify your email before logging in',
-              email: email
-            };
-          }
-          if (responseData?.accountLocked || responseData?.isActive === 'inactive') {
-            throw {
-              type: 'ACCOUNT_LOCKED',
-              message: serverMessage || 'Account is locked. Please contact support',
-              lockDuration: responseData?.lockDuration
-            };
-          }
-          throw new Error(serverMessage || 'Access denied');
-
+          throw new Error(serverMessage || "Access denied");
         case 404:
-          throw new Error(serverMessage || 'Account not found');
-
-        case 422:
-          throw new Error(serverMessage || 'Invalid input data');
-
+          throw new Error(serverMessage || "Account not found");
         case 429:
-          throw new Error('Too many login attempts. Please try again later.');
-
+          throw new Error("Too many attempts. Try later.");
         case 500:
-        case 502:
-        case 503:
-          throw new Error('Server error. Please try again later.');
-
+          throw new Error("Server error. Try again later.");
         default:
-          throw new Error(serverMessage || `Login failed with status ${status}`);
+          throw new Error(serverMessage || "Login failed");
       }
     }
-    // Handle request errors (no response received)
-    else if (error.request) {
-      throw new Error('No response from server. Please check your connection.');
+
+    // ❌ No response
+    if (error.request) {
+      throw new Error("No response from server");
     }
-    // Handle other errors
-    else {
-      throw new Error(error.message || 'An unexpected error occurred during login');
-    }
+
+    throw new Error(error.message || "Unexpected login error");
   }
 };
 

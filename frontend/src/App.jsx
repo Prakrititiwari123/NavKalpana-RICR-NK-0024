@@ -7,6 +7,7 @@ import PublicLayout from "./Layout/PublicLayout";
 import PrivateLayout from "./Layout/PrivateLayout";
 import { PageLoader } from "./components/Common/Loaders";
 import { useAuth } from "./Context/AuthContext";
+import ScrollToTop from "./Context/ScrollToTop";
 // Lazy load pages for better performance
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -181,6 +182,7 @@ const App = () => {
   return (
     <ErrorBoundary>
       <BrowserRouter>
+        <ScrollToTop/>
         <Toaster
           position="top-right"
           toastOptions={{

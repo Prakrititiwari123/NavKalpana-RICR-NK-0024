@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { genOtpToken,genToken } from "../utils/authToken.js";
 import OTP from "../models/otpModel.js"
 import { sendOTPEmail } from "../utils/emailService.js";
+import jwt from "jsonwebtoken";
 
 
 // ----------------UserRegister-----------------
@@ -60,21 +61,36 @@ export const UserRegister = async (req, res, next) => {
 };
 
 
+export const refresh = (req, res) => {
+  const token = req.cookies.refreshToken;
+
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.REFRESH_SECRET, (err, decoded) => {
+    if (err) return res.sendStatus(403);
+
+    const newAccessToken = jwt.sign(
+      { id: decoded.id },
+      process.env.ACCESS_SECRET,
+      { expiresIn: "10m" }
+    );
+
+    res.json({ accessToken: newAccessToken });
+  });
+};
+
 
 // -----------------UserLogin---------------------
 export const UserLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    console.log("email " + email, "Password " + password);
-    
     if (!email || !password) {
       const error = new Error("All fields required");
       error.statusCode = 400;
       return next(error);
     }
 
-    // Use findOne instead of find to get a single user object
     const existingUser = await User.findOne({ email }).select("+password");
 
     if (!existingUser) {
@@ -82,8 +98,6 @@ export const UserLogin = async (req, res, next) => {
       error.statusCode = 401;
       return next(error);
     }
-    console.log("Hi Im "+   existingUser);
-    
 
     const isVerified = await bcrypt.compare(password, existingUser.password);
 
@@ -93,13 +107,34 @@ export const UserLogin = async (req, res, next) => {
       return next(error);
     }
 
-    genToken(existingUser, res);
+    // ✅ ACCESS TOKEN (SHORT LIFE)
+    const accessToken = jwt.sign(
+      { id: existingUser._id },
+      process.env.ACCESS_SECRET,
+      { expiresIn: "10m" }
+    );
 
-    // remove password before sending response
+    // ✅ REFRESH TOKEN (LONG LIFE)
+    const refreshToken = jwt.sign(
+      { id: existingUser._id },
+      process.env.REFRESH_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // ✅ REFRESH TOKEN → HTTP ONLY COOKIE
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: false, // https ho to true
+    });
+
+    // password remove
     existingUser.password = undefined;
 
+    // ✅ RESPONSE
     res.status(200).json({
       message: "Login Successful",
+      accessToken,
       user: existingUser,
     });
 
@@ -107,16 +142,23 @@ export const UserLogin = async (req, res, next) => {
     next(error);
   }
 };
-
 // ------------------UserLogout---------------
-export const UserLogout = async (req, res, next) => {
+export const Logout = async (req, res, next) => {
   try {
-    res.clearCookie("Nexus");
-    res.status(200).json({ message: "Logout Successfull" });
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: false, // https ho to true
+    });
+
+    res.status(200).json({
+      message: "Logout successful",
+    });
   } catch (error) {
     next(error);
   }
 };
+
 
 // ----------------UserGenOTP-------------------
 export const UserGenOTP = async (req, res, next) => {

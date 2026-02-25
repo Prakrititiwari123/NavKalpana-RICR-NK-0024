@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   FiActivity, FiCoffee, FiTrendingUp, FiZap, 
@@ -7,7 +6,6 @@ import {
 
 const Features = () => {
   const navigate = useNavigate();
-  const [activeFeature, setActiveFeature] = useState(0);
 
   const features = [
     {
