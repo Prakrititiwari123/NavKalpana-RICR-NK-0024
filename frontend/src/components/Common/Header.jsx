@@ -38,8 +38,6 @@ const Header = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [isProfileMenuOpen, isMobileMenuOpen]);
 
-
-
   // Handle navigation
   const handleNavigation = (path) => {
     navigate(path);
@@ -77,8 +75,6 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo Section - Always visible */}
           <div className="flex items-center space-x-3">
-
-
             {/* Logo */}
             <button
               onClick={() => handleNavigation('/')}
@@ -96,10 +92,8 @@ const Header = () => {
             </button>
           </div>
 
-    
           {/* Right Section */}
           <div className="flex items-center space-x-2 sm:space-x-3">
-
             {!isAuthenticated ? (
               <>
                 <div className="flex items-center gap-1 sm:gap-2">
@@ -117,17 +111,11 @@ const Header = () => {
                     <FiUserPlus className="w-4 h-4 sm:hidden" />
                     <span className="hidden sm:inline">Get Started</span>
                   </button>
-
-
                 </div>
-
-
               </>
             ) : (
               /* Logged In - Show User Menu */
               <div className="flex items-center space-x-2 sm:space-x-3">
-
-
                 {/* User Menu */}
                 <div className="flex gap-4 relative profile-menu">
                   <button
@@ -162,19 +150,6 @@ const Header = () => {
 
                     <FiChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-500 transition-transform duration-300 mr-1 ${isProfileMenuOpen ? 'rotate-180' : ''
                       }`} />
-                  </button>
-
-                  {/* Mobile Menu Button - Only visible on mobile */}
-                  <button
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-all duration-300 mobile-menu-button"
-                    aria-label="Toggle menu"
-                  >
-                    {isMobileMenuOpen ? (
-                      <FiX className="w-5 h-5 text-gray-600" />
-                    ) : (
-                      <FiMenu className="w-5 h-5 text-gray-600" />
-                    )}
                   </button>
 
                   {/* Dropdown Menu */}
@@ -243,9 +218,9 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu - Only visible when menu is open */}
+        {/* Mobile Menu - Only visible when menu is open and user is not authenticated */}
         {isMobileMenuOpen && !isAuthenticated && (
-          <div className="lg:hidden  mt-4 pb-3 border-t border-gray-100 animate-slideDown mobile-menu">
+          <div className="lg:hidden mt-4 pb-3 border-t border-gray-100 animate-slideDown mobile-menu">
             <div className="flex flex-col space-y-1 pt-3">
               <button
                 onClick={() => handleNavigation('/')}
@@ -288,7 +263,7 @@ const Header = () => {
         )}
       </div>
 
-      <style jsx="true">{`
+      <style >{`
         @keyframes slideDown {
           from {
             opacity: 0;

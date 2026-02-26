@@ -17,7 +17,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   
   // Dashboard routes where footer should not appear
-  const dashboardRoutes = ['/dashboard', '/workout', '/diet', '/progress', '/analytics', '/chat', '/settings'];
+  const dashboardRoutes = ['/dashboard', '/profile', '/tracking', '/workout', '/diet', '/progress', '/analytics', '/chat', '/settings'];
   const isDashboardPage = dashboardRoutes.includes(location.pathname);
   
   // Show scroll button based on scroll position
@@ -268,7 +268,7 @@ const Footer = () => {
         </div>
       )}
 
-      <style jsx="true">{`
+      <style>{`
         @keyframes pulse-slow {
           0%, 100% { opacity: 0.2; }
           50% { opacity: 0.4; }

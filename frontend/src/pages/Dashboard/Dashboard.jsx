@@ -102,7 +102,7 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-indigo-50 relative overflow-hidden">
+      <div className="min-h-screen bg-linear-to-br from-white via-blue-50 to-indigo-50 relative overflow-hidden">
         {/* Animated Background Elements - Pure Tailwind */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-blue-100/30 mix-blend-multiply blur-3xl animate-pulse"></div>
@@ -117,7 +117,7 @@ const Dashboard = () => {
           <div className="mb-8 animate-[fadeInDown_0.6s_ease-out]">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
                   {greeting}, {firstName}!
                 </h1>
                 <div className="flex items-center gap-2 text-gray-600">
@@ -335,7 +335,7 @@ const Dashboard = () => {
 
             <button
               onClick={() => navigate('/workout')}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+              className="w-full bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
             >
               <FiEdit3 className="w-5 h-5" />
               Log Workout
@@ -387,7 +387,7 @@ const Dashboard = () => {
 
             <button
               onClick={() => navigate('/diet')}
-              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+              className="w-full bg-linear-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
             >
               <FiEdit3 className="w-5 h-5" />
               Log Meal
@@ -411,7 +411,7 @@ const Dashboard = () => {
             </div>
 
             {/* Weight Progress */}
-            <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
+            <div className="mb-8 p-6 bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl">
               <h3 className="text-sm font-semibold text-gray-700 mb-4">Weight Goal Progress</h3>
               <div className="flex items-center justify-between mb-4 text-sm">
                 <span className="text-gray-600">
@@ -426,7 +426,7 @@ const Dashboard = () => {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-blue-500 to-indigo-500 h-3 rounded-full transition-all duration-500"
+                  className="bg-linear-to-r from-blue-500 to-indigo-500 h-3 rounded-full transition-all duration-500"
                   style={{ width: `${Math.max(0, Math.min(progressPercentage, 100))}%` }}
                 />
               </div>
@@ -455,7 +455,7 @@ const Dashboard = () => {
                       <p className="text-3xl font-bold text-gray-900 mb-2">{stat.value}%</p>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
-                          className={`bg-gradient-to-r ${stat.color} h-2 rounded-full transition-all duration-500`}
+                          className={`bg-linear-to-r ${stat.color} h-2 rounded-full transition-all duration-500`}
                           style={{ width: `${stat.value}%` }}
                         />
                       </div>
@@ -515,7 +515,7 @@ const Dashboard = () => {
                 <button
                   key={action.label}
                   onClick={() => navigate(action.action)}
-                  className={`bg-gradient-to-r ${action.color} text-white font-semibold py-6 rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-110 flex flex-col items-center gap-3 group animate-[slideInUp_0.6s_ease-out] opacity-0 [animation-fill-mode:forwards]`}
+                  className={`bg-linear-to-r ${action.color} text-white font-semibold py-6 rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-110 flex flex-col items-center gap-3 group animate-[slideInUp_0.6s_ease-out] opacity-0 [animation-fill-mode:forwards]`}
                   style={{ animationDelay: `${800 + index * 100}ms` }}
                 >
                   <Icon className="w-8 h-8 group-hover:scale-125 transition-transform duration-300" />
@@ -528,7 +528,7 @@ const Dashboard = () => {
         </div>
 
         {/* Custom Animations - Added to global styles once */}
-        <style jsx="true">{`
+        <style jsx="true"z>{`
           @keyframes fadeInDown {
             from {
               opacity: 0;

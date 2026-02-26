@@ -970,13 +970,13 @@ const Analytics = () => {
           </div>
         </div>
 
-        <style jsx="true">{`
-          .analytics-page {
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            background: #f9fafb;
-          }
+      <style jsx="true">{`
+        .analytics-page {
+          padding: 2rem;
+          max-width: 1400px;
+          margin: 0 auto;
+          background: #f9fafb;
+        }
 
           .page-header {
             display: flex;

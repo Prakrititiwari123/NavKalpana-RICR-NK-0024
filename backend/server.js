@@ -9,6 +9,8 @@ import cookieParser from "cookie-parser";
 import connectDB from "./src/config/db.js";
 import AuthRouter from "./src/routers/authRouter.js";
 import UserRouter from "./src/routers/UserRouter.js"
+import aiRoutes from "./src/routers/aiRouter.js"
+
 
 // Import all schema routes
 import workoutRoutes from "./src/routers/workout.routes.js";
@@ -35,6 +37,7 @@ app.use("/auth", AuthRouter);
 
 // User Routes (profile, health data, goals)
 app.use("/user", UserRouter);
+app.use("/api/v1/ai", aiRoutes)
 
 // AI Routes
 // app.use("/api/v1/ai", aiRoutes);
