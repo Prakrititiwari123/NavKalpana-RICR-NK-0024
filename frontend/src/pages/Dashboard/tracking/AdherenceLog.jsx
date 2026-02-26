@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { CheckSquare, Calendar, Flame, Heart, Award, MessageSquare, TrendingUp, Target } from 'lucide-react';
 import { useAuth } from '../../../Context/AuthContext';
-import { updateAdherence } from '../../../Services/profileService'
 import toast from 'react-hot-toast';
 
 const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {

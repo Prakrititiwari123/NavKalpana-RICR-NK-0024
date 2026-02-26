@@ -28,6 +28,18 @@ const nutritionSchema = new mongoose.Schema(
       carbs: Number,
       fats: Number,
     },
+    foodItems: [
+      {
+        name: { type: String, trim: true },
+        quantity: { type: String, trim: true },
+        calories: Number,
+      },
+    ],
+    notes: {
+      type: String,
+      trim: true,
+      default: "",
+    },
   },
   { timestamps: true }
 );

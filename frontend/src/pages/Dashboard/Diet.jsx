@@ -21,6 +21,9 @@ const Diet = () => {
   const [loading, setLoading] = useState(true);
   const [mealLogs, setMealLogs] = useState([]);
   const [userProfile, setUserProfile] = useState(null);
+  const [expandedMeal, setExpandedMeal] = useState(null);
+  const [completedMeals, setCompletedMeals] = useState([1, 2]);
+  const [waterIntake, setWaterIntake] = useState(0);
   
   // Get user data from auth context
   const userHealthData = user?.healthData || {};
@@ -37,11 +40,11 @@ const Diet = () => {
     sugar: 50,
   });
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const tabs = [
+    { id: 'plan', label: 'Diet Plan', icon: Utensils },
+    { id: 'tracker', label: 'Calorie Tracker', icon: Activity },
+    { id: 'calculator', label: 'Macro Calculator', icon: Calculator },
+  ];
 
   // Daily calorie target
   const dailyTarget = 2200;
@@ -105,6 +108,55 @@ const Diet = () => {
       ]
     }
   ];
+
+  const weeklyHistory = [
+    { day: 'Monday', calories: 2050 },
+    { day: 'Tuesday', calories: 2180 },
+    { day: 'Wednesday', calories: 1940 },
+    { day: 'Thursday', calories: 2210 },
+    { day: 'Friday', calories: 2120 },
+    { day: 'Saturday', calories: 2300 },
+    { day: 'Sunday', calories: 2080 },
+  ];
+
+  const mealSuggestions = [
+    {
+      id: 1,
+      title: 'High-Protein Power Bowl',
+      description: 'Chicken, quinoa, greens, and avocado for balanced macros.',
+      calories: 520,
+      proteinPerk: '42g protein',
+    },
+    {
+      id: 2,
+      title: 'Greek Yogurt Parfait',
+      description: 'Greek yogurt, berries, seeds, and oats for a smart snack.',
+      calories: 310,
+      proteinPerk: '24g protein',
+    },
+    {
+      id: 3,
+      title: 'Salmon & Sweet Potato Plate',
+      description: 'Omega-3 rich salmon with complex carbs and fiber.',
+      calories: 610,
+      proteinPerk: '38g protein',
+    },
+  ];
+
+  const getMacroPercentage = (consumed, target) => {
+    if (!target) return 0;
+    return Math.round((consumed / target) * 100);
+  };
+
+  const toggleMeal = (mealId) => {
+    setCompletedMeals((prev) =>
+      prev.includes(mealId) ? prev.filter((id) => id !== mealId) : [...prev, mealId]
+    );
+  };
+
+  const addWater = () => {
+    setWaterIntake((prev) => Math.min(prev + 1, 8));
+  };
 
   const loadUserNutritionData = useCallback(async () => {
     setLoading(true);
@@ -842,7 +894,6 @@ const Diet = () => {
           }
         }
       `}</style>
-      </div>
     </DashboardLayout>
   );
 };

@@ -16,7 +16,7 @@ const Register = lazy(() => import("./pages/auth/Register"));
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
 const Workout = lazy(() => import("./pages/Dashboard/Workout"));
 const Diet = lazy(() => import("./pages/Dashboard/Diet"));
-const Progress = lazy(() => import("./pages/Dashboard/Progress"));
+const Progress = lazy(() => import("./pages/Dashboard/Tracking"));
 const Analytics = lazy(() => import("./pages/Dashboard/Analytics"));
 const Chat = lazy(() => import("./pages/Dashboard/Chat"));
 

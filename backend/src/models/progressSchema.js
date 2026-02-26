@@ -19,10 +19,20 @@ const progressSchema = new mongoose.Schema(
       },
     ],
 
+    progressPhotos: [
+      {
+        date: { type: Date, default: Date.now },
+        photoUrl: String,
+        note: String,
+      },
+    ],
+
     goal: {
       startWeight: Number,
       targetWeight: Number,
       targetDate: Date,
+      timeline: String,
+      calorieTarget: Number,
     },
 
     measurements: {
@@ -32,6 +42,29 @@ const progressSchema = new mongoose.Schema(
       arms: Number,
       thighs: Number,
     },
+
+    adherence: {
+      dietAdherence: Number,
+      workoutAdherence: Number,
+      sleepAdherence: Number,
+    },
+
+    adherenceHistory: [
+      {
+        date: { type: Date, default: Date.now },
+        workoutCompleted: Boolean,
+        dietFollowed: Boolean,
+        waterIntake: Boolean,
+        sleepQuality: Number,
+        mood: Number,
+        energy: Number,
+        adherenceScore: Number,
+        diet: Number,
+        workout: Number,
+        sleep: Number,
+        notes: String,
+      },
+    ],
   },
   { timestamps: true }
 );

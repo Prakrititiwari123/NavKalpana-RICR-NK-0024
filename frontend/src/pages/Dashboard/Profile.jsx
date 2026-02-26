@@ -32,15 +32,13 @@ import {
   setStoredUser,
   updateHealthProfile,
   updateVitals,
-  updateGoals,
+  saveAllGoals,
   createWorkout,
   deleteWorkout,
   createNutritionLog,
   deleteNutritionLog,
   addWeightLog,
   deleteWeightLog,
-  updateMeasurements,
-  updateProgressGoal,
   loadAllUserData,
 
   updateUserProfile,
@@ -216,9 +214,9 @@ const Profile = () => {
             fullName: storedUser?.fullName || '',
             age: storedUser?.age || '',
             gender: storedUser?.gender || '',
-            height: storedUser?.heightCm || '',
+            height: storedUser?.height || '',
             heightUnit: 'cm',
-            weight: storedUser?.weightKg || '',
+            weight: storedUser?.weight || '',
             activityLevel: storedUser?.activityLevel || '',
             bmi: null,
             bmiCategory: '',
@@ -256,19 +254,26 @@ const Profile = () => {
             ...prev,
             startWeight: progress.goal?.startWeight || '',
             targetWeight: progress.goal?.targetWeight || prev.targetWeight,
-            targetDate: progress.goal?.targetDate?.split('T')[0] || '',
+            targetDate: progress.goal?.targetDate
+              ? new Date(progress.goal.targetDate).toISOString().split('T')[0]
+              : '',
+            timeline: progress.goal?.timeline || prev.timeline,
+            calorieTarget: progress.goal?.calorieTarget ?? prev.calorieTarget,
             measurements: progress.measurements || prev.measurements,
           }));
         }
 
         // Set analytics
         if (analytics) {
-          setAnalyticsData({
-            period: analytics.period || '7d',
-            weightChange: analytics.weightChange || 0,
-            habitScore: analytics.habitScore || 0,
-            predictions: analytics.predictions || { nextWeight: null, confidence: 85 },
-          });
+          const latestAnalytics = Array.isArray(analytics) ? analytics[0] : analytics;
+          if (latestAnalytics) {
+            setAnalyticsData({
+              period: latestAnalytics.period || '7d',
+              weightChange: latestAnalytics.weightChange || 0,
+              habitScore: latestAnalytics.habitScore || 0,
+              predictions: latestAnalytics.predictions || { nextWeight: null, confidence: 85 },
+            });
+          }
         }
 
       } catch (error) {
@@ -506,8 +511,8 @@ const Profile = () => {
         fullName: healthFormData.fullName,
         age: healthFormData.age,
         gender: healthFormData.gender,
-        heightCm: healthFormData.height,
-        weightKg: healthFormData.weight,
+        height: healthFormData.height,
+        weight: healthFormData.weight,
         activityLevel: healthFormData.activityLevel,
       };
 
@@ -522,47 +527,41 @@ const Profile = () => {
     }
   };
 
-  // Save goals (updates User + Progress schemas)
-  const handleSaveGoals = async () => {
-    setSavingSection('goals');
-    try {
-      // Update goals in user schema (primaryGoal, experienceLevel)
-      await updateGoals({
-        primaryGoal: goalFormData.goalType,
-        experienceLevel: goalFormData.experienceLevel,
-      });
+ // Save goals (updates User + Progress schemas in one API call)
+const handleSaveGoals = async () => {
+  setSavingSection('goals');
+  try {
+    // Single API call for all goals data
+    await saveAllGoals({
+      goalType: goalFormData.goalType,
+      experienceLevel: goalFormData.experienceLevel,
+      startWeight: goalFormData.startWeight || healthFormData.weight,
+      targetWeight: goalFormData.targetWeight,
+      targetDate: goalFormData.targetDate,
+      timeline: goalFormData.timeline,
+      calorieTarget: goalFormData.calorieTarget,
+      measurements: goalFormData.measurements,
+    });
 
-      // Update progress schema goal
-      await updateProgressGoal({
-        startWeight: goalFormData.startWeight || healthFormData.weight,
-        targetWeight: goalFormData.targetWeight,
-        targetDate: goalFormData.targetDate,
-      });
+    // Update localStorage
+    const existingUser = getStoredUser() || {};
+    const updatedUser = {
+      ...existingUser,
+      primaryGoal: goalFormData.goalType,
+      experienceLevel: goalFormData.experienceLevel,
+      // You might also want to store progress data in a separate localStorage key
+    };
 
-      // Update measurements if changed
-      if (Object.values(goalFormData.measurements).some(val => val)) {
-        await updateMeasurements(goalFormData.measurements);
-      }
-
-      // Update localStorage
-      const existingUser = getStoredUser() || {};
-      const updatedUser = {
-        ...existingUser,
-        primaryGoal: goalFormData.goalType,
-        experienceLevel: goalFormData.experienceLevel,
-      };
-
-      setStoredUser(updatedUser);
-      setUserData(updatedUser);
-      setUnsavedChanges(prev => ({ ...prev, goals: false }));
-      toast.success('Goals updated successfully!');
-    } catch (error) {
-      toast.error(error.message || 'Failed to update goals');
-    } finally {
-      setSavingSection(null);
-    }
-  };
-
+    setStoredUser(updatedUser);
+    setUserData(updatedUser);
+    setUnsavedChanges(prev => ({ ...prev, goals: false }));
+    toast.success('Goals updated successfully!');
+  } catch (error) {
+    toast.error(error.message || 'Failed to update goals');
+  } finally {
+    setSavingSection(null);
+  }
+};
   // Save workout (creates WorkoutLog)
   const handleSaveWorkout = async () => {
     setSavingSection('workouts');

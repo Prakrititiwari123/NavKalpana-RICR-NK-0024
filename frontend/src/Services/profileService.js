@@ -6,6 +6,28 @@ import axiosInstance from "../config/Api";
 
 const USER_KEY = "healthnexus_user";
 
+const hasOwn = (obj, key) =>
+  Object.prototype.hasOwnProperty.call(obj ?? {}, key);
+
+const toNumberOrNull = (value) => {
+  if (value === "" || value === null || value === undefined) return null;
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : null;
+};
+
+const normalizeMeasurements = (measurements = {}) => {
+  const fields = ["chest", "waist", "hips", "arms", "thighs"];
+  const normalized = {};
+
+  for (const field of fields) {
+    if (hasOwn(measurements, field)) {
+      normalized[field] = toNumberOrNull(measurements[field]);
+    }
+  }
+
+  return normalized;
+};
+
 export const getStoredUser = () => {
   try {
     return JSON.parse(localStorage.getItem(USER_KEY));
@@ -43,31 +65,81 @@ export const updateUserProfile = async (payload) => {
 
 // Update health profile (age, gender, activityLevel)
 export const updateHealthProfile = async (data) => {
-  return updateUserProfile({
-    age: data.age,
-    gender: data.gender,
-    activityLevel: data.activityLevel,
-  });
+  const payload = {};
+  if (hasOwn(data, "age")) payload.age = toNumberOrNull(data.age);
+  if (hasOwn(data, "gender")) payload.gender = data.gender;
+  if (hasOwn(data, "activityLevel")) payload.activityLevel = data.activityLevel;
+  return updateUserProfile(payload);
 };
 
 // Update vitals (height, weight)
 export const updateVitals = async (data) => {
-  return updateUserProfile({
-    heightCm: data.height || data.heightCm,
-    weightKg: data.currentWeight || data.weight || data.weightKg,
-    ...(data.goalWeight && { goalWeight: data.goalWeight }), // This will be handled by goals separately
-  });
+  const payload = {};
+  if (hasOwn(data, "height") || hasOwn(data, "heightCm")) {
+    payload.height = toNumberOrNull(data.height ?? data.heightCm);
+  }
+  if (hasOwn(data, "currentWeight") || hasOwn(data, "weight") || hasOwn(data, "weightKg")) {
+    payload.weight = toNumberOrNull(data.currentWeight ?? data.weight ?? data.weightKg);
+  }
+  return updateUserProfile(payload);
 };
 
-// Update fitness goals (primaryGoal, experienceLevel)
-export const updateGoals = async (data) => {
-  return updateUserProfile({
-    primaryGoal: data.primaryGoal,
-    experienceLevel: data.experienceLevel,
-    ...(data.timeline && { timeline: data.timeline }), // User schema doesn't have timeline, will be in Progress
-    ...(data.calorieTarget && { calorieTarget: data.calorieTarget }), // User schema doesn't have calorieTarget
-  });
+const buildGoalsPayload = (data = {}) => {
+  const payload = {};
+
+  if (hasOwn(data, "primaryGoal") || hasOwn(data, "goalType")) {
+    payload.primaryGoal = data.primaryGoal ?? data.goalType ?? null;
+  }
+
+  if (hasOwn(data, "experienceLevel")) {
+    payload.experienceLevel = data.experienceLevel ?? null;
+  }
+
+  const progressGoal = {};
+
+  if (hasOwn(data, "startWeight")) {
+    progressGoal.startWeight = toNumberOrNull(data.startWeight);
+  }
+  if (hasOwn(data, "targetWeight")) {
+    progressGoal.targetWeight = toNumberOrNull(data.targetWeight);
+  }
+  if (hasOwn(data, "targetDate")) {
+    progressGoal.targetDate = data.targetDate || null;
+  }
+  if (hasOwn(data, "timeline")) {
+    progressGoal.timeline = data.timeline || null;
+  }
+  if (hasOwn(data, "calorieTarget")) {
+    progressGoal.calorieTarget = toNumberOrNull(data.calorieTarget);
+  }
+
+  if (Object.keys(progressGoal).length > 0) {
+    payload.progressGoal = progressGoal;
+  }
+
+  if (data.measurements && typeof data.measurements === "object") {
+    payload.measurements = normalizeMeasurements(data.measurements);
+  }
+
+  return payload;
 };
+
+// Save all goals data (updates User + Progress schemas in one call)
+export const saveAllGoals = async (data) => {
+  const payload = buildGoalsPayload(data);
+  if (Object.keys(payload).length === 0) {
+    throw new Error("No goals data provided");
+  }
+
+  const res = await axiosInstance.put("/api/user/goals", payload);
+  return res?.data?.data || null;
+};
+
+// Partial goals update (same route, used by diet/macro updates)
+export const updateGoals = async (data) => {
+  return saveAllGoals(data);
+};
+
 
 // Update fitness meta (activityLevel, experienceLevel, primaryGoal)
 export const updateFitnessProfile = async (data) => {
@@ -92,8 +164,11 @@ export const createWorkout = async (data) => {
   const workoutData = {
     date: data.date || new Date(),
     workoutType: data.workoutType,
-    duration: data.duration, // minutes
-    caloriesBurned: data.caloriesBurned,
+    duration: toNumberOrNull(data.duration), // minutes
+    caloriesBurned: toNumberOrNull(data.caloriesBurned),
+    intensity: toNumberOrNull(data.intensity) ?? 3,
+    notes: data.notes || "",
+    exercises: Array.isArray(data.exercises) ? data.exercises : [],
   };
 
   const res = await axiosInstance.post("/api/workouts", workoutData);
@@ -124,12 +199,14 @@ export const createNutritionLog = async (data) => {
   const nutritionData = {
     date: data.date || new Date(),
     mealType: data.mealType, // Breakfast, Lunch, Dinner, Snack
-    calories: data.calories,
+    calories: toNumberOrNull(data.calories),
     macros: {
-      protein: data.macros?.protein || 0,
-      carbs: data.macros?.carbs || 0,
-      fats: data.macros?.fats || 0,
+      protein: toNumberOrNull(data.macros?.protein) ?? 0,
+      carbs: toNumberOrNull(data.macros?.carbs) ?? 0,
+      fats: toNumberOrNull(data.macros?.fats) ?? 0,
     },
+    foodItems: Array.isArray(data.foodItems) ? data.foodItems : [],
+    notes: data.notes || "",
   };
 
   const res = await axiosInstance.post("/api/nutrition", nutritionData);
@@ -159,7 +236,7 @@ export const getProgress = async () => {
 export const addWeightLog = async (data) => {
   const weightLogData = {
     date: data.date || new Date(),
-    weight: data.weight,
+    weight: toNumberOrNull(data.weight),
     note: data.note || "",
   };
 
@@ -175,20 +252,63 @@ export const deleteWeightLog = async (id) => {
 
 // Update measurements (chest, waist, hips, arms, thighs)
 export const updateMeasurements = async (data) => {
-  const res = await axiosInstance.put("/api/progress/measurements", data);
+  const res = await axiosInstance.put(
+    "/api/progress/measurements",
+    normalizeMeasurements(data)
+  );
   return res?.data?.data;
 };
 
-// Update progress goal (startWeight, targetWeight, targetDate)
+// Update progress goal (startWeight, targetWeight, targetDate, timeline, calorieTarget)
 export const updateProgressGoal = async (data) => {
   const goalData = {
-    startWeight: data.startWeight,
-    targetWeight: data.targetWeight,
-    targetDate: data.targetDate,
+    startWeight: toNumberOrNull(data.startWeight),
+    targetWeight: toNumberOrNull(data.targetWeight),
+    targetDate: data.targetDate || null,
+    timeline: data.timeline || null,
+    calorieTarget: toNumberOrNull(data.calorieTarget),
   };
 
   const res = await axiosInstance.put("/api/progress/goal", goalData);
   return res?.data?.data;
+};
+
+// Update adherence metrics
+export const updateAdherence = async (data) => {
+  const adherenceData = {
+    date: data.date || new Date(),
+    workoutCompleted: Boolean(data.workoutCompleted),
+    dietFollowed: Boolean(data.dietFollowed),
+    waterIntake: Boolean(data.waterIntake),
+    sleepQuality: toNumberOrNull(data.sleepQuality) ?? 0,
+    mood: toNumberOrNull(data.mood) ?? 0,
+    energy: toNumberOrNull(data.energy) ?? 0,
+    adherenceScore: toNumberOrNull(data.adherenceScore) ?? null,
+    dietAdherence: toNumberOrNull(data.dietAdherence ?? data.diet) ?? 0,
+    workoutAdherence: toNumberOrNull(data.workoutAdherence ?? data.workout) ?? 0,
+    sleepAdherence: toNumberOrNull(data.sleepAdherence ?? data.sleep) ?? 0,
+    notes: data.notes || "",
+  };
+
+  const res = await axiosInstance.put("/api/progress/adherence", adherenceData);
+  return res?.data?.data;
+};
+
+// Add progress photo
+export const addProgressPhoto = async (data) => {
+  const payload = {
+    date: data.date || new Date(),
+    photoUrl: data.photoUrl || data.url,
+    note: data.note || "",
+  };
+  const res = await axiosInstance.post("/api/progress/photos", payload);
+  return res?.data?.data;
+};
+
+// Delete progress photo
+export const deleteProgressPhoto = async (id) => {
+  await axiosInstance.delete(`/api/progress/photos/${id}`);
+  return true;
 };
 
 // Update full progress
@@ -203,7 +323,7 @@ export const updateProgress = async (data) => {
 
 export const getAnalytics = async () => {
   const res = await axiosInstance.get("/api/analytics");
-  return res?.data?.data || null;
+  return res?.data?.data || [];
 };
 
 export const createAnalytics = async (data) => {
@@ -226,6 +346,11 @@ export const updateAnalytics = async (id, data) => {
   return res?.data?.data;
 };
 
+export const deleteAnalytics = async (id) => {
+  await axiosInstance.delete(`/api/analytics/${id}`);
+  return true;
+};
+
 /* =====================================================
    DASHBOARD – LOAD EVERYTHING
 ===================================================== */
@@ -243,7 +368,7 @@ export const loadAllUserData = async () => {
       workouts: workouts.status === "fulfilled" ? workouts.value : [],
       nutrition: nutrition.status === "fulfilled" ? nutrition.value : [],
       progress: progress.status === "fulfilled" ? progress.value : null,
-      analytics: analytics.status === "fulfilled" ? analytics.value : null,
+      analytics: analytics.status === "fulfilled" ? analytics.value : [],
     };
   } catch (error) {
     console.error("Error loading all user data:", error);
@@ -251,7 +376,7 @@ export const loadAllUserData = async () => {
       workouts: [],
       nutrition: [],
       progress: null,
-      analytics: null,
+      analytics: [],
     };
   }
 };

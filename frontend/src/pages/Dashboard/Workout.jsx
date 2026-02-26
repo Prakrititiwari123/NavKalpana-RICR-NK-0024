@@ -22,6 +22,8 @@ const Workout = () => {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [favoriteExercises, setFavoriteExercises] = useState([]);
   const [userProfile, setUserProfile] = useState(null);
+  const [completedExercises, setCompletedExercises] = useState([]);
+  const [exerciseNotes, setExerciseNotes] = useState({});
   const [weeklyProgress, setWeeklyProgress] = useState({
     totalWorkouts: 0,
     totalDuration: 0,
@@ -35,18 +37,11 @@ const Workout = () => {
   const userGoals = userHealthData.goals || {};
   const userProfile_ = userHealthData.profile || {};
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Mock data
-  const currentWeek = {
-    start: 'March 3',
-    end: 'March 9',
-    year: '2026'
-  };
+  const tabs = [
+    { id: 'plan', label: 'Workout Plan', icon: Calendar },
+    { id: 'library', label: 'Exercise Library', icon: Library },
+    { id: 'progress', label: 'Progressive Overload', icon: TrendingUp },
+  ];
 
   const todayWorkout = {
     day: 'Monday',
@@ -61,6 +56,10 @@ const Workout = () => {
       { id: 6, name: 'Tricep Pushdown', sets: 3, reps: 15, weight: 30, unit: 'kg' }
     ]
   };
+
+  const completionPercentage = todayWorkout.exercises.length
+    ? Math.round((completedExercises.length / todayWorkout.exercises.length) * 100)
+    : 0;
 
   const weeklySchedule = [
     { day: 'Monday', date: 'Mar 3', workout: 'Chest & Triceps', status: 'pending', icon: '💪' },
@@ -193,6 +192,25 @@ const Workout = () => {
     }
   };
 
+  const toggleExercise = (exerciseId) => {
+    setCompletedExercises((prev) =>
+      prev.includes(exerciseId) ? prev.filter((id) => id !== exerciseId) : [...prev, exerciseId]
+    );
+  };
+
+  const updateNote = (exerciseId, note) => {
+    setExerciseNotes((prev) => ({
+      ...prev,
+      [exerciseId]: note,
+    }));
+  };
+
+  const getStatusColor = (status) => {
+    if (status === 'completed') return 'bg-green-100 text-green-700';
+    if (status === 'in-progress') return 'bg-yellow-100 text-yellow-700';
+    return 'bg-gray-100 text-gray-700';
+  };
+
   // Generate workout plan based on user profile
   const generateWorkoutPlan = () => {
     const goal = userGoals.primaryGoal || 'maintain';
@@ -231,6 +249,55 @@ const Workout = () => {
   };
 
   const workoutPlan = generateWorkoutPlan();
+
+  const exerciseHistory = workoutLogs.slice(0, 5).map((workout, index) => ({
+    id: workout._id || workout.id || `workout-${index}`,
+    workout: workout.workoutType || 'Workout Session',
+    date: new Date(workout.date || Date.now()).toLocaleDateString(),
+    exercises:
+      workout.exercises?.length > 0
+        ? workout.exercises
+        : [
+            { name: 'Bench Press', weight: 80, reps: 8, previousWeight: 75 },
+            { name: 'Incline Press', weight: 30, reps: 10, previousWeight: 27.5 },
+          ],
+    notes: workout.notes || '',
+  }));
+
+  const fallbackHistory =
+    exerciseHistory.length > 0
+      ? exerciseHistory
+      : [
+          {
+            id: 'fallback-1',
+            workout: todayWorkout.focus,
+            date: todayWorkout.date,
+            exercises: todayWorkout.exercises.map((exercise) => ({
+              name: exercise.name,
+              weight: typeof exercise.weight === 'number' ? exercise.weight : 0,
+              reps: exercise.reps,
+              previousWeight:
+                typeof exercise.weight === 'number'
+                  ? Math.max(exercise.weight - 2.5, 0)
+                  : null,
+            })),
+            notes: 'Solid session with controlled form.',
+          },
+        ];
+
+  const statistics = {
+    totalWorkouts: workoutLogs.length || weeklyProgress.totalWorkouts || 1,
+    completionRate:
+      workoutLogs.length > 0
+        ? Math.min(Math.round((weeklyProgress.totalWorkouts / workoutLogs.length) * 100), 100)
+        : 100,
+    currentStreak: Math.max(weeklyProgress.totalWorkouts, 1),
+    personalRecords: [
+      { exercise: 'Bench Press', weight: '95kg', unit: '', date: 'Mar 02, 2026' },
+      { exercise: 'Squat', weight: '120kg', unit: '', date: 'Feb 26, 2026' },
+      { exercise: 'Deadlift', weight: '150kg', unit: '', date: 'Feb 20, 2026' },
+    ],
+  };
 
   if (loading) {
     return (
@@ -533,7 +600,7 @@ const Workout = () => {
             Exercise History
           </h2>
           <div className="space-y-4">
-            {exerciseHistory.map((workout, index) => (
+            {fallbackHistory.map((workout, index) => (
               <div
                 key={workout.id}
                 className="p-5 bg-linear-to-r from-gray-50 to-blue-50 rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300"
@@ -743,7 +810,6 @@ const Workout = () => {
           }
         }
       `}</style>
-      </div>
     </DashboardLayout>
   );
 };

@@ -17,6 +17,7 @@ import workoutRoutes from "./src/routers/workout.routes.js";
 import nutritionRoutes from "./src/routers/nutrition.routes.js";
 import progressRoutes from "./src/routers/progress.routes.js";
 import analyticsRoutes from "./src/routers/analytics.routes.js";
+import goalrouter from "./src/routers/goalrouter.js";
 
 const app = express();
 
@@ -55,6 +56,8 @@ app.use("/api/progress", progressRoutes);
 
 // Analytics Routes
 app.use("/api/analytics", analyticsRoutes);
+
+app.use("/api/user", goalrouter);
 
 // ==================== TEST ROUTE ====================
 app.get("/", (req, res) => {

@@ -13,7 +13,9 @@ import {
   addWeightLog,
   deleteWeightLog,
   updateMeasurements,
-  // updateAdherence
+  updateAdherence,
+  addProgressPhoto,
+  deleteProgressPhoto,
 } from '../../Services/profileService.js';
 
 const toNumber = (value) => {
@@ -87,14 +89,28 @@ const Tracking = () => {
 
         // Format photos
         const formattedPhotos = (progressData.progressPhotos || []).map(photo => ({
-          id: photo._id,
+          id: photo._id || photo.id || `${new Date(photo.date || Date.now()).getTime()}`,
           date: new Date(photo.date),
           url: photo.photoUrl,
           note: photo.note
         }));
 
-        // Format adherence logs (if they exist in array format)
-        const formattedAdherence = progressData.adherenceHistory || [];
+        // Format adherence logs
+        const formattedAdherence = (progressData.adherenceHistory || []).map((log) => ({
+          id: log?._id || `${new Date(log?.date || Date.now()).getTime()}`,
+          date: new Date(log?.date || Date.now()),
+          workoutCompleted: Boolean(log?.workoutCompleted),
+          dietFollowed: Boolean(log?.dietFollowed),
+          waterIntake: Boolean(log?.waterIntake),
+          sleepQuality: Number(log?.sleepQuality) || 0,
+          mood: Number(log?.mood) || 3,
+          energy: Number(log?.energy) || 3,
+          notes: log?.notes || '',
+          adherenceScore: Number(log?.adherenceScore) || 0,
+          diet: Number(log?.diet) || 0,
+          workout: Number(log?.workout) || 0,
+          sleep: Number(log?.sleep) || 0,
+        }));
 
         setWeightLogs(formattedWeightLogs);
         setMeasurements(formattedMeasurements);
@@ -242,49 +258,65 @@ const Tracking = () => {
   };
 
   // Handle photo upload
-  const handlePhotoUpload = (photo) => {
-    // This would need a file upload endpoint
-    const newPhoto = {
-      id: Date.now(),
-      date: new Date(),
-      url: photo.url || URL.createObjectURL(photo.file),
-      note: photo.note || ''
-    };
-    setPhotos((prev) => [newPhoto, ...prev]);
-    toast.success('Photo uploaded successfully!');
+  const handlePhotoUpload = async (photo) => {
+    try {
+      const savedPhoto = await addProgressPhoto({
+        date: photo.date || new Date(),
+        photoUrl: photo.url,
+        note: photo.note || '',
+      });
+
+      const newPhoto = {
+        id: savedPhoto?._id || Date.now(),
+        date: new Date(savedPhoto?.date || photo.date || new Date()),
+        url: savedPhoto?.photoUrl || photo.url,
+        note: savedPhoto?.note || photo.note || '',
+      };
+      setPhotos((prev) => [newPhoto, ...prev]);
+      toast.success('Photo uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      toast.error(error.message || 'Failed to upload photo');
+    }
   };
 
   // Handle photo delete
-  const handlePhotoDelete = (id) => {
-    setPhotos((prev) => prev.filter((photo) => photo.id !== id));
-    toast.success('Photo removed');
+  const handlePhotoDelete = async (id) => {
+    try {
+      await deleteProgressPhoto(id);
+      setPhotos((prev) => prev.filter((photo) => String(photo.id) !== String(id)));
+      toast.success('Photo removed');
+    } catch (error) {
+      console.error('Error deleting photo:', error);
+      toast.error(error.message || 'Failed to remove photo');
+    }
   };
 
   // Handle adherence submission
-  // const handleAdherenceSubmit = async (entry) => {
-  //   try {
-  //     await updateAdherence({
-  //       dietAdherence: entry.diet || 0,
-  //       workoutAdherence: entry.workout || 0,
-  //       sleepAdherence: entry.sleep || 0
-  //     });
+  const handleAdherenceSubmit = async (entry) => {
+    try {
+      await updateAdherence(entry);
 
-  //     const newAdherence = {
-  //       id: Date.now(),
-  //       date: entry.date || new Date(),
-  //       diet: entry.diet,
-  //       workout: entry.workout,
-  //       sleep: entry.sleep,
-  //       notes: entry.notes || ''
-  //     };
+      const newAdherence = {
+        id: Date.now(),
+        date: entry.date || new Date(),
+        workoutCompleted: Boolean(entry.workoutCompleted),
+        dietFollowed: Boolean(entry.dietFollowed),
+        waterIntake: Boolean(entry.waterIntake),
+        sleepQuality: Number(entry.sleepQuality) || 0,
+        mood: Number(entry.mood) || 3,
+        energy: Number(entry.energy) || 3,
+        notes: entry.notes || '',
+        adherenceScore: Number(entry.adherenceScore) || 0,
+      };
 
-  //     setAdherenceLogs((prev) => [newAdherence, ...prev]);
-  //     toast.success('Adherence logged successfully!');
-  //   } catch (error) {
-  //     console.error('Error logging adherence:', error);
-  //     toast.error(error.message || 'Failed to log adherence');
-  //   }
-  // };
+      setAdherenceLogs((prev) => [newAdherence, ...prev]);
+      toast.success('Adherence logged successfully!');
+    } catch (error) {
+      console.error('Error logging adherence:', error);
+      toast.error(error.message || 'Failed to log adherence');
+    }
+  };
 
   // Handle export
   const handleExport = (type) => {
@@ -465,7 +497,7 @@ const Tracking = () => {
               {activeTab === 'adherence' && (
                 <AdherenceLog
                   logs={adherenceLogs}
-                  // onSubmit={handleAdherenceSubmit}
+                  onSubmit={handleAdherenceSubmit}
                   date={new Date()}
                 />
               )}

@@ -4,19 +4,23 @@ import User from "../models/userModel.js";
 
 export const Protect = async (req, res, next) => {
   
+  
   try {
     // 🔑 ACCESS TOKEN ONLY
     const token =
     req.cookies?.accessToken ||
     req.headers.authorization?.split(" ")[1];
     
+ 
     if (!token) {
       return res.status(401).json({
         message: "Unauthorized - Access token missing",
       });
     }
     
+    
     const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
+    
     
     const user = await User.findById(decoded.id).select("-password");
     if (!user) {

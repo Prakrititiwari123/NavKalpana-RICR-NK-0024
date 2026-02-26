@@ -2,6 +2,13 @@ import cloudinary from "../config/cloudinary.js";
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 
+const parseOptionalNumber = (value) => {
+  if (value === undefined) return undefined;
+  if (value === null || value === "") return null;
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : undefined;
+};
+
 export const updateUserProfile = async (req, res, next) => {
 
   
@@ -25,9 +32,16 @@ export const updateUserProfile = async (req, res, next) => {
       photo,
       healthData,
       documents,
-    } = req.user;
-    
-    console.log("haduhhuheeuhweuh");
+      age,
+      activityLevel,
+      experienceLevel,
+      primaryGoal,
+      height,
+      heightCm,
+      weight,
+      weightKg,
+      currentWeight,
+    } = req.body;
     /* ================= BASIC FIELDS ================= */
 
     if (fullName !== undefined) updates.fullName = fullName;
@@ -58,6 +72,24 @@ export const updateUserProfile = async (req, res, next) => {
 
     if (dob !== undefined) updates.dob = dob;
     if (gender !== undefined) updates.gender = gender;
+    const parsedAge = parseOptionalNumber(age);
+    if (parsedAge !== undefined) updates.age = parsedAge;
+    if (activityLevel !== undefined) updates.activityLevel = activityLevel;
+    if (experienceLevel !== undefined) updates.experienceLevel = experienceLevel;
+    if (primaryGoal !== undefined) updates.primaryGoal = primaryGoal;
+
+    const resolvedHeight = height ?? heightCm;
+    const parsedHeight = parseOptionalNumber(resolvedHeight);
+    if (parsedHeight !== undefined) {
+      updates.height = parsedHeight;
+    }
+
+    const resolvedWeight = weight ?? weightKg ?? currentWeight;
+    const parsedWeight = parseOptionalNumber(resolvedWeight);
+    if (parsedWeight !== undefined) {
+      updates.weight = parsedWeight;
+    }
+
     if (address !== undefined) updates.address = address;
     if (city !== undefined) updates.city = city;
 
@@ -102,13 +134,13 @@ export const updateUserProfile = async (req, res, next) => {
       updates.healthData = healthData;
 
       // Auto BMI calculation (if vitals present)
-      if (
-        healthData?.vitals?.height &&
-        healthData?.vitals?.weight
-      ) {
+      const vitalsHeight = healthData?.vitals?.height;
+      const vitalsWeight = healthData?.vitals?.weight ?? healthData?.vitals?.currentWeight;
+
+      if (vitalsHeight && vitalsWeight) {
         const h = healthData.vitals.height / 100;
         updates.healthData.vitals.bmi =
-          Math.round((healthData.vitals.weight / (h * h)) * 10) / 10;
+          Math.round((vitalsWeight / (h * h)) * 10) / 10;
       }
     }
 

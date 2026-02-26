@@ -26,7 +26,7 @@ const Register = () => {
     
     // Health Profile
     age: '',
-    biologicalSex: '',
+    gender: '',
     height: '',
     weight: '',
     activityLevel: '',
@@ -79,7 +79,7 @@ const Register = () => {
   const validateStep = (step) => {
     const stepFields = {
       1: ['fullName', 'email', 'password', 'confirmPassword'],
-      2: ['age', 'biologicalSex', 'height', 'weight', 'activityLevel', 'experienceLevel', 'primaryGoal'],
+      2: ['age', 'gender', 'height', 'weight', 'activityLevel', 'experienceLevel', 'primaryGoal'],
       3: ['medicalDisclaimer', 'termsAccepted']
     };
 
@@ -101,7 +101,7 @@ const Register = () => {
       // Mark all fields in current step as touched to show errors
       const stepFields = {
         1: ['fullName', 'email', 'password', 'confirmPassword'],
-        2: ['age', 'biologicalSex', 'height', 'weight', 'activityLevel', 'experienceLevel', 'primaryGoal'],
+        2: ['age', 'gender', 'height', 'weight', 'activityLevel', 'experienceLevel', 'primaryGoal'],
         3: ['medicalDisclaimer', 'termsAccepted']
       };
       
@@ -560,8 +560,8 @@ const Register = () => {
                         Gender
                       </label>
                       <select
-                        name="biologicalSex"
-                        value={formData.biologicalSex}
+                        name="gender"
+                        value={formData.gender}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className="w-full px-3 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-all"
@@ -571,8 +571,8 @@ const Register = () => {
                         <option value="female" className="bg-gray-800">Female</option>
                         <option value="other" className="bg-gray-800">Other</option>
                       </select>
-                      {touched.biologicalSex && errors.biologicalSex && (
-                        <p className="text-red-300 text-xs mt-1">{errors.biologicalSex}</p>
+                      {touched.gender && errors.gender && (
+                        <p className="text-red-300 text-xs mt-1">{errors.gender}</p>
                       )}
                     </div>
 

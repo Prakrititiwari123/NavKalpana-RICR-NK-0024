@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import api from '../../config/Api';
 
 const Chat = () => {
   const [messages, setMessages] = useState([
@@ -83,68 +84,66 @@ const Chat = () => {
   }, []);
 
   // Simulate AI typing and response
-  const simulateAIResponse = (userMessage) => {
+  const simulateAIResponse = async (userMessage) => {
     setIsTyping(true);
-    
-    // FIXED: Correct endpoint path
-    const { data } = await api.post("/api/v1/ai/ask-ai", {
-      message: contextualMessage,
-    });
 
-    console.log('Response received:', data); // Debug log
+    try {
+      const contextualMessage = [
+        `User: ${userData.name}`,
+        `Goal weight: ${userData.goalWeight}kg`,
+        `Current weight: ${userData.currentWeight}kg`,
+        `Question: ${userMessage}`,
+      ].join('\n');
 
-    // Determine options based on response content
-    let options = [];
-    const responseLower = data.reply.toLowerCase();
-    
-    if (responseLower.includes('weight') || responseLower.includes('calorie')) {
-      options = ['Show meal plan', 'Adjust calories', 'Cardio exercises'];
-    } else if (responseLower.includes('protein') || responseLower.includes('diet') || responseLower.includes('eat')) {
-      options = ['Create meal plan', 'More protein foods', 'Protein powder advice'];
-    } else if (responseLower.includes('workout') || responseLower.includes('exercise')) {
-      options = ['Modify workout', 'Alternative exercises', 'Form tips'];
-    } else if (responseLower.includes('tired') || responseLower.includes('fatigue')) {
-      options = ['Take rest day', 'Increase calories', 'Stretching routine'];
-    } else if (responseLower.includes('progress')) {
-      options = ['View detailed stats', 'Set new goal', 'Share progress'];
-    } else if (responseLower.includes('motivation')) {
-      options = ['More motivation', 'Success stories', 'Weekly challenge'];
-    } else {
-      options = ['Ask about workouts', 'Ask about diet', 'Check progress'];
+      const { data } = await api.post('/api/v1/ai/ask-ai', {
+        message: contextualMessage,
+      });
+
+      const reply = data?.reply || "I received your message. Please share a bit more detail.";
+      let options = [];
+      const responseLower = reply.toLowerCase();
+
+      if (responseLower.includes('weight') || responseLower.includes('calorie')) {
+        options = ['Show meal plan', 'Adjust calories', 'Cardio exercises'];
+      } else if (responseLower.includes('protein') || responseLower.includes('diet') || responseLower.includes('eat')) {
+        options = ['Create meal plan', 'More protein foods', 'Protein powder advice'];
+      } else if (responseLower.includes('workout') || responseLower.includes('exercise')) {
+        options = ['Modify workout', 'Alternative exercises', 'Form tips'];
+      } else if (responseLower.includes('tired') || responseLower.includes('fatigue')) {
+        options = ['Take rest day', 'Increase calories', 'Stretching routine'];
+      } else if (responseLower.includes('progress')) {
+        options = ['View detailed stats', 'Set new goal', 'Share progress'];
+      } else if (responseLower.includes('motivation')) {
+        options = ['More motivation', 'Success stories', 'Weekly challenge'];
+      } else {
+        options = ['Ask about workouts', 'Ask about diet', 'Check progress'];
+      }
+
+      const newMessage = {
+        id: Date.now(),
+        type: 'ai',
+        text: reply,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        options,
+      };
+
+      setMessages((prev) => [...prev, newMessage]);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+
+      const errorMessage = {
+        id: Date.now(),
+        type: 'ai',
+        text: `I'm having trouble connecting right now. (Error: ${error.response?.status || 'Network'})`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        options: ['Try again', 'Contact support'],
+      };
+
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsTyping(false);
     }
-
-    const newMessage = {
-      id: messages.length + 2,
-      type: 'ai',
-      text: data.reply,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      options: options
-    };
-
-    setMessages(prev => [...prev, newMessage]);
-  } catch (error) {
-    console.error('Error getting AI response:', error);
-    console.error('Error details:', {
-      message: error.message,
-      response: error.response?.data,
-      status: error.response?.status,
-      config: error.config // This will show the full URL that was called
-    });
-    
-    // Fallback error message
-    const errorMessage = {
-      id: messages.length + 2,
-      type: 'ai',
-      text: `I'm having trouble connecting right now. (Error: ${error.response?.status || 'Network'})`,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      options: ['Try again', 'Contact support']
-    };
-    
-    setMessages(prev => [...prev, errorMessage]);
-  } finally {
-    setIsTyping(false);
-  }
-};
+  };
 
   const handleSendMessage = async (e) => {
     e?.preventDefault();

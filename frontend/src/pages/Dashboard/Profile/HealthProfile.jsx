@@ -94,12 +94,12 @@ const HealthProfile = ({ onChange, values, errors }) => {
           onChange={(e) => handleFieldChange('activityLevel', e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
-          <option value="">Select activity level</option>
-          <option value="Sedentary">Sedentary (little or no exercise)</option>
-          <option value="Light">Light (exercise 1-3 days/week)</option>
-          <option value="Moderate">Moderate (exercise 3-5 days/week)</option>
-          <option value="Active">Active (exercise 6-7 days/week)</option>
-          <option value="Very Active">Very Active (intense exercise daily)</option>
+          <option value="" className="bg-gray-800">Select Activity Level</option>
+          <option value="sedentary" className="bg-gray-800">Sedentary (little or no exercise)</option>
+          <option value="light" className="bg-gray-800">Lightly Active (1-3 days/week)</option>
+          <option value="moderate" className="bg-gray-800">Moderately Active (3-5 days/week)</option>
+          <option value="very" className="bg-gray-800">Very Active (6-7 days/week)</option>
+          <option value="extra" className="bg-gray-800">Extra Active (athlete/physical job)</option>
         </select>
         {errors?.activityLevel && <p className="mt-1 text-sm text-red-600">{errors.activityLevel}</p>}
       </div>

@@ -37,9 +37,8 @@ const userSchema = new mongoose.Schema(
       max: 100,
     },
 
-    biologicalSex: {
+    gender: {
       type: String,
-      enum: ["male", "female", "other"],
     },
 
     height: Number,

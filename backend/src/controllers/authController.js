@@ -13,7 +13,7 @@ export const UserRegister = async (req, res, next) => {
       email,
       password,
       age,
-      biologicalSex,
+      gender,
       height,
       weight,
       activityLevel,
@@ -21,15 +21,15 @@ export const UserRegister = async (req, res, next) => {
       primaryGoal,
     } = req.body;
 
-
+  
     console.log({
       fullName,
       email,
       password,
       age,
       gender,
-      heightCm,
-      weightKg,
+      height,
+      weight,
       activityLevel,
       experienceLevel,
       primaryGoal,
@@ -64,8 +64,8 @@ export const UserRegister = async (req, res, next) => {
 
       age,
       gender,
-      heightCm,
-      weightKg,
+      height,
+      weight,
       activityLevel,
       experienceLevel,
       primaryGoal,
