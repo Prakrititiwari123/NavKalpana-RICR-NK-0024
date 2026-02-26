@@ -4,13 +4,14 @@ import bcrypt from "bcrypt";
 
 export const updateUserProfile = async (req, res, next) => {
 
+  
   try {
-
-    const userId = req.body?.id;
+    
+    const userId = req.user?._id;
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
+    
     const updates = {};
     const {
       fullName,
@@ -24,8 +25,9 @@ export const updateUserProfile = async (req, res, next) => {
       photo,
       healthData,
       documents,
-    } = req.body;
-
+    } = req.user;
+    
+    console.log("haduhhuheeuhweuh");
     /* ================= BASIC FIELDS ================= */
 
     if (fullName !== undefined) updates.fullName = fullName;

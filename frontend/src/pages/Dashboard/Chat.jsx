@@ -16,7 +16,7 @@ const Chat = () => {
   
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [showContext, setShowContext] = useState(true);
+  const [showContext] = useState(true);
   const [showHistory, setShowHistory] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
   
@@ -41,7 +41,7 @@ const Chat = () => {
   };
 
   // Chat history
-  const [chatHistory, setChatHistory] = useState([
+  const [chatHistory] = useState([
     { id: 1, title: 'Why am I not losing weight?', date: 'Yesterday', preview: 'Based on your data...' },
     { id: 2, title: 'Protein intake advice', date: '3 days ago', preview: 'For your weight...' },
     { id: 3, title: 'Feeling tired during workouts', date: '1 week ago', preview: 'This could be due to...' },
@@ -86,106 +86,67 @@ const Chat = () => {
   const simulateAIResponse = (userMessage) => {
     setIsTyping(true);
     
-    setTimeout(() => {
-      let response = '';
-      let options = [];
-      
-      // Simple response logic based on user message
-      if (userMessage.toLowerCase().includes('weight') || userMessage.toLowerCase().includes('lose')) {
-        response = `Based on your data:
-• Current weight: ${userData.currentWeight}kg
-• Goal weight: ${userData.goalWeight}kg
-• Weekly loss: 0.3kg
-• Calorie deficit: 300kcal/day
+    // FIXED: Correct endpoint path
+    const { data } = await api.post("/api/v1/ai/ask-ai", {
+      message: contextualMessage,
+    });
 
-📌 Recommendation: Try increasing protein intake to ${userData.protein.target}g/day and add 2 cardio sessions per week.`;
-        options = ['Show meal plan', 'Adjust calories', 'Cardio exercises'];
-      }
-      else if (userMessage.toLowerCase().includes('protein') || userMessage.toLowerCase().includes('diet')) {
-        response = `Your current protein intake: ${userData.protein.current}g / ${userData.protein.target}g
+    console.log('Response received:', data); // Debug log
 
-🥚 High-protein foods:
-• Chicken breast (31g/100g)
-• Eggs (13g/2 eggs)
-• Greek yogurt (10g/100g)
-• Lentils (9g/100g)
-• Paneer (18g/100g)
+    // Determine options based on response content
+    let options = [];
+    const responseLower = data.reply.toLowerCase();
+    
+    if (responseLower.includes('weight') || responseLower.includes('calorie')) {
+      options = ['Show meal plan', 'Adjust calories', 'Cardio exercises'];
+    } else if (responseLower.includes('protein') || responseLower.includes('diet') || responseLower.includes('eat')) {
+      options = ['Create meal plan', 'More protein foods', 'Protein powder advice'];
+    } else if (responseLower.includes('workout') || responseLower.includes('exercise')) {
+      options = ['Modify workout', 'Alternative exercises', 'Form tips'];
+    } else if (responseLower.includes('tired') || responseLower.includes('fatigue')) {
+      options = ['Take rest day', 'Increase calories', 'Stretching routine'];
+    } else if (responseLower.includes('progress')) {
+      options = ['View detailed stats', 'Set new goal', 'Share progress'];
+    } else if (responseLower.includes('motivation')) {
+      options = ['More motivation', 'Success stories', 'Weekly challenge'];
+    } else {
+      options = ['Ask about workouts', 'Ask about diet', 'Check progress'];
+    }
 
-Want me to create a high-protein meal plan for today?`;
-        options = ['Create meal plan', 'More protein foods', 'Protein powder advice'];
-      }
-      else if (userMessage.toLowerCase().includes('workout') || userMessage.toLowerCase().includes('exercise')) {
-        response = `Today's workout: ${userData.workoutToday}
-Completion: 2/4 exercises done
+    const newMessage = {
+      id: messages.length + 2,
+      type: 'ai',
+      text: data.reply,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      options: options
+    };
 
-💪 Would you like to:
-• Modify today's workout
-• See alternative exercises
-• Get form tips for current exercises`;
-        options = ['Modify workout', 'Alternative exercises', 'Form tips'];
-      }
-      else if (userMessage.toLowerCase().includes('tired') || userMessage.toLowerCase().includes('fatigue')) {
-        response = `I notice you've marked 'tired' 3 times this week.
+    setMessages(prev => [...prev, newMessage]);
+  } catch (error) {
+    console.error('Error getting AI response:', error);
+    console.error('Error details:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+      config: error.config // This will show the full URL that was called
+    });
+    
+    // Fallback error message
+    const errorMessage = {
+      id: messages.length + 2,
+      type: 'ai',
+      text: `I'm having trouble connecting right now. (Error: ${error.response?.status || 'Network'})`,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      options: ['Try again', 'Contact support']
+    };
+    
+    setMessages(prev => [...prev, errorMessage]);
+  } finally {
+    setIsTyping(false);
+  }
+};
 
-😴 Possible reasons:
-• Calorie intake too low (currently ${userData.todayCalories}/${userData.calorieTarget})
-• Not enough sleep (aim for 7-8 hours)
-• Overtraining (you've worked out 6 days straight)
-
-🔄 Suggestions:
-• Take a rest day tomorrow
-• Add 200 more calories to your diet
-• Try light stretching today`;
-        options = ['Take rest day', 'Increase calories', 'Stretching routine'];
-      }
-      else if (userMessage.toLowerCase().includes('progress')) {
-        response = `📈 Your Progress Summary:
-
-⚖️ Weight: ${userData.currentWeight}kg (${userData.currentWeight > userData.goalWeight ? '↓' : '↑'} ${Math.abs(userData.currentWeight - userData.goalWeight)}kg to goal)
-🔥 Habit Score: ${userData.habitScore}/100
-📊 Workout Adherence: 85%
-🍽️ Diet Adherence: 78%
-⭐ Current Streak: ${userData.streak} days
-
-${userData.habitScore > 80 ? 'Great job staying consistent! 🎉' : 'You can improve consistency this week! 💪'}`;
-        options = ['View detailed stats', 'Set new goal', 'Share progress'];
-      }
-      else if (userMessage.toLowerCase().includes('motivation') || userMessage.toLowerCase().includes('motivate')) {
-        response = `🌟 You're doing amazing!
-
-• ${userData.streak} day streak! 🔥
-• Lost ${userData.currentWeight - userData.goalWeight}kg so far
-• Better than 80% of users your age
-
-Remember why you started! Every workout brings you closer to your goal. 
-
-"You don't have to be extreme, just consistent."`;
-        options = ['More motivation', 'Success stories', 'Weekly challenge'];
-      }
-      else {
-        response = `I understand you're asking about "${userMessage}". 
-
-To give you the best advice, could you specify:
-• Are you asking about workouts, diet, or progress?
-• Is this about a specific goal?`;
-
-        options = ['Ask about workouts', 'Ask about diet', 'Check progress'];
-      }
-
-      const newMessage = {
-        id: messages.length + 2,
-        type: 'ai',
-        text: response,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        options: options
-      };
-
-      setMessages(prev => [...prev, newMessage]);
-      setIsTyping(false);
-    }, 1500); // Simulate 1.5 second thinking time
-  };
-
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e?.preventDefault();
     
     if (!inputMessage.trim()) return;

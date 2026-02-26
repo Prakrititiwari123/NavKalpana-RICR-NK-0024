@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
+const HEALTH_TIPS = [
+  "Stay hydrated! Drink at least 8 glasses of water daily",
+  "Regular exercise boosts your immune system",
+  "Getting 7-8 hours of sleep improves heart health",
+  "Meditation reduces stress and anxiety",
+  "Take short breaks during work to stretch",
+  "Eating colorful fruits provides essential vitamins",
+  "Walking 10,000 steps daily improves fitness",
+  "Deep breathing exercises lower blood pressure",
+];
+
 const Loader = ({ fullScreen = true, text = "Loading your health data..." }) => {
   const [progress, setProgress] = useState(0);
   const [tipIndex, setTipIndex] = useState(0);
-
-  // Health tips to show while loading
-  const healthTips = [
-    "Stay hydrated! Drink at least 8 glasses of water daily",
-    "Regular exercise boosts your immune system",
-    "Getting 7-8 hours of sleep improves heart health",
-    "Meditation reduces stress and anxiety",
-    "Take short breaks during work to stretch",
-    "Eating colorful fruits provides essential vitamins",
-    "Walking 10,000 steps daily improves fitness",
-    "Deep breathing exercises lower blood pressure",
-  ];
 
   // Simulate progress for visual appeal
   useEffect(() => {
@@ -31,7 +30,7 @@ const Loader = ({ fullScreen = true, text = "Loading your health data..." }) => 
   // Rotate health tips
   useEffect(() => {
     const tipInterval = setInterval(() => {
-      setTipIndex(prev => (prev + 1) % healthTips.length);
+      setTipIndex(prev => (prev + 1) % HEALTH_TIPS.length);
     }, 3000);
 
     return () => clearInterval(tipInterval);
@@ -128,7 +127,7 @@ const Loader = ({ fullScreen = true, text = "Loading your health data..." }) => 
       <div className="max-w-xs text-center">
         <p className="text-xs text-gray-400 mb-1">💡 Health Tip</p>
         <p className="text-sm text-gray-600 animate-[fadeIn_0.5s_ease-in-out]">
-          {healthTips[tipIndex]}
+          {HEALTH_TIPS[tipIndex]}
         </p>
       </div>
 

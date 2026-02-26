@@ -11,21 +11,15 @@ const Footer = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isLandingPage = location.pathname === '/';
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [email, setEmail] = useState('');
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const currentYear = new Date().getFullYear();
   
   // Dashboard routes where footer should not appear
   const dashboardRoutes = ['/dashboard', '/workout', '/diet', '/progress', '/analytics', '/chat', '/settings'];
   const isDashboardPage = dashboardRoutes.includes(location.pathname);
   
-  // Don't render footer on dashboard pages
-  if (isDashboardPage) {
-    return null;
-  }
-  
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [email, setEmail] = useState('');
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const currentYear = new Date().getFullYear();
-
   // Show scroll button based on scroll position
   useEffect(() => {
     const handleScroll = () => {
@@ -44,6 +38,11 @@ const Footer = () => {
       setTimeout(() => setIsSubscribed(false), 3000);
     }
   };
+
+  // Don't render footer on dashboard pages
+  if (isDashboardPage) {
+    return null;
+  }
 
   return (
     <footer className={`${isLandingPage ? 'bg-linear-to-b from-white to-blue-50' : 'bg-linear-to-b from-white to-gray-50'} border-t border-gray-200 ${isLandingPage ? 'mt-20' : 'mt-12'} relative overflow-hidden`}>
@@ -148,14 +147,7 @@ const Footer = () => {
               <p className="text-gray-600 text-sm mb-4">
                 Get wellness tips and health insights delivered to your inbox.
               </p>
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                if (email) {
-                  setIsSubscribed(true);
-                  setEmail('');
-                  setTimeout(() => setIsSubscribed(false), 3000);
-                }
-              }} className="flex flex-col space-y-2">
+              <form onSubmit={handleSubscribe} className="flex flex-col space-y-2">
                 <div className="relative group">
                   <input 
                     type="email" 

@@ -1,16 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  FiCalendar, FiCheck, FiTrendingUp, FiActivity,
-  FiEdit3, FiPlus, FiChevronRight, FiAward
-} from 'react-icons/fi';
-import { GiWeightLiftingUp } from 'react-icons/gi';
-import { IoFlame } from 'react-icons/io5';
+import React, { useState, useEffect, useCallback } from 'react';
+// eslint-disable-next-line no-unused-vars
+import { AnimatePresence, motion } from 'framer-motion';
+import { Dumbbell, Calendar, Library, TrendingUp, Loader } from 'lucide-react';
 import DashboardLayout from '../../components/Dashboard/DashboardLayout';
+import WorkoutPlan from './Workout/WorkoutPlan';
+import ExerciseLibrary from './Workout/ExerciseLibrary';
+import ProgressOverload from './Workout/ProgressOverload';
+import { useAuth } from '../../Context/AuthContext';
+import { 
+  getWorkouts, 
+  createWorkout,
+  getProgress 
+} from '../../Services/profileService';
+import toast from 'react-hot-toast';
 
 const Workout = () => {
-  const [completedExercises, setCompletedExercises] = useState([]);
-  const [exerciseNotes, setExerciseNotes] = useState({});
-  const [scrollY, setScrollY] = useState(0);
+  const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState('plan');
+  const [loading, setLoading] = useState(true);
+  const [workoutLogs, setWorkoutLogs] = useState([]);
+  const [selectedExercises, setSelectedExercises] = useState([]);
+  const [favoriteExercises, setFavoriteExercises] = useState([]);
+  const [userProfile, setUserProfile] = useState(null);
+  const [weeklyProgress, setWeeklyProgress] = useState({
+    totalWorkouts: 0,
+    totalDuration: 0,
+    totalCalories: 0,
+    averageIntensity: 0,
+  });
+
+  // Get user data from auth context
+  const userHealthData = user?.healthData || {};
+  const userVitals = userHealthData.vitals || {};
+  const userGoals = userHealthData.goals || {};
+  const userProfile_ = userHealthData.profile || {};
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -49,128 +72,283 @@ const Workout = () => {
     { day: 'Sunday', date: 'Mar 9', workout: 'Rest Day', status: 'pending', icon: '😴' }
   ];
 
-  const exerciseHistory = [
-    {
-      id: 1,
-      date: 'Feb 28, 2026',
-      workout: 'Chest & Triceps',
-      exercises: [
-        { name: 'Bench Press', weight: 75, reps: 8, previousWeight: 72.5 },
-        { name: 'Incline Press', weight: 30, reps: 10, previousWeight: 27.5 }
-      ],
-      notes: 'Felt strong today, increased weight on bench press'
-    },
-    {
-      id: 2,
-      date: 'Feb 26, 2026',
-      workout: 'Back & Biceps',
-      exercises: [
-        { name: 'Deadlift', weight: 120, reps: 5, previousWeight: 115 },
-        { name: 'Barbell Row', weight: 70, reps: 8, previousWeight: 70 }
-      ],
-      notes: 'Good form, new PR on deadlift!'
-    },
-    {
-      id: 3,
-      date: 'Feb 24, 2026',
-      workout: 'Legs',
-      exercises: [
-        { name: 'Squats', weight: 100, reps: 8, previousWeight: 95 },
-        { name: 'Leg Press', weight: 180, reps: 12, previousWeight: 180 }
-      ],
-      notes: 'Legs felt heavy, but pushed through'
-    },
-    {
-      id: 4,
-      date: 'Feb 21, 2026',
-      workout: 'Shoulders',
-      exercises: [
-        { name: 'Military Press', weight: 50, reps: 8, previousWeight: 50 },
-        { name: 'Lateral Raises', weight: 12, reps: 12, previousWeight: 10 }
-      ],
-      notes: 'Good shoulder pump'
-    },
-    {
-      id: 5,
-      date: 'Feb 19, 2026',
-      workout: 'Arms & Abs',
-      exercises: [
-        { name: 'Barbell Curl', weight: 35, reps: 10, previousWeight: 32.5 },
-        { name: 'Skull Crushers', weight: 30, reps: 10, previousWeight: 30 }
-      ],
-      notes: 'Great arm session'
-    }
-  ];
+  const loadWorkoutData = useCallback(async () => {
+    setLoading(true);
+    try {
+      // Load workouts from backend
+      const workouts = await getWorkouts();
+      if (workouts && workouts.length > 0) {
+        setWorkoutLogs(workouts);
+        calculateWeeklyProgress(workouts);
+      }
 
-  const statistics = {
-    totalWorkouts: 18,
-    completionRate: 85,
-    currentStreak: 6,
-    personalRecords: [
-      { exercise: 'Bench Press', weight: 85, unit: 'kg', date: 'Feb 15' },
-      { exercise: 'Deadlift', weight: 120, unit: 'kg', date: 'Feb 26' },
-      { exercise: 'Squat', weight: 110, unit: 'kg', date: 'Feb 10' }
-    ]
+      // Load progress data for goals
+      await getProgress();
+
+      // Set user profile
+      setUserProfile({
+        age: userProfile_?.age,
+        gender: userProfile_?.gender,
+        weight: userVitals.currentWeight,
+        height: userVitals.height,
+        goal: userGoals.primaryGoal,
+        experienceLevel: userGoals.experienceLevel,
+      });
+
+      // Load favorites from localStorage (temporary until backend supports it)
+      const savedFavorites = localStorage.getItem('favoriteExercises');
+      if (savedFavorites) {
+        setFavoriteExercises(JSON.parse(savedFavorites));
+      }
+
+    } catch (error) {
+      console.error('Error loading workout data:', error);
+      toast.error('Failed to load workout data');
+    } finally {
+      setLoading(false);
+    }
+  }, [userGoals.experienceLevel, userGoals.primaryGoal, userProfile_?.age, userProfile_?.gender, userVitals.currentWeight, userVitals.height]);
+
+  // Load workout data on mount
+  useEffect(() => {
+    loadWorkoutData();
+  }, [loadWorkoutData]);
+
+  const calculateWeeklyProgress = (workouts) => {
+    const now = new Date();
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    
+    const weeklyWorkouts = workouts.filter(w => new Date(w.date) >= weekAgo);
+    
+    const totalWorkouts = weeklyWorkouts.length;
+    const totalDuration = weeklyWorkouts.reduce((sum, w) => sum + (w.duration || 0), 0);
+    const totalCalories = weeklyWorkouts.reduce((sum, w) => sum + (w.caloriesBurned || 0), 0);
+    const averageIntensity = weeklyWorkouts.length > 0 
+      ? Math.round(weeklyWorkouts.reduce((sum, w) => sum + (w.intensity || 3), 0) / weeklyWorkouts.length)
+      : 0;
+
+    setWeeklyProgress({
+      totalWorkouts,
+      totalDuration,
+      totalCalories,
+      averageIntensity,
+    });
   };
 
-  const toggleExercise = (exerciseId) => {
-    setCompletedExercises(prev => 
-      prev.includes(exerciseId) 
-        ? prev.filter(id => id !== exerciseId)
-        : [...prev, exerciseId]
+  const handleExerciseSelect = (exercise) => {
+    setSelectedExercises((prev) =>
+      prev.includes(exercise.id)
+        ? prev.filter((id) => id !== exercise.id)
+        : [...prev, exercise.id]
     );
   };
 
-  const updateNote = (exerciseId, note) => {
-    setExerciseNotes(prev => ({ ...prev, [exerciseId]: note }));
+  const handleToggleFavorite = (exerciseId) => {
+    setFavoriteExercises((prev) => {
+      const newFavorites = prev.includes(exerciseId)
+        ? prev.filter(id => id !== exerciseId)
+        : [...prev, exerciseId];
+      
+      // Save to localStorage
+      localStorage.setItem('favoriteExercises', JSON.stringify(newFavorites));
+      
+      toast.success(
+        newFavorites.includes(exerciseId) 
+          ? 'Added to favorites' 
+          : 'Removed from favorites'
+      );
+      
+      return newFavorites;
+    });
   };
 
-  const completionPercentage = Math.round(
-    (completedExercises.length / todayWorkout.exercises.length) * 100
-  );
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'completed': return 'bg-green-100 text-green-700 border-green-300';
-      case 'pending': return 'bg-blue-100 text-blue-700 border-blue-300';
-      case 'skipped': return 'bg-gray-100 text-gray-700 border-gray-300';
-      default: return 'bg-gray-100 text-gray-700 border-gray-300';
+  const handleAdjustment = async (adjustment) => {
+    try {
+      console.log('Adjustment:', adjustment);
+      // TODO: Implement adjustment logic when backend is ready
+      toast.success('Progressive overload adjustment applied!');
+    } catch {
+      toast.error('Failed to apply adjustment');
     }
   };
 
+  const handleWorkoutLogSubmit = async (logData) => {
+    try {
+      const newWorkout = await createWorkout({
+        date: logData.date || new Date(),
+        workoutType: logData.workoutType,
+        duration: parseInt(logData.duration),
+        caloriesBurned: parseInt(logData.caloriesBurned),
+        exercises: logData.exercises || [],
+        intensity: logData.intensity || 3,
+        notes: logData.notes || '',
+      });
+
+      setWorkoutLogs(prev => [newWorkout, ...prev]);
+      calculateWeeklyProgress([newWorkout, ...workoutLogs]);
+      
+      toast.success('Workout logged successfully!');
+    } catch (error) {
+      toast.error(error.message || 'Failed to log workout');
+    }
+  };
+
+  // Generate workout plan based on user profile
+  const generateWorkoutPlan = () => {
+    const goal = userGoals.primaryGoal || 'maintain';
+    const experience = userGoals.experienceLevel || 'beginner';
+    
+    let daysPerWeek = 3;
+    let exercisesPerWorkout = 5;
+    let restDays = ['Wednesday', 'Sunday'];
+
+    if (experience === 'intermediate') {
+      daysPerWeek = 4;
+      exercisesPerWorkout = 6;
+      restDays = ['Thursday', 'Sunday'];
+    } else if (experience === 'advanced') {
+      daysPerWeek = 5;
+      exercisesPerWorkout = 7;
+      restDays = ['Wednesday', 'Sunday'];
+    }
+
+    if (goal === 'muscle' || goal === 'gain') {
+      // More volume for muscle building
+      exercisesPerWorkout += 1;
+    } else if (goal === 'lose') {
+      // More cardio for weight loss
+      // Adjust plan accordingly
+    }
+
+    return {
+      daysPerWeek,
+      exercisesPerWorkout,
+      restDays,
+      focus: goal === 'muscle' ? 'Hypertrophy' : 
+             goal === 'lose' ? 'Fat Loss' : 
+             'Strength & Conditioning',
+    };
+  };
+
+  const workoutPlan = generateWorkoutPlan();
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-screen">
+          <Loader className="w-12 h-12 text-blue-600 animate-spin" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-linear-to-br from-gray-50 via-blue-50 to-purple-50 p-4 md:p-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 p-4 md:p-8">
         <div className="max-w-7xl mx-auto space-y-6">
-        
-        {/* SECTION 1: PAGE HEADER */}
-        <div 
-          className="bg-white rounded-2xl shadow-lg p-6 md:p-8 transition-all duration-500 hover:shadow-xl"
-          style={{ 
-            transform: `translateY(${Math.min(scrollY * 0.1, 20)}px)`,
-            opacity: Math.max(1 - scrollY * 0.001, 0.9)
-          }}
-        >
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <GiWeightLiftingUp className="w-10 h-10 text-blue-600 animate-pulse" />
-                <h1 className="text-4xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Workout Plans
-                </h1>
+          {/* Header */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+            <div className="flex items-center gap-3 mb-2">
+              <Dumbbell className="w-10 h-10 text-blue-600" />
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Workout Center
+              </h1>
+            </div>
+            <p className="text-gray-600">
+              Plan your workouts, track progress, and build your perfect physique.
+            </p>
+
+            {/* User Profile Summary */}
+            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-blue-50 rounded-lg p-3">
+                <p className="text-xs text-blue-600">Experience</p>
+                <p className="text-lg font-semibold text-gray-800 capitalize">
+                  {userProfile?.experienceLevel || 'Beginner'}
+                </p>
               </div>
-              <div className="flex items-center gap-2 text-gray-600">
-                <FiCalendar className="w-5 h-5" />
-                <span className="text-lg font-medium">
-                  Week of {currentWeek.start} - {currentWeek.end}, {currentWeek.year}
-                </span>
+              <div className="bg-purple-50 rounded-lg p-3">
+                <p className="text-xs text-purple-600">Goal</p>
+                <p className="text-lg font-semibold text-gray-800 capitalize">
+                  {userProfile?.goal || 'Maintain'}
+                </p>
+              </div>
+              <div className="bg-green-50 rounded-lg p-3">
+                <p className="text-xs text-green-600">Plan</p>
+                <p className="text-lg font-semibold text-gray-800">
+                  {workoutPlan.daysPerWeek} days/week
+                </p>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-3">
+                <p className="text-xs text-orange-600">This Week</p>
+                <p className="text-lg font-semibold text-gray-800">
+                  {weeklyProgress.totalWorkouts}/{workoutPlan.daysPerWeek}
+                </p>
               </div>
             </div>
-            <button className="group bg-linear-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">
-              <FiPlus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-              Generate New Plan
-            </button>
           </div>
+
+          {/* Tabs Navigation */}
+          <div className="bg-white rounded-xl shadow-sm p-2">
+            <div className="flex flex-wrap gap-2">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                      activeTab === tab.id
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Tab Content */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {activeTab === 'plan' && (
+                <WorkoutPlan
+                  onWorkoutLogSubmit={handleWorkoutLogSubmit}
+                  workoutLogs={workoutLogs}
+                  userProfile={userProfile}
+                  workoutPlan={workoutPlan}
+                  weeklyProgress={weeklyProgress}
+                />
+              )}
+
+              {activeTab === 'library' && (
+                <ExerciseLibrary
+                  onSelect={handleExerciseSelect}
+                  selected={selectedExercises}
+                  favorites={favoriteExercises}
+                  onToggleFavorite={handleToggleFavorite}
+                  userProfile={userProfile}
+                />
+              )}
+
+              {activeTab === 'progress' && (
+                <ProgressOverload
+                  onAdjust={handleAdjustment}
+                  workoutLogs={workoutLogs}
+                  userProfile={userProfile}
+                  weeklyProgress={weeklyProgress}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* SECTION 2: TODAY'S WORKOUT */}

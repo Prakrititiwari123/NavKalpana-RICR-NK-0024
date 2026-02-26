@@ -1,17 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import {
-  FiPlus, FiCheck, FiCalendar, FiTrendingUp,
-  FiDroplet, FiEdit3, FiChevronDown
-} from 'react-icons/fi';
-import { IoRestaurant, IoFlame, IoWater } from 'react-icons/io5';
-import { GiWeightLiftingUp } from 'react-icons/gi';
+import React, { useState, useEffect, useCallback } from 'react';
+// eslint-disable-next-line no-unused-vars
+import { AnimatePresence, motion } from 'framer-motion';
+import { Utensils, Calendar, Activity, Calculator, Loader } from 'lucide-react';
 import DashboardLayout from '../../components/Dashboard/DashboardLayout';
+import DietPlan from './diet/DietPlan';
+import CalorieTracker from './diet/CalorieTracker';
+import MacroCalculator from './diet/MacroCalculator';
+import { useAuth } from '../../Context/AuthContext';
+import { 
+  getNutritionLogs, 
+  createNutritionLog,
+  updateGoals,
+  getProgress
+} from '../../Services/profileService';
+import toast from 'react-hot-toast';
 
 const Diet = () => {
-  const [waterIntake, setWaterIntake] = useState(4);
-  const [completedMeals, setCompletedMeals] = useState([]);
-  const [expandedMeal, setExpandedMeal] = useState(null);
-  const [scrollY, setScrollY] = useState(0);
+  const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState('plan');
+  const [loading, setLoading] = useState(true);
+  const [mealLogs, setMealLogs] = useState([]);
+  const [userProfile, setUserProfile] = useState(null);
+  
+  // Get user data from auth context
+  const userHealthData = user?.healthData || {};
+  const userVitals = userHealthData.vitals || {};
+  const userGoalsData = userHealthData.goals || {};
+
+  // Calculate macro targets based on user goals
+  const [macroTargets, setMacroTargets] = useState({
+    calories: userGoalsData.calorieTarget || 2100,
+    protein: Math.round((userGoalsData.calorieTarget || 2100) * 0.3 / 4) || 158, // 30% protein, 4 cal/g
+    carbs: Math.round((userGoalsData.calorieTarget || 2100) * 0.45 / 4) || 236,   // 45% carbs, 4 cal/g
+    fat: Math.round((userGoalsData.calorieTarget || 2100) * 0.25 / 9) || 58,      // 25% fat, 9 cal/g
+    fiber: 30,
+    sugar: 50,
+  });
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -82,138 +106,251 @@ const Diet = () => {
     }
   ];
 
-  const totalCaloriesConsumed = todaysMeals
-    .filter(meal => meal.status === 'completed')
-    .reduce((sum, meal) => sum + meal.calories, 0);
+  const loadUserNutritionData = useCallback(async () => {
+    setLoading(true);
+    try {
+      // Load nutrition logs
+      const nutritionData = await getNutritionLogs();
+      if (nutritionData && nutritionData.length > 0) {
+        setMealLogs(nutritionData);
+      }
 
-  const caloriePercentage = Math.round((totalCaloriesConsumed / dailyTarget) * 100);
+      // Load progress data for goals
+      await getProgress();
 
-  const weeklyHistory = [
-    { day: 'Monday', calories: 2150, protein: 160, carbs: 270, fats: 65 },
-    { day: 'Tuesday', calories: 2180, protein: 155, carbs: 280, fats: 68 },
-    { day: 'Wednesday', calories: 2100, protein: 170, carbs: 260, fats: 62 },
-    { day: 'Thursday', calories: 2220, protein: 165, carbs: 290, fats: 70 },
-    { day: 'Friday', calories: 2050, protein: 150, carbs: 255, fats: 60 },
-    { day: 'Saturday', calories: 2300, protein: 180, carbs: 310, fats: 75 },
-    { day: 'Sunday', calories: totalCaloriesConsumed, protein: 145, carbs: 220, fats: 58 }
-  ];
+      // Set user profile
+      setUserProfile({
+        age: userHealthData.profile?.age,
+        gender: userHealthData.profile?.gender,
+        height: userVitals.height,
+        weight: userVitals.currentWeight,
+        activityLevel: userHealthData.profile?.activityLevel,
+        goal: userGoalsData.primaryGoal,
+        targetWeight: userVitals.goalWeight,
+      });
 
-  const mealSuggestions = [
-    {
-      id: 1,
-      title: 'Protein-Packed Breakfast Bowl',
-      description: 'Scrambled eggs with quinoa, spinach, and berries',
-      calories: 420,
-      proteinPerk: 'High Protein'
-    },
-    {
-      id: 2,
-      title: 'Mediterranean Lunch',
-      description: 'Grilled fish with whole grain pasta and olive oil',
-      calories: 680,
-      proteinPerk: 'Omega-3 Rich'
-    },
-    {
-      id: 3,
-      title: 'Pre-Workout Snack',
-      description: 'Banana with almond butter and honey',
-      calories: 280,
-      proteinPerk: 'Energy Boost'
-    },
-    {
-      id: 4,
-      title: 'Lean Dinner Combo',
-      description: 'Turkey breast with quinoa and roasted vegetables',
-      calories: 550,
-      proteinPerk: 'Low Fat'
-    },
-    {
-      id: 5,
-      title: 'Post-Workout Recovery',
-      description: 'Chocolate protein shake with banana and oats',
-      calories: 350,
-      proteinPerk: 'Recovery'
-    },
-    {
-      id: 6,
-      title: 'Veggie-Packed Salad',
-      description: 'Chickpea salad with mixed greens and tahini dressing',
-      calories: 380,
-      proteinPerk: 'Plant-Based'
+    } catch (error) {
+      console.error('Error loading nutrition data:', error);
+      toast.error('Failed to load nutrition data');
+    } finally {
+      setLoading(false);
     }
-  ];
+  }, [userGoalsData.primaryGoal, userHealthData.profile?.activityLevel, userHealthData.profile?.age, userHealthData.profile?.gender, userVitals.currentWeight, userVitals.goalWeight, userVitals.height]);
 
-  const toggleMeal = (mealId) => {
-    setCompletedMeals(prev =>
-      prev.includes(mealId)
-        ? prev.filter(id => id !== mealId)
-        : [...prev, mealId]
+  // Load user data on mount
+  useEffect(() => {
+    loadUserNutritionData();
+  }, [loadUserNutritionData]);
+
+  // Handle meal swap (for meal plan)
+  const handleMealSwap = async (meal) => {
+    try {
+      console.log('Swapping meal:', meal);
+      // TODO: Implement meal swap logic with backend
+      toast.success('Meal swapped successfully!');
+    } catch {
+      toast.error('Failed to swap meal');
+    }
+  };
+
+  // Handle logging a meal
+  const handleLogMeal = async (logData) => {
+    try {
+      // Prepare data for backend
+      const mealData = {
+        date: logData.date || new Date(),
+        mealType: logData.mealType,
+        calories: parseInt(logData.calories),
+        macros: {
+          protein: parseInt(logData.protein) || 0,
+          carbs: parseInt(logData.carbs) || 0,
+          fats: parseInt(logData.fats) || 0,
+        },
+        foodItems: logData.foodItems || [],
+        notes: logData.notes || '',
+      };
+
+      // Save to backend
+      const savedMeal = await createNutritionLog(mealData);
+      
+      // Update local state
+      setMealLogs((prev) => [savedMeal, ...prev]);
+      
+      toast.success('Meal logged successfully!');
+    } catch (error) {
+      console.error('Error logging meal:', error);
+      toast.error(error.message || 'Failed to log meal');
+    }
+  };
+
+  // Handle macro calculation
+  const handleCalculateMacros = async (macroData) => {
+    try {
+      console.log('Calculated macros:', macroData);
+      
+      // Update macro targets
+      setMacroTargets(macroData);
+      
+      // Update user goals in backend
+      await updateGoals({
+        calorieTarget: macroData.calories,
+      });
+
+      toast.success('Macro targets updated!');
+    } catch {
+      toast.error('Failed to update macro targets');
+    }
+  };
+
+  // Calculate daily totals from logs
+  const dailyTotals = () => {
+    const today = new Date().toDateString();
+    const todayLogs = mealLogs.filter(log => 
+      new Date(log.date).toDateString() === today
     );
+
+    return todayLogs.reduce((acc, log) => ({
+      calories: acc.calories + (log.calories || 0),
+      protein: acc.protein + (log.macros?.protein || 0),
+      carbs: acc.carbs + (log.macros?.carbs || 0),
+      fats: acc.fats + (log.macros?.fats || 0),
+    }), { calories: 0, protein: 0, carbs: 0, fats: 0 });
   };
 
-  const addWater = () => {
-    if (waterIntake < 8) {
-      setWaterIntake(waterIntake + 1);
-    }
-  };
+  const todaysProgress = dailyTotals();
 
-  const getMacroPercentage = (consumed, target) => {
-    return Math.round((consumed / target) * 100);
-  };
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-screen">
+          <Loader className="w-12 h-12 text-green-600 animate-spin" />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-linear-to-br from-green-50 via-emerald-50 to-blue-50 p-4 md:p-8">
+      <div className="min-h-screen bg-linear-to-br from-gray-50 via-green-50 to-emerald-50 p-4 md:p-8">
         <div className="max-w-7xl mx-auto space-y-6">
+          {/* Header */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+            <div className="flex items-center gap-3 mb-2">
+              <Utensils className="w-10 h-10 text-green-600" />
+              <h1 className="text-4xl font-bold bg-linear-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                Nutrition Center
+              </h1>
+            </div>
+            <p className="text-gray-600">
+              Plan your meals, track calories, and calculate optimal macros for your goals.
+            </p>
 
-        {/* SECTION 1: PAGE HEADER */}
-        <div
-          className="bg-white rounded-2xl shadow-lg p-6 md:p-8 transition-all duration-500 hover:shadow-xl"
-          style={{
-            transform: `translateY(${Math.min(scrollY * 0.1, 20)}px)`,
-            opacity: Math.max(1 - scrollY * 0.001, 0.9)
-          }}
-        >
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <IoRestaurant className="w-10 h-10 text-green-600 animate-pulse" />
-                <h1 className="text-4xl font-bold bg-linear-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                  Diet & Nutrition
-                </h1>
+            {/* User Info Summary */}
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="bg-green-50 rounded-lg p-3">
+                <p className="text-xs text-green-600">Daily Calories</p>
+                <p className="text-lg font-bold text-gray-800">
+                  {todaysProgress.calories} / {macroTargets.calories} kcal
+                </p>
+                <div className="w-full bg-green-200 rounded-full h-1.5 mt-2">
+                  <div 
+                    className="bg-green-600 h-1.5 rounded-full transition-all"
+                    style={{ width: `${Math.min((todaysProgress.calories / macroTargets.calories) * 100, 100)}%` }}
+                  />
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-gray-600">
-                <IoFlame className="w-5 h-5 text-orange-500" />
-                <span className="text-lg font-medium">
-                  Daily Target: <strong className="text-green-600">{dailyTarget} kcal</strong>
-                </span>
+              <div className="bg-blue-50 rounded-lg p-3">
+                <p className="text-xs text-blue-600">Protein</p>
+                <p className="text-lg font-bold text-gray-800">
+                  {todaysProgress.protein} / {macroTargets.protein}g
+                </p>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-3">
+                <p className="text-xs text-orange-600">Carbs</p>
+                <p className="text-lg font-bold text-gray-800">
+                  {todaysProgress.carbs} / {macroTargets.carbs}g
+                </p>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-3">
+                <p className="text-xs text-yellow-600">Fats</p>
+                <p className="text-lg font-bold text-gray-800">
+                  {todaysProgress.fats} / {macroTargets.fat}g
+                </p>
               </div>
             </div>
-            <button className="group bg-linear-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">
-              <FiPlus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-              Regenerate Meal Plan
-            </button>
+
+            {/* User Profile Info */}
+            {userProfile && (
+              <div className="mt-4 text-sm text-gray-500 flex flex-wrap gap-4">
+                {userProfile.age && <span>Age: {userProfile.age}</span>}
+                {userProfile.gender && <span>Gender: {userProfile.gender}</span>}
+                {userProfile.weight && <span>Weight: {userProfile.weight} kg</span>}
+                {userProfile.height && <span>Height: {userProfile.height} cm</span>}
+                {userProfile.goal && (
+                  <span className="capitalize">Goal: {userProfile.goal}</span>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Daily Calorie Progress */}
-          <div className="mt-6 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-700 font-semibold">Today's Calories</span>
-              <span className="text-2xl font-bold text-green-600">
-                {totalCaloriesConsumed} / {dailyTarget} kcal
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-              <div
-                className="h-full bg-linear-to-r from-green-500 to-emerald-500 rounded-full transition-all duration-500"
-                style={{ width: `${Math.min(caloriePercentage, 100)}%` }}
-              />
-            </div>
-            <div className="flex justify-between text-sm text-gray-500">
-              <span>{caloriePercentage}% consumed</span>
-              <span>{Math.max(dailyTarget - totalCaloriesConsumed, 0)} kcal remaining</span>
+          {/* Tabs Navigation */}
+          <div className="bg-white rounded-xl shadow-sm p-2">
+            <div className="flex flex-wrap gap-2">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                      activeTab === tab.id
+                        ? 'bg-linear-to-r from-green-600 to-emerald-600 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    {tab.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
+
+          {/* Tab Content */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {activeTab === 'plan' && (
+                <DietPlan 
+                  onSwap={handleMealSwap}
+                  userProfile={userProfile}
+                  macroTargets={macroTargets}
+                />
+              )}
+
+              {activeTab === 'tracker' && (
+                <CalorieTracker
+                  logs={mealLogs}
+                  target={macroTargets}
+                  onLog={handleLogMeal}
+                  dailyTotals={todaysProgress}
+                />
+              )}
+
+              {activeTab === 'calculator' && (
+                <MacroCalculator 
+                  onCalculate={handleCalculateMacros}
+                  userProfile={userProfile}
+                  initialTargets={macroTargets}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* SECTION 2: MACRO NUTRIENTS OVERVIEW */}

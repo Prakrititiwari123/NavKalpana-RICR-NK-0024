@@ -1,137 +1,138 @@
+// middlewares/authMiddleware.js
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
-
-// ----------------------Protect------------------
 export const Protect = async (req, res, next) => {
+  
   try {
-    const token = req.cookies.refreshToken; 
-    console.log("Token received in Cookies:", token);
-
-    if (!token) {
-      const error = new Error("Unauthorized! No token provided. Please login again.");
-      error.statusCode = 401;
-      return next(error);
-    }
-
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
-    } catch (jwtError) {
-      const error = new Error("Invalid or expired token. Please login again.");
-      error.statusCode = 401;
-      return next(error);
-    }
-
-    console.log(decoded);
-
-    const verifiedUser = await User.findById(decoded.id);
-    if (!verifiedUser) {
-      const error = new Error("User not found. Please login again.");
-      error.statusCode = 401;
-      return next(error);
-    }
-
-    req.user = verifiedUser;
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
-// ----------------------admin Protect------------
-export const AdminProtect = async (req, res, next) => {
-  try {
-    let token;
-
-    // 1. Check token
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
-    ) {
-      token = req.headers.authorization.split(" ")[1];
-    }
-
+    // 🔑 ACCESS TOKEN ONLY
+    const token =
+    req.cookies?.accessToken ||
+    req.headers.authorization?.split(" ")[1];
+    
     if (!token) {
       return res.status(401).json({
-        success: false,
-        message: "No token provided",
+        message: "Unauthorized - Access token missing",
       });
     }
-
-    // 2. Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // 3. Find user
+    
+    const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
+    
     const user = await User.findById(decoded.id).select("-password");
-
     if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "User not found",
-      });
+      return res.status(401).json({ message: "User not found" });
     }
-
-    // 4. Optional role check
-    if (req.headers.role && req.headers.role !== user.role) {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied",
-      });
-    }
-
-    // Attach user to request
+    
     req.user = user;
-
     next();
-  } catch (error) {
+  } catch (err) {
     return res.status(401).json({
-      success: false,
-      message: "Not authorized",
+      message: "Invalid or expired access token",
     });
   }
 };
 
 
-// -------------------OTP Protect-----------------
+export const RefreshProtect = (req, res, next) => {
+  const refreshToken = req.cookies?.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: "No refresh token" });
+  }
+
+  try {
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_SECRET
+    );
+    req.user = { id: decoded.id };
+    next();
+  } catch {
+    return res.status(401).json({ message: "Invalid refresh token" });
+  }
+};
+
+
+export const AdminProtect = async (req, res, next) => {
+  try {
+    const token =
+      req.cookies?.accessToken ||
+      req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
+
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+
+    
+
+    req.user = user;
+    next();
+  } catch {
+    return res.status(401).json({ message: "Not authorized" });
+  }
+};
+
+
+
 export const OtpProtect = async (req, res, next) => {
   try {
-    const token = req.cookies.otpToken;
-    console.log("Token recived in Cookies:", token);
+    const token = req.cookies?.otpToken;
 
-    const decode = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decode);
-    if (!decode) {
-      const error = new Error("Unauthorized! Please try again");
-      error.statusCode = 401;
-      return next(error);
+    if (!token) {
+      return res.status(401).json({
+        message: "OTP token missing",
+      });
     }
 
-    const verifiedUser = await User.findById(decode.id);
-    if (!verifiedUser) {
-      const error = new Error("Unauthorized! Please try again");
-      error.statusCode = 401;
-      return next(error);
+    const decoded = jwt.verify(
+      token,
+      process.env.OTP_SECRET // 🔐 SEPARATE SECRET
+    );
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid OTP user",
+      });
     }
 
-    req.user = verifiedUser;
+    req.user = user;
     next();
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    return res.status(401).json({
+      message: "Invalid or expired OTP",
+    });
   }
 };
 
 
-// ----------------------user validation for active-----------------
-export const checkUserActive = async (req, res, next) => {
+// middlewares/checkUserActive.js
+export const checkUserActive = (req, res, next) => {
   try {
-    if (req.user && req.user.isActive === false) {
-      const error = new Error("Account has been deactivated or deleted");
-      error.statusCode = 403;
-      return next(error);
+    if (!req.user) {
+      return res.status(401).json({
+        message: "Unauthorized - user not attached",
+      });
     }
+
+    if (req.user.isActive === false) {
+      return res.status(403).json({
+        message: "Account has been deactivated",
+      });
+    }
+
     next();
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 };
+
+

@@ -1,4 +1,3 @@
-// services/authService.js
 import axiosInstance from "../config/Api";
 
 
@@ -8,7 +7,7 @@ export const loginUser = async ({ email, password, rememberMe }) => {
       throw new Error("Email and password are required");
     }
     
-
+    
     const response = await axiosInstance.post(
       "/auth/login",
       {
@@ -20,24 +19,18 @@ export const loginUser = async ({ email, password, rememberMe }) => {
         withCredentials: true, // ⭐ refresh token cookie
       }
     );
-
+    
     if (response.status !== 200 || !response.data) {
       throw new Error("Invalid response from server");
     }
-
-    const { user, accessToken, message } = response.data;
-
-    if (!user || !accessToken) {
-      throw new Error("Invalid login response structure");
-    }
+    
+    
+    
 
     // ✅ RETURN DATA (AuthContext will store in memory)
     return {
       success: true,
-      user,
-      accessToken,
-      message: message || "Login successful",
-      isActive: user.isActive === "active",
+      user : response.data.user,
     };
 
   } catch (error) {
@@ -197,7 +190,7 @@ export const registerUser = async (userData) => {
       throw new Error('Invalid response from server');
     }
 
-    const { user, token, refreshToken, expiresIn } = response.data;
+    const { user, token, refreshToken, expiresIn, message } = response.data;
 
     // Store tokens
     if (token) {
@@ -230,7 +223,7 @@ export const registerUser = async (userData) => {
     return {
       success: true,
       user,
-      message: data.message || "Login successful",
+      message: message || "Login successful",
     };
 
   } catch (error) {
@@ -288,42 +281,6 @@ export const getUserData = () => {
 
 
 
-export const updateUserData = async (updatedFields = {}) => {
-  try {
-    if (!updatedFields || Object.keys(updatedFields).length === 0) {
-      throw new Error("No fields to update");
-    }
-
-
-    
-    const response = await axiosInstance.patch(
-      "/user/update-profile",
-      updatedFields
-    );
-
-
-    if (!response.data?.data) {
-      throw new Error("Invalid server response");
-    }
-
-    const updatedUser = response.data.data;
-
-    console.log(updatedUser);
-    
-
-    return updatedUser;
-  } catch (error) {
-    console.error(
-      "Update user failed:",
-      error?.response?.data || error.message
-    );
-    throw error;
-  }
-};
-
-
-
-
 export const logoutUser = () => {
   try {
     localStorage.removeItem('healthnexus_user');
@@ -333,3 +290,8 @@ export const logoutUser = () => {
     throw new Error('Failed to logout. Please try again.');
   }
 }
+
+
+
+
+

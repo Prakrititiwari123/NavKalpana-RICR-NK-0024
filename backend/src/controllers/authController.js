@@ -6,69 +6,93 @@ import { sendOTPEmail } from "../utils/emailService.js";
 import jwt from "jsonwebtoken";
 
 
-// ----------------UserRegister-----------------
 export const UserRegister = async (req, res, next) => {
   try {
-    console.log(req.body);
-    //accept data from Frontend
-    const { fullName, email,  password } = req.body;
+    const {
+      fullName,
+      email,
+      password,
+      age,
+      biologicalSex,
+      height,
+      weight,
+      activityLevel,
+      experienceLevel,
+      primaryGoal,
+    } = req.body;
 
-    //verify that all data exist
-    if (!fullName || !email  || !password) {
-      const error = new Error("All feilds required");
-      error.statusCode = 400;
-      return next(error);
+
+    console.log({
+      fullName,
+      email,
+      password,
+      age,
+      gender,
+      heightCm,
+      weightKg,
+      activityLevel,
+      experienceLevel,
+      primaryGoal,
+    });
+    
+    // REQUIRED CHECK
+    if (!fullName || !email || !password) {
+      return res.status(400).json({ message: "Full name, email, password required" });
     }
 
-    console.log({ fullName, email,  password });
-
-    //Check for duplaicate user before registration
-    const existingUser = await User.findOne({ email });
+    // DUPLICATE CHECK
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
-      const error = new Error("Email already registered");
-      error.statusCode = 409;
-      return next(error);
+      return res.status(409).json({ message: "Email already registered" });
     }
 
-    console.log("Sending Data to DB");
-
-    //encrypt the password
+    // HASH PASSWORD
     const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    console.log("Password Hashing Done. hashPassword = ", hashPassword);
-
-    const photoURL = `https://placehold.co/600x400?text=${fullName.charAt(0).toUpperCase()}`;
+    // DEFAULT AVATAR
     const photo = {
-      url: photoURL,
+      url: `https://placehold.co/600x400?text=${fullName.charAt(0).toUpperCase()}`,
     };
 
-    //save data to database
-    const newUser = await User.create({
+    // CREATE USER (ALL FIELDS)
+    const user = await User.create({
       fullName,
       email: email.toLowerCase(),
-      password: hashPassword,
+      password: hashedPassword,
       photo,
+
+      age,
+      gender,
+      heightCm,
+      weightKg,
+      activityLevel,
+      experienceLevel,
+      primaryGoal,
     });
 
-    // send response to Frontend
-    console.log(newUser);
-    res.status(201).json({ message: "Registration Successfull" });
-    //End
+    res.status(201).json({
+      message: "Registration successful",
+      userId: user._id,
+    });
   } catch (error) {
     next(error);
   }
 };
 
+
 export const refresh = async (req, res) => {
   try {
-    const token = req.cookies.refreshToken;
+    const refreshToken = req.cookies.refreshToken;
 
-    if (!token) {
+    if (!refreshToken) {
       return res.status(401).json({ message: "No refresh token" });
     }
 
-    const decoded = jwt.verify(token, process.env.REFRESH_SECRET);
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_SECRET
+    );
 
     const user = await User.findById(decoded.id).select("-password");
 
@@ -76,78 +100,89 @@ export const refresh = async (req, res) => {
       return res.status(401).json({ message: "User not found" });
     }
 
+    // 🔐 NEW ACCESS TOKEN
     const newAccessToken = jwt.sign(
       { id: user._id },
       process.env.ACCESS_SECRET,
       { expiresIn: "10m" }
     );
 
-    res.status(200).json({
-      accessToken: newAccessToken,
-      user, // ⭐ MOST IMPORTANT LINE
+    // ✅ SET ACCESS TOKEN COOKIE (THIS WAS MISSING)
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
     });
-    
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+
   } catch (err) {
-    res.status(401).json({ message: "Invalid refresh token" });
+    return res.status(401).json({ message: "Invalid refresh token" });
   }
 };
 
 
-// -----------------UserLogin---------------------
+
+
+
 export const UserLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      const error = new Error("All fields required");
-      error.statusCode = 400;
-      return next(error);
+      return res.status(400).json({ message: "All fields required" });
     }
 
     const existingUser = await User.findOne({ email }).select("+password");
 
     if (!existingUser) {
-      const error = new Error("Email not registered");
-      error.statusCode = 401;
-      return next(error);
+      return res.status(401).json({ message: "Email not registered" });
     }
 
-    const isVerified = await bcrypt.compare(password, existingUser.password);
+    const isVerified = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
 
     if (!isVerified) {
-      const error = new Error("Password didn't match");
-      error.statusCode = 401;
-      return next(error);
+      return res.status(401).json({ message: "Password didn't match" });
     }
 
-    // ✅ ACCESS TOKEN (SHORT LIFE)
+    // 🔐 ACCESS TOKEN (SHORT)
     const accessToken = jwt.sign(
       { id: existingUser._id },
       process.env.ACCESS_SECRET,
       { expiresIn: "10m" }
     );
 
-    // ✅ REFRESH TOKEN (LONG LIFE)
+    // 🔐 REFRESH TOKEN (LONG)
     const refreshToken = jwt.sign(
       { id: existingUser._id },
       process.env.REFRESH_SECRET,
       { expiresIn: "7d" }
     );
 
-    // ✅ REFRESH TOKEN → HTTP ONLY COOKIE
-    res.cookie("refreshToken", refreshToken, {
+    // ✅ ACCESS TOKEN COOKIE
+    res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      sameSite: "strict",
-      secure: false, // https ho to true
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
     });
 
-    // password remove
+    // ✅ REFRESH TOKEN COOKIE
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    });
+
     existingUser.password = undefined;
 
-    // ✅ RESPONSE
-    res.status(200).json({
-      message: "Login Successful",
-      accessToken,
+    return res.status(200).json({
+      success: true,
       user: existingUser,
     });
 
@@ -155,6 +190,16 @@ export const UserLogin = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
+
+
+
+
+
+
+
 // ------------------UserLogout---------------
 export const Logout = async (req, res, next) => {
   try {

@@ -1,8 +1,9 @@
+// models/User.js
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    // ✅ REQUIRED (Signup)
+    // AUTH
     fullName: {
       type: String,
       required: true,
@@ -23,106 +24,40 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
 
-    // ✅ OPTIONAL (Editable later)
     role: {
       type: String,
       enum: ["admin", "user"],
       default: "user",
     },
 
-    dob: { type: String },
-    gender: {
+    // BASIC PROFILE
+    age: {
+      type: Number,
+      min: 10,
+      max: 100,
+    },
+
+    biologicalSex: {
       type: String,
-      enum: ["male", "female", "others", "N/A"],
+      enum: ["male", "female", "other"],
     },
 
-    phone: { type: String },
-    address: { type: String },
-    city: { type: String },
-    pin: { type: String },
+    height: Number,
+    weight: Number,
 
-    photo: {
-      url: { type: String },
-      publicID: { type: String },
+    // FITNESS META
+    activityLevel: {
+      type: String,
     },
 
-    // ✅ Health Data (Optional – profile completion phase)
-    healthData: {
-      vitals: {
-        height: Number,
-        weight: Number,
-        bmi: Number,
-        bloodGroup: String,
-        heartRate: Number,
-        bloodPressure: String,
-        oxygenSaturation: Number,
-        temperature: Number,
-      },
-
-      medicalHistory: {
-        chronicDiseases: [String],
-        surgeries: [String],
-        allergies: [String],
-      },
-
-      medications: {
-        currentMedications: [String],
-        pastMedications: [String],
-      },
-
-      lifestyle: {
-        smoking: Boolean,
-        alcohol: Boolean,
-        exerciseFrequency: {
-          type: String,
-          enum: ["None", "Occasional", "Regular"],
-        },
-        diet: String,
-      },
-
-      labReports: [
-        {
-          reportName: String,
-          reportDate: Date,
-          result: String,
-          fileUrl: String,
-        },
-      ],
-
-      appointments: [
-        {
-          doctorName: String,
-          specialization: String,
-          appointmentDate: Date,
-          notes: String,
-        },
-      ],
-
-      vaccinations: [
-        {
-          vaccineName: String,
-          dose: String,
-          date: Date,
-        },
-      ],
-
-      emergencyContacts: [
-        {
-          name: String,
-          relation: String,
-          phone: String,
-        },
-      ],
+    experienceLevel: {
+      type: String,
     },
 
-    // ✅ Documents (Optional)
-    documents: {
-      gst: String,
-      uidai: String,
-      pan: String,
+    primaryGoal: {
+      type: String,
     },
 
-    // ✅ System flags
     isActive: {
       type: Boolean,
       default: true,
@@ -131,5 +66,4 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const User = mongoose.model("User", userSchema);
-export default User;
+export default mongoose.model("User", userSchema);

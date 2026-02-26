@@ -8,6 +8,7 @@ import PrivateLayout from "./Layout/PrivateLayout";
 import { PageLoader } from "./components/Common/Loaders";
 import { useAuth } from "./Context/AuthContext";
 import ScrollToTop from "./Context/ScrollToTop";
+import Profile from "./pages/Dashboard/Profile";
 // Lazy load pages for better performance
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -18,7 +19,6 @@ const Diet = lazy(() => import("./pages/Dashboard/Diet"));
 const Progress = lazy(() => import("./pages/Dashboard/Progress"));
 const Analytics = lazy(() => import("./pages/Dashboard/Analytics"));
 const Chat = lazy(() => import("./pages/Dashboard/Chat"));
-const Settings = lazy(() => import("./pages/Dashboard/Settings"));
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -286,6 +286,14 @@ const App = () => {
                 }
               />
               <Route
+                path="/profile"
+                element={
+                  // <ProtectedRoute>
+                  <Profile />
+                  // </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/chat"
                 element={
                   // <ProtectedRoute>
@@ -293,14 +301,14 @@ const App = () => {
                   // </ProtectedRoute>
                 }
               />
-              <Route
+              {/* <Route
                 path="/settings"
                 element={
                   // <ProtectedRoute>
                   <Settings />
                   // </ProtectedRoute>
                 }
-              />
+              /> */}
             </Route>
 
             {/* 404 Route - Catch all unmatched routes */}

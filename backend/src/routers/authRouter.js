@@ -9,13 +9,13 @@ import {
   deleteAccount,
   refresh
 } from "../controllers/authController.js";
-import { checkUserActive, OtpProtect, Protect } from "../middlewares/authMiddleware.js";
+import { RefreshProtect, OtpProtect, Protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router.post("/register", UserRegister);
 router.post("/login", UserLogin);
-router.get("/refresh", refresh);
+router.get("/refresh", RefreshProtect , refresh);
 
 router.post("/logout", Logout);
 
@@ -23,7 +23,6 @@ router.post("/genOtp", UserGenOTP);
 router.post("/verifyOtp", UserVerifyOtp);
 router.post("/forgetPassword", OtpProtect, UserForgetPassword);
 
-router.delete('/delete-account', Protect, deleteAccount);
 router.delete('/delete-account', Protect, deleteAccount);
 
 export default router;

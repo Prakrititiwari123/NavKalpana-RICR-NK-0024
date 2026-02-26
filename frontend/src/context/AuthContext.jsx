@@ -17,11 +17,20 @@ export const AuthProvider = ({ children }) => {
           "http://localhost:4500/auth/refresh",
           { withCredentials: true }
         );
-
+        
+        
         setAccessToken(res.data.accessToken);
         setUser(res.data.user); // optional if backend sends user
         setIsAuthenticated(true);
-      } catch (err) {
+
+         if (res.data.accessToken) {
+          localStorage.setItem("accessToken", res.data.accessToken);
+          
+        }
+        if (res.data.user) {
+          localStorage.setItem("healthnexus_user", JSON.stringify(res.data.user));
+        }
+      } catch {
         setUser(null);
         setAccessToken(null);
         setIsAuthenticated(false);
@@ -38,6 +47,13 @@ export const AuthProvider = ({ children }) => {
     setUser(data.user);
     setAccessToken(data.accessToken);
     setIsAuthenticated(true);
+
+    if (data?.user) {
+      localStorage.setItem("healthnexus_user", JSON.stringify(data.user));
+    }
+    if (data?.accessToken) {
+      localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
+    }
   };
 
   // 🚪 LOGOUT
@@ -48,11 +64,14 @@ export const AuthProvider = ({ children }) => {
         {},
         { withCredentials: true }
       );
-    } catch (_) {}
+    } catch {
+      void 0;
+    }
 
     setUser(null);
     setAccessToken(null);
     setIsAuthenticated(false);
+    localStorage.removeItem("healthnexus_user");
   };
 
   // AuthContext.js (MODIFICATION ONLY)
@@ -79,4 +98,5 @@ const updateUser = (updatedUser) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

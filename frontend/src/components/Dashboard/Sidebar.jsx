@@ -53,13 +53,7 @@ const Sidebar = () => {
       path: '/workout',
       color: 'text-indigo-600'
     },
-    {
-      id: 6,
-      label: 'Settings',
-      icon: FiSettings,
-      path: '/settings',
-      color: 'text-red-600'
-    }
+    
   ];
 
   const handleNavigation = (path) => {

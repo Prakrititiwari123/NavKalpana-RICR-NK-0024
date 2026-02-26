@@ -1,5 +1,6 @@
 ﻿// Register.jsx
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';

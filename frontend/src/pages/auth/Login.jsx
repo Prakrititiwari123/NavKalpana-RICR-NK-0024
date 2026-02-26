@@ -6,6 +6,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -137,11 +138,12 @@ const Login = () => {
     e.preventDefault();
     setTouched({ email: true, password: true });
 
+    
     if (!isValid || isLoading) return;
-
+    
     setIsLoading(true);
     setLoginError(false);
-
+    
     try {
       const response = await loginUser({
         email: formData.email,
@@ -155,6 +157,8 @@ const Login = () => {
           accessToken: response.accessToken,
         });
       }
+      console.log(response);
+      
 
       toast.success("Login successful! Redirecting...", {
         icon: "🎉",
