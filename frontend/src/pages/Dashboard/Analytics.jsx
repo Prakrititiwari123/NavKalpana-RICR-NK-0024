@@ -518,7 +518,7 @@ const Analytics = () => {
         </div>
       </div>
 
-      <style jsx="true">{`
+      <style >{`
         .analytics-page {
           padding: 2rem;
           max-width: 1400px;

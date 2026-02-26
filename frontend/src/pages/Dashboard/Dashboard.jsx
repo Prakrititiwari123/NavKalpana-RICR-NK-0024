@@ -528,7 +528,7 @@ const Dashboard = () => {
         </div>
 
         {/* Custom Animations - Added to global styles once */}
-        <style jsx="true">{`
+        <style jsx="true"z>{`
           @keyframes fadeInDown {
             from {
               opacity: 0;
