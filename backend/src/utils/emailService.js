@@ -1,4 +1,4 @@
-import SendEmail from "../config/email.js";
+import SendEmail from "../config/Email.js";
 
 export const sendOTPEmail = async (to, otp) => {
   const subject = "OTP to reset your HealthNexus Password";

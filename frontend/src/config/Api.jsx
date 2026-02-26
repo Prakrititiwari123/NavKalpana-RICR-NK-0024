@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:4500",
+  baseURL: "https://navkalpana-ricr-nk-0024.onrender.com",
   withCredentials: true,
  // 🔥 Required for rememberMe cookies
   headers: {
