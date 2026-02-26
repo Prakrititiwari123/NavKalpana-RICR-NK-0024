@@ -1,0 +1,570 @@
+================================================================================
+                        PROJECT OVERVIEW
+                      NavKalpana-RICR-NK-0024
+================================================================================
+
+PROJECT NAME: NavKalpana (Personal Fitness & Health Analytics Platform)
+DESCRIPTION: Full-stack web application for fitness tracking, diet management, 
+             workout analytics, and personalized health insights using AI.
+
+================================================================================
+                     PROJECT ARCHITECTURE
+================================================================================
+
+Technology Stack:
+  Backend:  Node.js, Express.js, MongoDB, JWT Authentication, Cloudinary
+  Frontend: React.js, Vite, Axios, Context API, Tailwind CSS
+
+Technologies Used: Groq AI API, Email Services, File Upload Management
+
+================================================================================
+                    FOLDER STRUCTURE & ACTIONS
+================================================================================
+
+ROOT LEVEL: d:\NavKalpana-RICR-NK-0024\
+├── ave.txt (This file - Project documentation)
+├── README.md (Project main documentation)
+
+================================================================================
+                    BACKEND FOLDER: backend/
+================================================================================
+
+Location: backend/
+
+PURPOSE: REST API server handling all business logic, authentication, data 
+         management, and AI-powered features.
+
+KEY FILES:
+  • package.json: Dependencies and scripts (npm run dev, npm start)
+  • server.js: Express server entry point, route initialization
+  • readme.md: Backend-specific documentation
+
+ACTIONS PERFORMED:
+  1. Server Initialization & Setup
+  2. Database Connection Management
+  3. API Route Handling
+  4. User Authentication & Authorization
+  5. Email Services (OTP, Verification, Reports)
+  6. File Upload Management (Cloudinary Integration)
+  7. AI-Powered Features (Groq API)
+
+
+---BACKEND/SRC/CONFIG/ FOLDER---
+Location: backend/src/config/
+
+PURPOSE: Centralized configuration files for external services and database
+
+FILES & ACTIONS:
+  • db.js: 
+    - MongoDB connection setup
+    - Database initialization
+    
+  • cloudinary.js:
+    - Image/File upload configuration
+    - Cloudinary API integration
+    - Media storage setup
+    
+  • Email.js:
+    - Email service configuration
+    - SMTP setup
+    - Email provider configuration
+    
+  • groq.js:
+    - Groq AI API configuration
+    - AI model initialization
+    - API key management
+
+
+---BACKEND/SRC/CONTROLLERS/ FOLDER---
+Location: backend/src/controllers/
+
+PURPOSE: Business logic handlers for different API endpoints
+
+FILES & ACTIONS:
+  • authController.js:
+    - User registration
+    - User login
+    - Password reset & recovery
+    - Email verification
+    - Session management
+    
+  • userController.js:
+    - Fetch user profile
+    - Update user information
+    - User settings management
+    - Profile picture upload
+    - Delete user account
+    
+  • aiController.js:
+    - AI-powered fitness recommendations
+    - Workout suggestions using Groq AI
+    - Diet plan generation
+    - Health insights & analysis
+    - Personalized advice generation
+    
+  • publicController.js:
+    - Public landing page data
+    - Featured content delivery
+    - Public API endpoints
+    - Blog/News content (if any)
+
+
+---BACKEND/SRC/MIDDLEWARES/ FOLDER---
+Location: backend/src/middlewares/
+
+PURPOSE: Custom middleware functions for request processing
+
+FILES & ACTIONS:
+  • authMiddleware.js:
+    - JWT token verification
+    - User authentication check
+    - Protected route validation
+    - Session verification
+    - Permission checking
+
+
+---BACKEND/SRC/MODELS/ FOLDER---
+Location: backend/src/models/
+
+PURPOSE: MongoDB schema definitions and database models
+
+FILES & ACTIONS:
+  • userModel.js:
+    - User data structure (email, password, profile info)
+    - User registration schema
+    - Password hashing methods
+    - User validation rules
+    
+  • otpModel.js:
+    - OTP storage schema
+    - OTP expiration handling
+    - Email verification storage
+    - Password reset token storage
+    
+  • contactModel.js:
+    - Contact form submissions
+    - User inquiries storage
+    - Support request tracking
+
+
+---BACKEND/SRC/ROUTERS/ FOLDER---
+Location: backend/src/routers/
+
+PURPOSE: API endpoint route definitions
+
+FILES & ACTIONS:
+  • authRouter.js:
+    - POST /auth/register - User registration
+    - POST /auth/login - User login
+    - POST /auth/forgot-password - Password reset request
+    - POST /auth/reset-password - Password reset
+    - GET /auth/verify-email - Email verification
+    - POST /auth/logout - User logout
+    
+  • UserRouter.js:
+    - GET /user/profile - Fetch user profile
+    - PUT /user/profile - Update user profile
+    - GET /user/settings - Get user settings
+    - PUT /user/settings - Update user settings
+    - POST /user/profile-picture - Upload profile picture
+    - DELETE /user/account - Delete user account
+    
+  • aiRouter.js:
+    - POST /ai/workout-suggestions - Get AI workout plans
+    - POST /ai/diet-plan - Generate diet plan
+    - POST /ai/health-insights - Get health analysis
+    - POST /ai/fitness-recommendations - Personalized recommendations
+    - GET /ai/chat - AI chat conversation
+
+
+---BACKEND/SRC/UTILS/ FOLDER---
+Location: backend/src/utils/
+
+PURPOSE: Utility functions and helper modules
+
+FILES & ACTIONS:
+  • authToken.js:
+    - JWT token generation
+    - Token verification
+    - Token refresh
+    - Token expiration handling
+    
+  • emailService.js:
+    - Send verification emails
+    - Send password reset emails
+    - Send OTP emails
+    - Send report emails
+    - Email template rendering
+    
+  • imageUploader.js:
+    - Handle image file uploads
+    - Cloudinary integration
+    - Image validation
+    - Image size optimization
+    - URL generation for uploaded images
+
+
+---BACKEND/SRC/SEEDERS/ FOLDER---
+Location: backend/src/seeders/
+
+PURPOSE: Database seed scripts for initial data population
+
+ACTIONS PERFORMED:
+  - Initial user data seeding
+  - Default settings initialization
+  - Demo data creation (if any)
+
+
+================================================================================
+                   FRONTEND FOLDER: frontend/
+================================================================================
+
+Location: frontend/
+
+PURPOSE: React-based user interface for fitness tracking, dashboard, and 
+         account management.
+
+KEY FILES:
+  • package.json: Dependencies and build scripts
+  • vite.config.js: Vite bundler configuration
+  • index.html: HTML entry point
+  • eslint.config.js: Code style configuration
+  • README.md: Frontend documentation
+
+MAIN ENTRY POINTS:
+  • main.jsx: React app initialization
+  • App.jsx: Root component routes
+  • index.css: Global styles
+
+
+---FRONTEND/SRC/CONFIG/ FOLDER---
+Location: frontend/src/config/
+
+PURPOSE: Configuration for API communication
+
+FILES & ACTIONS:
+  • Api.jsx:
+    - API base URL configuration
+    - Axios instance setup
+    - Default headers configuration
+    - API response interceptors
+
+
+---FRONTEND/SRC/CONTEXT/ FOLDER---
+Location: frontend/src/context/
+
+PURPOSE: React Context for state management
+
+FILES & ACTIONS:
+  • AuthContext.jsx:
+    - User authentication state
+    - User login/logout logic
+    - Session management
+    - User data caching
+    - Auth token storage & retrieval
+    
+  • ScrollToTop.jsx:
+    - Page scroll position management
+    - Navigation scroll behavior
+
+
+---FRONTEND/SRC/COMPONENTS/ FOLDER---
+Location: frontend/src/components/
+
+PURPOSE: Reusable React components for UI
+
+---FRONTEND/SRC/COMPONENTS/COMMON/ FOLDER---
+  • Button.jsx: Reusable button component
+  • Input.jsx: Form input field component
+  • Header.jsx: Navigation header component
+  • Footer.jsx: Page footer component
+  • Modal.jsx: Modal dialog component
+  • Loaders.jsx: Loading spinner components
+
+---FRONTEND/SRC/COMPONENTS/DASHBOARD/ FOLDER---
+  • DashboardLayout.jsx: Main dashboard layout wrapper
+  • Sidebar.jsx: Navigation sidebar for dashboard
+
+
+---FRONTEND/SRC/LAYOUT/ FOLDER---
+Location: frontend/src/Layout/
+
+PURPOSE: Page layout templates
+
+FILES & ACTIONS:
+  • PublicLayout.jsx:
+    - Layout for public pages (home, about, features)
+    - Header, footer, navigation
+    
+  • PrivateLayout.jsx:
+    - Layout for authenticated user pages
+    - Dashboard, profile, settings
+    - Protected route wrapper
+
+
+---FRONTEND/SRC/PAGES/ FOLDER---
+Location: frontend/src/pages/
+
+PURPOSE: Page components for different routes
+
+MAIN PAGES:
+  • Home.jsx: Landing/home page
+  • About.jsx: About page
+  • Features.jsx: Features showcase page
+  • Benefits.jsx: Benefits page
+
+
+---FRONTEND/SRC/PAGES/AUTH/ FOLDER---
+  • Login.jsx:
+    - User login form
+    - Email/password authentication
+    - "Remember me" functionality
+    - Forgot password link
+    
+  • Register.jsx:
+    - User registration form
+    - Email validation
+    - Password validation
+    - OTP verification
+    - Email confirmation
+
+
+---FRONTEND/SRC/PAGES/DASHBOARD/ FOLDER---
+Location: frontend/src/pages/Dashboard/
+
+PURPOSE: All dashboard-related pages for authenticated users
+
+MAIN FILES & ACTIONS:
+  • Dashboard.jsx: Main dashboard home
+  • Analytics.jsx: Fitness analytics & statistics
+  • Chat.jsx: AI chat interface
+  • Tracking.jsx: Workout/activity tracking
+  • Profile.jsx: User profile management
+  • Settings.jsx: Account settings
+
+SPECIALIZED DASHBOARD PAGES:
+
+---FRONTEND/SRC/PAGES/DASHBOARD/DIET/ FOLDER---
+  • DietPlan.jsx: Display and manage diet plans
+  • DietPlan.jsx: View recommended diets
+  • CalorieTracker.jsx: Track daily calorie intake
+  • MacroCalculator.jsx: Calculate macronutrients
+  • MealLogger.jsx: Log meals eaten
+  • MealDetail.jsx: Detailed meal information
+
+---FRONTEND/SRC/PAGES/DASHBOARD/WORKOUT/ FOLDER---
+  • Workout.jsx: Main workout page
+  • Displays scheduled workouts
+  • Logs workout activities
+  • Shows workout history
+
+---FRONTEND/SRC/PAGES/DASHBOARD/OVERTRAINING/ FOLDER---
+  • FatigueScore.jsx: Display user fatigue level
+  • InjuryRiskLevel.jsx: Show injury risk assessment
+  • OvertrainingAlertCount.jsx: Display overtraining alerts
+  • RecoveryDayFrequency.jsx: Recommend recovery days
+  • RecoveryRate.jsx: Show recovery progress
+
+---FRONTEND/SRC/PAGES/DASHBOARD/SUSTAINABILITY/ FOLDER---
+  • Various sustainability tracking pages
+  • Environmental impact metrics
+  • Eco-friendly workout suggestions
+
+---FRONTEND/SRC/PAGES/DASHBOARD/PROFILE/ FOLDER---
+  • HealthProfile.jsx: Display health metrics
+  • ProfileSetup.jsx: Initial profile setup
+  • ProfileView.jsx: View profile information
+  • GoalSettings.jsx: Set fitness/health goals
+
+---FRONTEND/SRC/PAGES/DASHBOARD/REPORTS/ FOLDER---
+  • MonthlyReport.jsx: Generate monthly fitness report
+  • MultiWeekReport.jsx: Generate multi-week report
+  • ReportCharts.jsx: Display report charts & graphs
+  • ReportInsights.jsx: AI-generated report insights
+  • EmailReportButton.jsx: Send report via email
+  • PDFDownloadButton.jsx: Download report as PDF
+
+---FRONTEND/SRC/MODALS/ FOLDER---
+Location: frontend/src/modals/
+
+PURPOSE: Modal dialog components
+
+FILES & ACTIONS:
+  • ForgetPasswordModal.jsx:
+    - Forgot password form
+    - Email submission
+    - Password reset request
+    
+  • ResetPasswordModal.jsx:
+    - Password reset form
+    - New password entry
+    - Password confirmation
+
+
+---FRONTEND/SRC/SERVICES/ FOLDER---
+Location: frontend/src/Services/
+
+PURPOSE: API service functions for backend communication
+
+FILES & ACTIONS:
+  • api.js:
+    - HTTP request wrapper
+    - Common API utilities
+    
+  • authService.js:
+    - POST login request
+    - POST register request
+    - POST logout request
+    - POST forgot-password request
+    - POST reset-password request
+    - GET verify-email request
+    
+  • userService.js (if exists):
+    - GET user profile
+    - PUT update profile
+    - GET user settings
+    - PUT update settings
+    
+  • profileService.js:
+    - GET health profile data
+    - PUT update health profile
+    - POST upload profile picture
+    - Delete user data
+    
+  • workoutService.js:
+    - GET all workouts
+    - POST create workout
+    - PUT update workout
+    - DELETE workout
+    - GET workout history
+    
+  • reportsService.js:
+    - GET monthly report
+    - GET multi-week report
+    - POST email report
+    - GET report charts data
+    - POST export to PDF
+
+
+---FRONTEND/SRC/UTILS/ FOLDER---
+Location: frontend/src/Utils/
+
+PURPOSE: Utility functions and helpers
+
+FILES & ACTIONS:
+  • Validations.js:
+    - Email validation
+    - Password validation
+    - Form field validation
+    - Input sanitization
+
+
+---FRONTEND/PUBLIC/ FOLDER---
+Location: frontend/public/
+
+PURPOSE: Static assets and public files
+
+ACTIONS PERFORMED:
+  - Serve static image files
+  - Store public SVG/icons
+  - Static documents (favicon, etc.)
+
+
+================================================================================
+                      KEY FEATURES & WORKFLOWS
+================================================================================
+
+1. USER AUTHENTICATION WORKFLOW:
+   Frontend (Login.jsx) → authService.js → Backend (authRouter.js) 
+   → authController.js → userModel.js → Database
+   → JWT token generation (authToken.js) → AuthContext storage
+
+2. FITNESS TRACKING WORKFLOW:
+   Dashboard.jsx → workoutService.js → Backend (routes)
+   → Controllers → Database → reportsService.js → Charts & Analytics
+
+3. AI-POWERED FEATURES:
+   Chat.jsx → Backend (aiRouter.js) → aiController.js → Groq AI API
+   → AI-generated recommendations → Frontend display
+
+4. DIET MANAGEMENT:
+   DietPlan.jsx/CalorieTracker.jsx → Backend APIs
+   → MacroCalculator calculations → Database storage
+
+5. REPORT GENERATION:
+   ReportCharts.jsx → reportsService.js → Backend data aggregation
+   → PDF generation or Email sending (emailService.js)
+
+6. PROFILE MANAGEMENT:
+   ProfileSetup.jsx → profileService.js → Backend (userController.js)
+   → imageUploader.js (if profile picture upload) → Cloudinary
+
+================================================================================
+                       DEPLOYMENT & RUNNING
+================================================================================
+
+BACKEND START:
+  • Command: npm run dev (development) or npm start (production)
+  • Location: backend/
+  • Port: Usually 5000 or 8000 (check server.js)
+  • Requires: Node.js, MongoDB, .env file with API keys
+
+FRONTEND START:
+  • Command: npm run dev (development)
+  • Location: frontend/
+  • Port: Usually 5173 (Vite default)
+  • Requires: Node.js, environment variables (API URL)
+
+BUILD FOR PRODUCTION:
+  • Frontend: npm run build (creates dist/ folder)
+  • Backend: Typically runs from source or containerized
+
+================================================================================
+                         DEVELOPMENT NOTES
+================================================================================
+
+1. Environment Variables needed:
+   Backend: MongoDB URI, JWT Secret, Cloudinary keys, Groq API key, Email config
+   Frontend: VITE_API_BASE_URL (backend API endpoint)
+
+2. Authentication Flow:
+   - Uses JWT tokens stored in context/local storage
+   - Protected routes via authMiddleware in backend
+   - PrivateLayout wrapper for frontend routes
+
+3. State Management:
+   - React Context (AuthContext) for auth state
+   - Component state for local UI state
+   - Backend session via JWT
+
+4. Error Handling:
+   - API response interceptors in config/Api.jsx
+   - Try-catch blocks in services
+   - Error messages displayed in components
+
+================================================================================
+                        PROJECT COMPLETION STATUS
+================================================================================
+
+IMPLEMENTED:
+  ✓ User Authentication System (Login, Register, Password Reset)
+  ✓ User Profile Management
+  ✓ Backend API Structure
+  ✓ Frontend Dashboard Layout
+  ✓ Diet Tracking Features
+  ✓ Workout Tracking Components
+  ✓ Overtraining Analysis
+  ✓ Report Generation
+  ✓ AI Integration (Groq API)
+  ✓ Email Services
+  ✓ Image Upload (Cloudinary)
+
+IN PROGRESS / PENDING:
+  - Full integration testing
+  - Performance optimization
+  - Deployment configuration
+  - Documentation completion
+
+================================================================================
+                          END OF OVERVIEW
+================================================================================
