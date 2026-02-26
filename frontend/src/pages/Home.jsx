@@ -35,28 +35,28 @@ const Home = () => {
       icon: <FiCpu className="w-6 h-6" />,
       title: "AI-Powered Insights",
       description: "Get personalized workout recommendations based on your performance data",
-      gradient: "from-emerald-500 to-teal-500",
+      linear: "from-emerald-500 to-teal-500",
       delay: "100"
     },
     {
       icon: <FiHeart className="w-6 h-6" />,
       title: "Health Monitoring",
       description: "Track heart rate, calories, and vital metrics in real-time",
-      gradient: "from-blue-500 to-indigo-500",
+      linear: "from-blue-500 to-indigo-500",
       delay: "200"
     },
     {
       icon: <FiTarget className="w-6 h-6" />,
       title: "Goal Tracking",
       description: "Set and achieve fitness milestones with smart progress tracking",
-      gradient: "from-purple-500 to-pink-500",
+      linear: "from-purple-500 to-pink-500",
       delay: "300"
     },
     {
       icon: <FiTrendingUp className="w-6 h-6" />,
       title: "Performance Analytics",
       description: "Visualize your progress with detailed charts and insights",
-      gradient: "from-orange-500 to-red-500",
+      linear: "from-orange-500 to-red-500",
       delay: "400"
     }
   ];
@@ -70,12 +70,12 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-50 overflow-hidden">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-emerald-200/20 to-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-200/20 to-pink-200/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-blue-100/10 to-indigo-100/10 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-linear-to-br from-emerald-200/20 to-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-linear-to-br from-purple-200/20 to-pink-200/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-linear-to-br from-blue-100/10 to-indigo-100/10 rounded-full blur-3xl"></div>
       </div>
 
       {/* Hero Section */}
@@ -87,12 +87,12 @@ const Home = () => {
               isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
             }`}>
               {/* Animated Badge */}
-              <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-emerald-50 to-blue-50 rounded-full border border-emerald-100/50 shadow-sm hover:shadow-md transition-all duration-300 group">
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-linear-to-r from-emerald-50 to-blue-50 rounded-full border border-emerald-100/50 shadow-sm hover:shadow-md transition-all duration-300 group">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                 </span>
-                <span className="text-sm font-semibold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
+                <span className="text-sm font-semibold bg-linear-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
                   AI-POWERED FITNESS
                 </span>
                 <FiCpu className="w-4 h-4 text-emerald-500 group-hover:rotate-12 transition-transform" />
@@ -104,10 +104,10 @@ const Home = () => {
                   Your personal
                 </span>
                 <span className="relative inline-block mt-2">
-                  <span className="text-5xl sm:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent animate-gradient">
+                  <span className="text-5xl sm:text-6xl lg:text-7xl font-bold bg-linear-to-r from-emerald-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent animate-linear">
                     AI fitness coach
                   </span>
-                  <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-blue-500 to-indigo-500 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></span>
+                  <span className="absolute -bottom-2 left-0 w-full h-1 bg-linear-to-r from-emerald-500 via-blue-500 to-indigo-500 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></span>
                 </span>
               </h1>
 
@@ -120,44 +120,44 @@ const Home = () => {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={() => navigate('/dashboard')}
-                    className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-blue-500 text-white rounded-xl font-semibold hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                    className="group relative px-8 py-4 bg-linear-to-r from-emerald-500 to-blue-500 text-white rounded-xl font-semibold hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center">
                       Go to Dashboard
                       <FiArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform" />
                     </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-r from-emerald-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </button>
                   <button
                     onClick={() => navigate('/profile')}
                     className="group relative px-8 py-4 bg-white text-gray-700 rounded-xl font-semibold border-2 border-gray-200 hover:border-emerald-500 hover:text-emerald-600 transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                   >
                     <span className="relative z-10">View Profile</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-gray-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-r from-gray-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </button>
                 </div>
               ) : (
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={() => navigate('/register')}
-                    className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-blue-500 text-white rounded-xl font-semibold hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                    className="group relative px-8 py-4 bg-linear-to-r from-emerald-500 to-blue-500 text-white rounded-xl font-semibold hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center">
                       Get Started Free
                       <FiArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform" />
                     </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-r from-emerald-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </button>
                   <button
                     onClick={() => navigate('/login')}
                     className="group relative px-8 py-4 bg-white text-gray-700 rounded-xl font-semibold border-2 border-gray-200 hover:border-emerald-500 hover:text-emerald-600 transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                   >
                     <span className="relative z-10">Sign In</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-gray-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-r from-gray-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </button>
                 </div>
               )}
-\
+
             </div>
 
             {/* Right Content - Enhanced Dashboard Preview */}
@@ -165,8 +165,8 @@ const Home = () => {
               isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
             }`}>
               {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-emerald-400 to-blue-400 rounded-2xl rotate-12 opacity-20 animate-float"></div>
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-20 animate-float-delayed"></div>
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-linear-to-br from-emerald-400 to-blue-400 rounded-2xl rotate-12 opacity-20 animate-float"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-linear-to-br from-purple-400 to-pink-400 rounded-full opacity-20 animate-float-delayed"></div>
               
               {/* Main Card */}
               <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl border border-gray-200/50 p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2">
@@ -174,7 +174,7 @@ const Home = () => {
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-4">
                     <div className="relative">
-                      <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-2xl flex items-center justify-center animate-pulse-slow">
+                      <div className="w-14 h-14 bg-linear-to-br from-emerald-500 to-blue-500 rounded-2xl flex items-center justify-center animate-pulse-slow">
                         <FiActivity className="w-7 h-7 text-white" />
                       </div>
                       <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white "></div>
@@ -198,7 +198,7 @@ const Home = () => {
                   {metrics.map((metric, idx) => (
                     <div 
                       key={idx} 
-                      className={`relative bg-gradient-to-br from-gray-50 to-white rounded-2xl p-4 border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 ${
+                      className={`relative bg-linear-to-br from-gray-50 to-white rounded-2xl p-4 border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 ${
                         activeMetric === idx ? 'ring-2 ring-emerald-500 ring-opacity-50' : ''
                       }`}
                     >
@@ -225,7 +225,7 @@ const Home = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium text-gray-700">Daily Goal Progress</span>
-                    <span className="text-sm font-bold bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">
+                    <span className="text-sm font-bold bg-linear-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">
                       78% Complete
                     </span>
                   </div>
@@ -233,7 +233,7 @@ const Home = () => {
                   {/* Animated Progress Bar
                   <div className="relative h-3 bg-gray-100 rounded-full overflow-hidden">
                     <div 
-                      className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-blue-500 to-indigo-500 rounded-full animate-progress"
+                      className="absolute inset-0 bg-linear-to-r from-emerald-500 via-blue-500 to-indigo-500 rounded-full animate-progress"
                       style={{ width: '78%' }}
                     >
                       <div className="absolute top-0 right-0 w-2 h-full bg-white opacity-30 animate-shimmer"></div>
@@ -278,7 +278,7 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16">
@@ -287,7 +287,7 @@ const Home = () => {
             </span>
             <h2 className="text-4xl font-bold text-gray-900 mt-6 mb-4">
               Everything you need to
-              <span className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent"> reach your goals</span>
+              <span className="bg-linear-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent"> reach your goals</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Our AI-powered platform provides all the tools you need to track, analyze, and improve your fitness journey.
@@ -302,13 +302,13 @@ const Home = () => {
                 className="group relative bg-white rounded-2xl p-6 border border-gray-200 hover:border-transparent hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
                 style={{ animationDelay: `${feature.delay}ms` }}
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-500`}></div>
+                <div className={`absolute inset-0 bg-linear-to-br ${feature.linear} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-500`}></div>
                 
-                <div className={`w-14 h-14 bg-gradient-to-br ${feature.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`w-14 h-14 bg-linear-to-br ${feature.linear} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                   <div className="text-white">{feature.icon}</div>
                 </div>
                 
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-600 group-hover:to-blue-600 transition-all duration-300">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-emerald-600 group-hover:to-blue-600 transition-all duration-300">
                   {feature.title}
                 </h3>
                 
@@ -325,7 +325,7 @@ const Home = () => {
         </div>
       </section>
 
-      <style jsx>{`
+      <style >{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-10px); }
@@ -346,7 +346,7 @@ const Home = () => {
           to { transform: scaleX(1); }
         }
         
-        @keyframes gradient {
+        @keyframes linear {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
         }
@@ -371,9 +371,9 @@ const Home = () => {
           animation: slide-in 0.5s ease-out;
         }
         
-        .animate-gradient {
+        .animate-linear {
           background-size: 200% 200%;
-          animation: gradient 3s ease infinite;
+          animation: linear 3s ease infinite;
         }
         
         .animate-progress {

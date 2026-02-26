@@ -106,7 +106,7 @@ const Sidebar = () => {
       {/* Mobile Hamburger Button - positioned below navbar */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-20 left-4 z-50 bg-white p-3 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+        className="lg:hidden fixed top-18 left-2 z-50 bg-white/50 p-2  rounded-lg shadow-lg hover:shadow-xl transition-shadow"
       >
         {isOpen ? (
           <FiX className="w-6 h-6 text-gray-900" />

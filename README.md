@@ -106,7 +106,7 @@ Vite runs at http://localhost:5173 by default.
 ## Ports And URLs
 
 - Frontend dev server: http://localhost:5173
-- Backend API default: http://localhost:5000
+- Backend API default: http://localhost:4500
 - Frontend API base URL in [frontend/src/config/Api.jsx](frontend/src/config/Api.jsx)
 - Backend CORS origin in [backend/server.js](backend/server.js)
 
