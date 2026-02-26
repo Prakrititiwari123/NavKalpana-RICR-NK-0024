@@ -326,26 +326,15 @@ const Chat = () => {
           <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-linear-to-tl from-blue-200/30 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         </div>
 
-        {/* Back Button - Mobile Only */}
-        <button
-          onClick={() => navigate('/dashboard')}
-          className="absolute left-4 top-20 md:left-6 md:top-6 p-2.5 rounded-xl bg-linear-to-br from-gray-500 to-gray-600 text-white hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl z-20 lg:hidden"
-          title="Back to Dashboard"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-        </button>
-
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 relative z-10">
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 ">
             {/* Mobile Header with History Toggle */}
-            <div className="lg:hidden flex  items-center justify-between mb-4 bg-white/80 backdrop-blur-xl rounded-2xl p-4 shadow-lg">
+            <div className="lg:hidden flex items-center justify-between mb-4 bg-white/80 backdrop-blur-xl rounded-2xl p-4 shadow-lg">
               <h2 className="text-xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 HealthNexus Coach
               </h2>
-              <div className="flex items-center gap-2 ">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   className="p-2.5 rounded-xl bg-linear-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-md"
@@ -558,7 +547,7 @@ const Chat = () => {
                 showHistory ? 'lg:max-w-[calc(100%-320px)]' : 'max-w-5xl mx-auto'
               }`}
             >
-              {/* Desktop Chat Header */}
+              {/* Desktop Chat Header - Back Button Removed */}
               <div className="hidden lg:flex items-center justify-between p-4 border-b border-purple-100 bg-white/50 backdrop-blur-sm">
                 <div className="flex items-center gap-3">
                   <button
@@ -583,15 +572,6 @@ const Chat = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
                     New Chat
-                  </button>
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    className="p-2.5 rounded-xl bg-linear-to-r from-gray-500 to-gray-600 text-white hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 shadow-md"
-                    title="Back to Dashboard"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
                   </button>
                 </div>
               </div>
@@ -836,12 +816,12 @@ const Chat = () => {
           }
 
           ::-webkit-scrollbar-thumb {
-            background: linear-linear(to bottom, #a855f7, #ec4899);
+            background: linear-gradient(to bottom, #a855f7, #ec4899);
             border-radius: 10px;
           }
 
           ::-webkit-scrollbar-thumb:hover {
-            background: linear-linear(to bottom, #9333ea, #db2777);
+            background: linear-gradient(to bottom, #9333ea, #db2777);
           }
 
           .line-clamp-2 {
