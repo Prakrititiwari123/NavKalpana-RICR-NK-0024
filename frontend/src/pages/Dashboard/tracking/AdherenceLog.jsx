@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { CheckSquare, Calendar, Flame, Heart, Award, MessageSquare } from 'lucide-react';
 
 const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
+  
   const [todayLog, setTodayLog] = useState({
     workoutCompleted: false,
     dietFollowed: false,
