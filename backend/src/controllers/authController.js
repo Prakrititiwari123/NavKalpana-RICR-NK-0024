@@ -5,6 +5,14 @@ import OTP from "../models/otpModel.js"
 import { sendOTPEmail } from "../utils/emailService.js";
 import jwt from "jsonwebtoken";
 
+const isProduction = process.env.NODE_ENV === "production";
+const refreshCookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
+  path: "/",
+};
+
 
 // ----------------UserRegister-----------------
 export const UserRegister = async (req, res, next) => {
@@ -136,9 +144,8 @@ export const UserLogin = async (req, res, next) => {
 
     // ✅ REFRESH TOKEN → HTTP ONLY COOKIE
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      sameSite: "strict",
-      secure: false, // https ho to true
+      ...refreshCookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     // password remove
@@ -159,9 +166,7 @@ export const UserLogin = async (req, res, next) => {
 export const Logout = async (req, res, next) => {
   try {
     res.clearCookie("refreshToken", {
-      httpOnly: true,
-      sameSite: "strict",
-      secure: false, // https ho to true
+      ...refreshCookieOptions,
     });
 
     res.status(200).json({

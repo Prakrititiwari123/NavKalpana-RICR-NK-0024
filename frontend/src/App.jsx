@@ -6,7 +6,7 @@ import React, { Suspense, lazy, useEffect, useState } from "react";
 import PublicLayout from "./Layout/PublicLayout";
 import PrivateLayout from "./Layout/PrivateLayout";
 import { PageLoader } from "./components/Common/Loaders";
-import { useAuth } from "./context/AuthContext"
+import { useAuth } from "./Context/AuthContext";
 import ScrollToTop from "./Context/ScrollToTop";
 // Lazy load pages for better performance
 const Home = lazy(() => import("./pages/Home"));
