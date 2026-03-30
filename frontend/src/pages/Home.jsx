@@ -9,7 +9,7 @@ import {
   FiMenu, FiX, FiAward, FiClock,
   FiCalendar, FiDroplet, FiWind
 } from 'react-icons/fi';
-import { useAuth } from '../Context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
   const navigate = useNavigate();

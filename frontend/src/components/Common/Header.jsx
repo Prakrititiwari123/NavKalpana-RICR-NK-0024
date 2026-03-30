@@ -4,7 +4,7 @@ import {
   FiActivity, FiHome, FiUser, FiSettings, FiBell, FiLogOut,
   FiMenu, FiX, FiSearch, FiChevronDown, FiLogIn, FiUserPlus
 } from 'react-icons/fi';
-import { useAuth } from '../../Context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 const Header = () => {
   const location = useLocation();
