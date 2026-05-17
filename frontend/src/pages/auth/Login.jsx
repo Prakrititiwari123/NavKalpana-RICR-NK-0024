@@ -160,10 +160,13 @@ const Login = () => {
         icon: "🎉",
         duration: 2000,
       });
+      window.location.href = "/dashboard";y
 
       setTimeout(() => {
+        
         navigate("/dashboard");
       }, 1500);
+     
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Invalid email or password",
@@ -173,7 +176,9 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
+    
   };
+  
 
   // Optimized animation variants
   const containerVariants = {

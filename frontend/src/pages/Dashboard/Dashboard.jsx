@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [greeting, setGreeting] = useState('');
 
   // Mock data for demonstration (will be replaced with real API data)
+  
   const mockData = {
     habitScore: 78,
     weightChange: -2.3,
