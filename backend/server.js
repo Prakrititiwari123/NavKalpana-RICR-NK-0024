@@ -10,6 +10,7 @@ import connectDB from "./src/config/db.js";
 import AuthRouter from "./src/routers/authRouter.js";
 import UserRouter from "./src/routers/UserRouter.js";
 import aiRoutes from "./src/routers/aiRouter.js";
+import goalRoutes from "./src/routers/goalRouter.js"
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use(morgan("dev"));
 app.use("/auth", AuthRouter);
 app.use("/user", UserRouter);
 app.use("/api/v1/ai", aiRoutes);
+app.use("/api/goals", goalRoutes);
 
 app.get("/", (req, res) => {
   console.log("Server is Working");
