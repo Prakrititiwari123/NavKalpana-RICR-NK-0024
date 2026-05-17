@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy } from "react";
 
 // Layouts
 import PublicLayout from "./Layout/PublicLayout";
 import PrivateLayout from "./Layout/PrivateLayout";
 import { PageLoader } from "./components/Common/Loaders";
-import { useAuth } from "./context/AuthContext";
+import { ProtectedRouteGuard } from "./components/ProtectedRouteGuard";
 import ScrollToTop from "./context/ScrollToTop";
 // Lazy load pages for better performance
 const Home = lazy(() => import("./pages/Home"));
@@ -65,102 +65,7 @@ class ErrorBoundary extends React.Component {
 
 
 
-// Protected Route Component
-const ProtectedRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const checkAuth = () => {
-      try {
-        const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
-
-        // Validate token and user data
-        if (token && user) {
-          try {
-            JSON.parse(user); // Validate user data is valid JSON
-            setIsAuthenticated(true);
-          } catch (e) {
-            console.error(e + "Invalid user data in localStorage");
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            setIsAuthenticated(false);
-          }
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error("Error checking authentication:", error);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  const { loading } = useAuth()
-
-  if (isLoading || loading) {
-    return <PageLoader />;
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace state={{ from: window.location.pathname }} />;
-  }
-
-  return children;
-};
-
-// Public Route Component (redirects to dashboard if already authenticated)
-const PublicRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const checkAuth = () => {
-      try {
-        const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
-
-        if (token && user) {
-          try {
-            JSON.parse(user);
-            setIsAuthenticated(true);
-          } catch (e) {
-
-            console.log(e);
-
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            setIsAuthenticated(false);
-          }
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error("Error checking authentication:", error);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  if (isLoading) {
-    return <PageLoader />;
-  }
-
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
-  return children;
-};
 
 
 
@@ -215,136 +120,128 @@ const App = () => {
 
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            {/* Public Routes */}
+            {/* Public Routes - Protected from authenticated users */}
             <Route element={<PublicLayout />}>
               <Route
                 path="/"
                 element={
-                  <PublicRoute>
+                  <ProtectedRouteGuard type="public">
                     <Home />
-                  </PublicRoute>
+                  </ProtectedRouteGuard>
                 }
               />
-
             </Route>
 
-            {/* Private Routes */}
+            {/* Auth & Protected Routes */}
             <Route element={<PrivateLayout />}>
-
+              {/* Public Auth Routes */}
               <Route
                 path="/login"
                 element={
-                  <PublicRoute>
+                  <ProtectedRouteGuard type="public">
                     <Login />
-                  </PublicRoute>
+                  </ProtectedRouteGuard>
                 }
               />
               <Route
                 path="/register"
                 element={
-                  <PublicRoute>
+                  <ProtectedRouteGuard type="public">
                     <Register />
-                  </PublicRoute>
+                  </ProtectedRouteGuard>
                 }
               />
 
-
+              {/* Protected Dashboard Routes */}
               <Route
                 path="/dashboard"
                 element={
-                  // <ProtectedRoute>
-                  <Dashboard />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Dashboard />
+                  </ProtectedRouteGuard>
                 }
               />
 
               <Route
                 path="/profile"
                 element={
-                  // <ProtectedRoute>
-                  <Profile />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Profile />
+                  </ProtectedRouteGuard>
                 }
               />
 
               <Route
                 path="/workout"
                 element={
-                  // <ProtectedRoute>
-                  <Workout />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Workout />
+                  </ProtectedRouteGuard>
                 }
               />
               <Route
                 path="/diet"
                 element={
-                  // <ProtectedRoute>
-                  <Diet />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Diet />
+                  </ProtectedRouteGuard>
                 }
               />
               <Route
                 path="/tracking"
                 element={
-                  // <ProtectedRoute>
-                  <Tracking />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Tracking />
+                  </ProtectedRouteGuard>
                 }
               />
-              {/* <Route
-                path="/progress"
-                element={
-                  // <ProtectedRoute>
-                  <Progress />
-                  // </ProtectedRoute>
-                }
-              /> */}
+
               <Route
                 path="/analytics"
                 element={
-                  // <ProtectedRoute>
-                  <Analytics />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Analytics />
+                  </ProtectedRouteGuard>
                 }
               />
               <Route
                 path="/chat"
                 element={
-                  // <ProtectedRoute>
-                  <Chat />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Chat />
+                  </ProtectedRouteGuard>
                 }
               />
               <Route
                 path="/settings"
                 element={
-                  // <ProtectedRoute>
-                  <Settings />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Settings />
+                  </ProtectedRouteGuard>
                 }
               />
               <Route
                 path="/reports"
                 element={
-                  // <ProtectedRoute>
-                  <Reports />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Reports />
+                  </ProtectedRouteGuard>
                 }
               />
               <Route
                 path="/overtraining"
                 element={
-                  // <ProtectedRoute>
-                  <Overtraining />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Overtraining />
+                  </ProtectedRouteGuard>
                 }
               />
               <Route
                 path="/sustainability"
                 element={
-                  // <ProtectedRoute>
-                  <Sustainability />
-                  // </ProtectedRoute>
+                  <ProtectedRouteGuard type="protected">
+                    <Sustainability />
+                  </ProtectedRouteGuard>
                 }
               />
             </Route>
