@@ -1,54 +1,102 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { TrendingUp, Scale, Camera, CheckSquare, History } from 'lucide-react';
-import DashboardLayout from '../../components/Dashboard/DashboardLayout';
-import WeightTracker from './tracking/WeightTracker.jsx';
-import MeasurementTracker from './tracking/MeasurementTracker.jsx';
-import ProgressPhotos from './tracking/ProgressPhotos.jsx';
-import AdherenceLog from './tracking/AdherenceLog.jsx';
-import HistoryView from './tracking/HistoryView.jsx';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { TrendingUp, Scale, Camera, CheckSquare, History } from "lucide-react";
+import DashboardLayout from "../../components/Dashboard/DashboardLayout";
+import WeightTracker from "./tracking/WeightTracker.jsx";
+import MeasurementTracker from "./tracking/MeasurementTracker.jsx";
+import ProgressPhotos from "./tracking/ProgressPhotos.jsx";
+import AdherenceLog from "./tracking/AdherenceLog.jsx";
+import HistoryView from "./tracking/HistoryView.jsx";
+import { trackingService } from "../../Services/trackingService";
 
 const Tracking = () => {
-  const [activeTab, setActiveTab] = useState('weight');
+  const [activeTab, setActiveTab] = useState("weight");
   const [weightLogs, setWeightLogs] = useState([]);
   const [measurements, setMeasurements] = useState([]);
   const [photos, setPhotos] = useState([]);
   const [adherenceLogs, setAdherenceLogs] = useState([]);
 
   const tabs = [
-    { id: 'weight', label: 'Weight', icon: Scale },
-    { id: 'measurements', label: 'Measurements', icon: TrendingUp },
-    { id: 'photos', label: 'Progress Photos', icon: Camera },
-    { id: 'adherence', label: 'Adherence', icon: CheckSquare },
-    { id: 'history', label: 'History', icon: History },
+    { id: "weight", label: "Weight", icon: Scale },
+    { id: "measurements", label: "Measurements", icon: TrendingUp },
+    { id: "photos", label: "Progress Photos", icon: Camera },
+    { id: "adherence", label: "Adherence", icon: CheckSquare },
+    { id: "history", label: "History", icon: History },
   ];
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await trackingService.getData();
+        if (data) {
+          setWeightLogs(data.weightHistory || []);
+          setMeasurements(data.measurements || []);
+          setPhotos(data.progressPhotos || []);
+          setAdherenceLogs(data.adherenceLogs || []);
+        }
+      } catch (error) {
+        console.error("Failed to load tracking data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const saveTrackingData = async (updatedData) => {
+    try {
+      await trackingService.updateData(updatedData);
+    } catch (error) {
+      console.error("Failed to save tracking data:", error);
+    }
+  };
+
   const handleWeightSubmit = (entry) => {
-    setWeightLogs((prev) => [...prev, { ...entry, id: Date.now(), date: new Date() }]);
+    const newLogs = [
+      ...weightLogs,
+      { ...entry, id: Date.now(), date: new Date() },
+    ];
+    setWeightLogs(newLogs);
+    saveTrackingData({ weightHistory: newLogs });
   };
 
   const handleWeightDelete = (id) => {
-    setWeightLogs((prev) => prev.filter((log) => log.id !== id));
+    const newLogs = weightLogs.filter((log) => log.id !== id);
+    setWeightLogs(newLogs);
+    saveTrackingData({ weightHistory: newLogs });
   };
 
   const handleMeasurementSubmit = (entry) => {
-    setMeasurements((prev) => [...prev, { ...entry, id: Date.now(), date: new Date() }]);
+    const newLogs = [
+      ...measurements,
+      { ...entry, id: Date.now(), date: new Date() },
+    ];
+    setMeasurements(newLogs);
+    saveTrackingData({ measurements: newLogs });
   };
 
   const handlePhotoUpload = (photo) => {
-    setPhotos((prev) => [...prev, { ...photo, id: Date.now(), date: new Date() }]);
+    const newLogs = [...photos, { ...photo, id: Date.now(), date: new Date() }];
+    setPhotos(newLogs);
+    saveTrackingData({ progressPhotos: newLogs });
   };
 
   const handlePhotoDelete = (id) => {
-    setPhotos((prev) => prev.filter((photo) => photo.id !== id));
+    const newLogs = photos.filter((photo) => photo.id !== id);
+    setPhotos(newLogs);
+    saveTrackingData({ progressPhotos: newLogs });
   };
 
   const handleAdherenceSubmit = (entry) => {
-    setAdherenceLogs((prev) => [...prev, { ...entry, id: Date.now() }]);
+    const newLogs = [...adherenceLogs, { ...entry, id: Date.now() }];
+    setAdherenceLogs(newLogs);
+    saveTrackingData({ adherenceLogs: newLogs });
   };
 
   const handleExport = (type) => {
-    console.log('Exporting data:', type);
+    console.log("Exporting data:", type);
     // TODO: Implement CSV export
   };
 
@@ -74,7 +122,8 @@ const Tracking = () => {
               </h1>
             </div>
             <p className="text-gray-600">
-              Monitor your weight, measurements, photos, and adherence to reach your goals.
+              Monitor your weight, measurements, photos, and adherence to reach
+              your goals.
             </p>
           </div>
 
@@ -89,8 +138,8 @@ const Tracking = () => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
                       activeTab === tab.id
-                        ? 'bg-linear-to-r from-purple-600 to-pink-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        ? "bg-linear-to-r from-purple-600 to-pink-600 text-white shadow-md"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
                   >
                     <Icon className="w-5 h-5" />
@@ -110,7 +159,7 @@ const Tracking = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              {activeTab === 'weight' && (
+              {activeTab === "weight" && (
                 <WeightTracker
                   logs={weightLogs}
                   goal={75}
@@ -119,7 +168,7 @@ const Tracking = () => {
                 />
               )}
 
-              {activeTab === 'measurements' && (
+              {activeTab === "measurements" && (
                 <MeasurementTracker
                   measurements={measurements}
                   photos={photos}
@@ -127,7 +176,7 @@ const Tracking = () => {
                 />
               )}
 
-              {activeTab === 'photos' && (
+              {activeTab === "photos" && (
                 <ProgressPhotos
                   photos={photos}
                   onUpload={handlePhotoUpload}
@@ -135,7 +184,7 @@ const Tracking = () => {
                 />
               )}
 
-              {activeTab === 'adherence' && (
+              {activeTab === "adherence" && (
                 <AdherenceLog
                   logs={adherenceLogs}
                   onSubmit={handleAdherenceSubmit}
@@ -143,7 +192,7 @@ const Tracking = () => {
                 />
               )}
 
-              {activeTab === 'history' && (
+              {activeTab === "history" && (
                 <HistoryView
                   data={getAllData()}
                   type="all"

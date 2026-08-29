@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { BsArrowClockwise, BsEnvelope, BsShieldLock, BsLock } from "react-icons/bs";
+import {
+  BsArrowClockwise,
+  BsEnvelope,
+  BsShieldLock,
+  BsLock,
+} from "react-icons/bs";
 import api from "../config/Api";
 import toast from "react-hot-toast";
 
@@ -111,7 +116,9 @@ const ForgetPasswordModal = ({ onClose }) => {
             {idx < steps.length - 1 && (
               <div
                 className={`w-8 h-0.5 ${
-                  step > s.id ? "bg-linear-to-r from-blue-500 to-indigo-600" : "bg-gray-200"
+                  step > s.id
+                    ? "bg-linear-to-r from-blue-500 to-indigo-600"
+                    : "bg-gray-200"
                 }`}
               />
             )}
@@ -139,7 +146,9 @@ const ForgetPasswordModal = ({ onClose }) => {
               <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
                 <BsShieldLock className="text-white text-xl" />
               </div>
-              <h2 className="text-xl font-semibold text-white">Reset Password</h2>
+              <h2 className="text-xl font-semibold text-white">
+                Reset Password
+              </h2>
             </div>
             <button
               onClick={onClose}
@@ -287,7 +296,7 @@ const ForgetPasswordModal = ({ onClose }) => {
       </div>
 
       {/* Add custom keyframes for animations */}
-      <style >{`
+      <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }

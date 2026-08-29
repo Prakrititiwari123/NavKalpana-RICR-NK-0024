@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import {
   User,
   Mail,
@@ -12,9 +12,9 @@ import {
   Heart,
   Ruler,
   Weight,
-} from 'lucide-react';
-import DashboardLayout from '../../../components/Dashboard/DashboardLayout';
-import toast from 'react-hot-toast';
+} from "lucide-react";
+import DashboardLayout from "../../../components/Dashboard/DashboardLayout";
+import toast from "react-hot-toast";
 
 const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
   const [userData, setUserData] = useState(null);
@@ -28,14 +28,14 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
         if (propUserData) {
           setUserData(propUserData);
         } else {
-          const storedUser = localStorage.getItem('healthnexus_user');
+          const storedUser = localStorage.getItem("healthnexus_user");
           if (storedUser) {
             setUserData(JSON.parse(storedUser));
           }
         }
       } catch (error) {
-        console.error('Error loading user data:', error);
-        toast.error('Failed to load profile data');
+        console.error("Error loading user data:", error);
+        toast.error("Failed to load profile data");
       } finally {
         setLoading(false);
       }
@@ -48,7 +48,7 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
     if (onEdit) {
       onEdit();
     } else {
-      toast.success('Edit functionality coming soon!');
+      toast.success("Edit functionality coming soon!");
     }
   };
 
@@ -60,29 +60,35 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
     if (onDelete) {
       onDelete();
     } else {
-      toast.error('Delete functionality not implemented');
+      toast.error("Delete functionality not implemented");
     }
     setShowDeleteConfirm(false);
   };
 
   const calculateBMI = () => {
-    if (userData?.healthData?.vitals?.height && userData?.healthData?.vitals?.currentWeight) {
+    if (
+      userData?.healthData?.vitals?.height &&
+      userData?.healthData?.vitals?.currentWeight
+    ) {
       const heightInMeters = userData.healthData.vitals.height / 100;
-      const bmi = (userData.healthData.vitals.currentWeight / (heightInMeters * heightInMeters)).toFixed(1);
+      const bmi = (
+        userData.healthData.vitals.currentWeight /
+        (heightInMeters * heightInMeters)
+      ).toFixed(1);
       return bmi;
     }
-    return 'N/A';
+    return "N/A";
   };
 
   const getMemberSince = () => {
     if (userData?.createdAt) {
-      return new Date(userData.createdAt).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+      return new Date(userData.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     }
-    return 'N/A';
+    return "N/A";
   };
 
   if (loading) {
@@ -150,7 +156,7 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                   )}
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800 text-center">
-                  {userData?.fullName || 'User Name'}
+                  {userData?.fullName || "User Name"}
                 </h2>
                 <p className="text-gray-500 text-sm mt-1">
                   Member since {getMemberSince()}
@@ -164,7 +170,7 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                   <div>
                     <p className="text-xs text-gray-500">Email</p>
                     <p className="text-sm font-medium text-gray-800">
-                      {userData?.email || 'N/A'}
+                      {userData?.email || "N/A"}
                     </p>
                   </div>
                 </div>
@@ -174,7 +180,7 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                   <div>
                     <p className="text-xs text-gray-500">Age</p>
                     <p className="text-sm font-medium text-gray-800">
-                      {userData?.healthData?.profile?.age || 'N/A'} years
+                      {userData?.healthData?.profile?.age || "N/A"} years
                     </p>
                   </div>
                 </div>
@@ -184,7 +190,7 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                   <div>
                     <p className="text-xs text-gray-500">Gender</p>
                     <p className="text-sm font-medium text-gray-800 capitalize">
-                      {userData?.healthData?.profile?.gender || 'N/A'}
+                      {userData?.healthData?.profile?.gender || "N/A"}
                     </p>
                   </div>
                 </div>
@@ -201,7 +207,9 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                 animate={{ opacity: 1, x: 0 }}
                 className="bg-white rounded-xl shadow-lg p-6"
               >
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Health Statistics</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  Health Statistics
+                </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="p-4 bg-linear-to-br from-blue-50 to-blue-100 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
@@ -209,7 +217,7 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                       <p className="text-xs text-gray-600">Height</p>
                     </div>
                     <p className="text-2xl font-bold text-gray-800">
-                      {userData?.healthData?.vitals?.height || 'N/A'}
+                      {userData?.healthData?.vitals?.height || "N/A"}
                       <span className="text-sm text-gray-600 ml-1">cm</span>
                     </p>
                   </div>
@@ -220,7 +228,7 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                       <p className="text-xs text-gray-600">Current Weight</p>
                     </div>
                     <p className="text-2xl font-bold text-gray-800">
-                      {userData?.healthData?.vitals?.currentWeight || 'N/A'}
+                      {userData?.healthData?.vitals?.currentWeight || "N/A"}
                       <span className="text-sm text-gray-600 ml-1">kg</span>
                     </p>
                   </div>
@@ -231,7 +239,7 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                       <p className="text-xs text-gray-600">Goal Weight</p>
                     </div>
                     <p className="text-2xl font-bold text-gray-800">
-                      {userData?.healthData?.vitals?.goalWeight || 'N/A'}
+                      {userData?.healthData?.vitals?.goalWeight || "N/A"}
                       <span className="text-sm text-gray-600 ml-1">kg</span>
                     </p>
                   </div>
@@ -241,7 +249,9 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                       <Activity className="w-5 h-5 text-orange-600" />
                       <p className="text-xs text-gray-600">BMI</p>
                     </div>
-                    <p className="text-2xl font-bold text-gray-800">{calculateBMI()}</p>
+                    <p className="text-2xl font-bold text-gray-800">
+                      {calculateBMI()}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -253,35 +263,44 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                 transition={{ delay: 0.1 }}
                 className="bg-white rounded-xl shadow-lg p-6"
               >
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Fitness Profile</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  Fitness Profile
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <TrendingUp className="w-5 h-5 text-blue-600" />
-                      <p className="text-sm font-medium text-gray-700">Activity Level</p>
+                      <p className="text-sm font-medium text-gray-700">
+                        Activity Level
+                      </p>
                     </div>
                     <p className="text-lg font-semibold text-gray-800 capitalize">
-                      {userData?.healthData?.profile?.activityLevel || 'Not Set'}
+                      {userData?.healthData?.profile?.activityLevel ||
+                        "Not Set"}
                     </p>
                   </div>
 
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <Target className="w-5 h-5 text-purple-600" />
-                      <p className="text-sm font-medium text-gray-700">Primary Goal</p>
+                      <p className="text-sm font-medium text-gray-700">
+                        Primary Goal
+                      </p>
                     </div>
                     <p className="text-lg font-semibold text-gray-800 capitalize">
-                      {userData?.healthData?.goals?.primaryGoal || 'Not Set'}
+                      {userData?.healthData?.goals?.primaryGoal || "Not Set"}
                     </p>
                   </div>
 
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <Heart className="w-5 h-5 text-red-600" />
-                      <p className="text-sm font-medium text-gray-700">Heart Rate</p>
+                      <p className="text-sm font-medium text-gray-700">
+                        Heart Rate
+                      </p>
                     </div>
                     <p className="text-lg font-semibold text-gray-800">
-                      {userData?.healthData?.vitals?.heartRate || 'N/A'}
+                      {userData?.healthData?.vitals?.heartRate || "N/A"}
                       <span className="text-sm text-gray-600 ml-1">bpm</span>
                     </p>
                   </div>
@@ -289,10 +308,13 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <Activity className="w-5 h-5 text-green-600" />
-                      <p className="text-sm font-medium text-gray-700">Experience Level</p>
+                      <p className="text-sm font-medium text-gray-700">
+                        Experience Level
+                      </p>
                     </div>
                     <p className="text-lg font-semibold text-gray-800 capitalize">
-                      {userData?.healthData?.goals?.experienceLevel || 'Not Set'}
+                      {userData?.healthData?.goals?.experienceLevel ||
+                        "Not Set"}
                     </p>
                   </div>
                 </div>
@@ -305,7 +327,9 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
                 transition={{ delay: 0.2 }}
                 className="bg-linear-to-r from-red-50 to-orange-50 rounded-xl shadow-lg p-6 border border-red-200"
               >
-                <h3 className="text-xl font-bold text-gray-800 mb-2">Account Status</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  Account Status
+                </h3>
                 <p className="text-sm text-gray-600 mb-4">
                   Your account is active and all features are available.
                 </p>
@@ -330,9 +354,12 @@ const ProfileView = ({ userData: propUserData, onEdit, onDelete }) => {
               animate={{ scale: 1, opacity: 1 }}
               className="bg-white rounded-xl p-6 max-w-md mx-4"
             >
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Confirm Deletion</h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-4">
+                Confirm Deletion
+              </h3>
               <p className="text-gray-600 mb-6">
-                Are you sure you want to delete your account? This action cannot be undone.
+                Are you sure you want to delete your account? This action cannot
+                be undone.
               </p>
               <div className="flex gap-3 justify-end">
                 <button

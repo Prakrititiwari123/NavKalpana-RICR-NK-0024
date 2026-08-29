@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import {
   X,
   Play,
@@ -10,8 +10,8 @@ import {
   Video,
   Clock,
   Dumbbell,
-} from 'lucide-react';
-import WorkoutLogger from './WorkoutLogger';
+} from "lucide-react";
+import WorkoutLogger from "./WorkoutLogger";
 
 const WorkoutDetail = ({ exercise, dayData, onComplete, onClose }) => {
   const [showTimer, setShowTimer] = useState(false);
@@ -35,7 +35,7 @@ const WorkoutDetail = ({ exercise, dayData, onComplete, onClose }) => {
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleStartTimer = () => {
@@ -74,7 +74,9 @@ const WorkoutDetail = ({ exercise, dayData, onComplete, onClose }) => {
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">{exercise.name}</h2>
+            <h2 className="text-2xl font-bold text-gray-800">
+              {exercise.name}
+            </h2>
             <p className="text-sm text-gray-600 mt-1">
               {dayData?.day} - {dayData?.focus}
             </p>
@@ -93,19 +95,27 @@ const WorkoutDetail = ({ exercise, dayData, onComplete, onClose }) => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-blue-50 rounded-lg p-4">
               <p className="text-xs text-gray-600 mb-1">Sets</p>
-              <p className="text-2xl font-bold text-blue-600">{exercise.sets}</p>
+              <p className="text-2xl font-bold text-blue-600">
+                {exercise.sets}
+              </p>
             </div>
             <div className="bg-purple-50 rounded-lg p-4">
               <p className="text-xs text-gray-600 mb-1">Reps</p>
-              <p className="text-2xl font-bold text-purple-600">{exercise.reps}</p>
+              <p className="text-2xl font-bold text-purple-600">
+                {exercise.reps}
+              </p>
             </div>
             <div className="bg-green-50 rounded-lg p-4">
               <p className="text-xs text-gray-600 mb-1">Rest</p>
-              <p className="text-2xl font-bold text-green-600">{exercise.rest}</p>
+              <p className="text-2xl font-bold text-green-600">
+                {exercise.rest}
+              </p>
             </div>
             <div className="bg-orange-50 rounded-lg p-4">
               <p className="text-xs text-gray-600 mb-1">Equipment</p>
-              <p className="text-sm font-bold text-orange-600">{exercise.equipment}</p>
+              <p className="text-sm font-bold text-orange-600">
+                {exercise.equipment}
+              </p>
             </div>
           </div>
 
@@ -113,7 +123,9 @@ const WorkoutDetail = ({ exercise, dayData, onComplete, onClose }) => {
           <div className="bg-gray-900 rounded-xl overflow-hidden aspect-video flex items-center justify-center">
             <div className="text-center">
               <Video className="w-16 h-16 text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-500 text-sm">Exercise demonstration video</p>
+              <p className="text-gray-500 text-sm">
+                Exercise demonstration video
+              </p>
               <button className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
                 Watch Tutorial
               </button>
@@ -125,7 +137,9 @@ const WorkoutDetail = ({ exercise, dayData, onComplete, onClose }) => {
             <div className="flex items-start gap-3">
               <Info className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2">Form Guidance</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  Form Guidance
+                </h3>
                 <p className="text-sm text-gray-700">{exercise.notes}</p>
               </div>
             </div>
@@ -142,7 +156,9 @@ const WorkoutDetail = ({ exercise, dayData, onComplete, onClose }) => {
 
             {showTimer ? (
               <div className="text-center">
-                <div className="text-6xl font-bold text-blue-600 mb-4">{formatTime(time)}</div>
+                <div className="text-6xl font-bold text-blue-600 mb-4">
+                  {formatTime(time)}
+                </div>
                 <div className="flex items-center justify-center gap-3">
                   {!isRunning ? (
                     <button
@@ -208,8 +224,12 @@ const WorkoutDetail = ({ exercise, dayData, onComplete, onClose }) => {
                     <Check className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-800">Workout Logged!</p>
-                    <p className="text-sm text-gray-600">Great job completing this exercise</p>
+                    <p className="font-semibold text-gray-800">
+                      Workout Logged!
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Great job completing this exercise
+                    </p>
                   </div>
                 </div>
                 <button

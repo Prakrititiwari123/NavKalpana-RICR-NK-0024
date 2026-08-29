@@ -1,4 +1,3 @@
-
 import Goal from "../models/goalModel.js";
 
 export const createGoal = async (req, res) => {
@@ -122,13 +121,9 @@ export const getSingleGoal = async (req, res) => {
 
 export const updateGoal = async (req, res) => {
   try {
-    const updatedGoal = await Goal.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-      }
-    );
+    const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
 
     if (!updatedGoal) {
       return res.status(404).json({
@@ -158,9 +153,7 @@ export const updateGoal = async (req, res) => {
 
 export const deleteGoal = async (req, res) => {
   try {
-    const deletedGoal = await Goal.findByIdAndDelete(
-      req.params.id
-    );
+    const deletedGoal = await Goal.findByIdAndDelete(req.params.id);
 
     if (!deletedGoal) {
       return res.status(404).json({

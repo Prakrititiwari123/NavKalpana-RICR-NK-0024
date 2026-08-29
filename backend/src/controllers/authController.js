@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
-import { genOtpToken,genToken } from "../utils/authToken.js";
-import OTP from "../models/otpModel.js"
+import { genOtpToken, genToken } from "../utils/authToken.js";
+import OTP from "../models/otpModel.js";
 import { sendOTPEmail } from "../utils/emailService.js";
 import jwt from "jsonwebtoken";
 
@@ -13,22 +13,32 @@ const refreshCookieOptions = {
   path: "/",
 };
 
-
 // ----------------UserRegister-----------------
 export const UserRegister = async (req, res, next) => {
   try {
     console.log(req.body);
     //accept data from Frontend
-    const { fullName, email,  password } = req.body;
+    const {
+      fullName,
+      email,
+      password,
+      age,
+      biologicalSex,
+      height,
+      weight,
+      activityLevel,
+      experienceLevel,
+      primaryGoal,
+    } = req.body;
 
     //verify that all data exist
-    if (!fullName || !email  || !password) {
+    if (!fullName || !email || !password) {
       const error = new Error("All feilds required");
       error.statusCode = 400;
       return next(error);
     }
 
-    console.log({ fullName, email,  password });
+    console.log({ fullName, email, password });
 
     //Check for duplaicate user before registration
     const existingUser = await User.findOne({ email });
@@ -57,6 +67,23 @@ export const UserRegister = async (req, res, next) => {
       email: email.toLowerCase(),
       password: hashPassword,
       photo,
+      gender: biologicalSex,
+      healthData: {
+        profile: {
+          age: age ? Number(age) : null,
+          gender: biologicalSex,
+          activityLevel,
+        },
+        goals: {
+          primaryGoal,
+          experienceLevel,
+        },
+        vitals: {
+          height: height ? Number(height) : null,
+          currentWeight: weight ? Number(weight) : null,
+          weight: weight ? Number(weight) : null,
+        },
+      },
     });
 
     // send response to Frontend
@@ -87,25 +114,24 @@ export const refresh = async (req, res) => {
     const newAccessToken = jwt.sign(
       { id: user._id },
       process.env.ACCESS_SECRET,
-      { expiresIn: "10m" }
+      { expiresIn: "10m" },
     );
 
     res.status(200).json({
       accessToken: newAccessToken,
       user, // ⭐ MOST IMPORTANT LINE
     });
-    
   } catch (err) {
     res.status(401).json({ message: "Invalid refresh token" });
   }
 };
-
 
 // -----------------UserLogin---------------------
 export const UserLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    console.log("email " + email, "Password " + password);
     if (!email || !password) {
       const error = new Error("All fields required");
       error.statusCode = 400;
@@ -119,6 +145,7 @@ export const UserLogin = async (req, res, next) => {
       error.statusCode = 401;
       return next(error);
     }
+    console.log("Hi Im " + existingUser);
 
     const isVerified = await bcrypt.compare(password, existingUser.password);
 
@@ -132,14 +159,14 @@ export const UserLogin = async (req, res, next) => {
     const accessToken = jwt.sign(
       { id: existingUser._id },
       process.env.ACCESS_SECRET,
-      { expiresIn: "10m" }
+      { expiresIn: "10m" },
     );
 
     // ✅ REFRESH TOKEN (LONG LIFE)
     const refreshToken = jwt.sign(
       { id: existingUser._id },
       process.env.REFRESH_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     // ✅ REFRESH TOKEN → HTTP ONLY COOKIE
@@ -157,7 +184,6 @@ export const UserLogin = async (req, res, next) => {
       accessToken,
       user: existingUser,
     });
-
   } catch (error) {
     next(error);
   }
@@ -176,7 +202,6 @@ export const Logout = async (req, res, next) => {
     next(error);
   }
 };
-
 
 // ----------------UserGenOTP-------------------
 export const UserGenOTP = async (req, res, next) => {
@@ -200,7 +225,7 @@ export const UserGenOTP = async (req, res, next) => {
     }
 
     //Check if user is otp is there or not
-    const existingUserOTP = await  OTP.findOne({ email });
+    const existingUserOTP = await OTP.findOne({ email });
     if (existingUserOTP) {
       await existingUserOTP.deleteOne();
     }
@@ -305,7 +330,6 @@ export const UserForgetPassword = async (req, res, next) => {
   }
 };
 
-
 // ----------------------Delete Account---------------
 
 export const deleteAccount = async (req, res, next) => {
@@ -313,20 +337,20 @@ export const deleteAccount = async (req, res, next) => {
     console.log("Delete account request received");
     const userId = req.user._id;
     console.log("Deleting user with ID:", userId); // 👈 Check ID
-    
+
     // Pehle check karo user exists karta hai?
     const existingUser = await User.findById(userId);
     console.log("Existing user:", existingUser); // 👈 Should show user data
-    
+
     if (!existingUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
     // Delete attempt
-    const deletedUser = await User.deleteOne({_id: userId});
+    const deletedUser = await User.deleteOne({ _id: userId });
     console.log("Deleted user result:", deletedUser); // 👈 Should show deleted user
-    
-    res.clearCookie('health');
+
+    res.clearCookie("health");
     res.status(200).json({ message: "Account deleted successfully" });
   } catch (error) {
     console.error("Delete error:", error); // 👈 Check actual error

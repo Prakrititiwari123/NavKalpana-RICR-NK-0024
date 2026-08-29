@@ -1,22 +1,23 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
-
 // ----------------------Protect------------------
 export const Protect = async (req, res, next) => {
   try {
-    const token = req.cookies.refreshToken; 
+    const token = req.cookies.refreshToken;
     console.log("Token received in Cookies:", token);
 
     if (!token) {
-      const error = new Error("Unauthorized! No token provided. Please login again.");
+      const error = new Error(
+        "Unauthorized! No token provided. Please login again.",
+      );
       error.statusCode = 401;
       return next(error);
     }
 
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
+      decoded = jwt.verify(token, process.env.REFRESH_SECRET);
     } catch (jwtError) {
       const error = new Error("Invalid or expired token. Please login again.");
       error.statusCode = 401;
@@ -92,7 +93,6 @@ export const AdminProtect = async (req, res, next) => {
   }
 };
 
-
 // -------------------OTP Protect-----------------
 export const OtpProtect = async (req, res, next) => {
   try {
@@ -120,7 +120,6 @@ export const OtpProtect = async (req, res, next) => {
     next(error);
   }
 };
-
 
 // ----------------------user validation for active-----------------
 export const checkUserActive = async (req, res, next) => {

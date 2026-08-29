@@ -1,38 +1,48 @@
-import React, { useState, useMemo } from 'react';
-import { CheckSquare, Calendar, Flame, Heart, Award, MessageSquare } from 'lucide-react';
+import React, { useState, useMemo } from "react";
+import {
+  CheckSquare,
+  Calendar,
+  Flame,
+  Heart,
+  Award,
+  MessageSquare,
+} from "lucide-react";
 
 const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
-  
   const [todayLog, setTodayLog] = useState({
     workoutCompleted: false,
     dietFollowed: false,
     waterIntake: false,
     sleepQuality: 0,
-    notes: '',
+    notes: "",
   });
 
   const todayString = useMemo(() => {
-    return new Date(date).toISOString().split('T')[0];
+    return new Date(date).toISOString().split("T")[0];
   }, [date]);
 
   const existingLog = useMemo(() => {
     return logs.find((log) => {
-      const logDate = new Date(log.date).toISOString().split('T')[0];
+      const logDate = new Date(log.date).toISOString().split("T")[0];
       return logDate === todayString;
     });
   }, [logs, todayString]);
 
   const currentStreak = useMemo(() => {
     if (logs.length === 0) return 0;
-    
-    const sortedLogs = [...logs].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    const sortedLogs = [...logs].sort(
+      (a, b) => new Date(b.date) - new Date(a.date),
+    );
     let streak = 0;
     let currentDate = new Date();
-    
+
     for (let log of sortedLogs) {
       const logDate = new Date(log.date);
-      const diffDays = Math.floor((currentDate - logDate) / (1000 * 60 * 60 * 24));
-      
+      const diffDays = Math.floor(
+        (currentDate - logDate) / (1000 * 60 * 60 * 24),
+      );
+
       if (diffDays === streak) {
         if (log.workoutCompleted && log.dietFollowed) {
           streak++;
@@ -43,21 +53,23 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
         break;
       }
     }
-    
+
     return streak;
   }, [logs]);
 
   const weeklyStats = useMemo(() => {
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    
+
     const weekLogs = logs.filter((log) => new Date(log.date) >= oneWeekAgo);
-    
+
     const workouts = weekLogs.filter((log) => log.workoutCompleted).length;
     const diet = weekLogs.filter((log) => log.dietFollowed).length;
     const water = weekLogs.filter((log) => log.waterIntake).length;
-    const avgSleep = weekLogs.reduce((sum, log) => sum + (log.sleepQuality || 0), 0) / (weekLogs.length || 1);
-    
+    const avgSleep =
+      weekLogs.reduce((sum, log) => sum + (log.sleepQuality || 0), 0) /
+      (weekLogs.length || 1);
+
     return {
       workouts,
       diet,
@@ -84,13 +96,13 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
       ...todayLog,
       date: new Date(date),
     });
-    
+
     setTodayLog({
       workoutCompleted: false,
       dietFollowed: false,
       waterIntake: false,
       sleepQuality: 0,
-      notes: '',
+      notes: "",
     });
   };
 
@@ -104,11 +116,11 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
           <div>
             <h2 className="text-3xl font-bold mb-1">Daily Check-In</h2>
             <p className="text-purple-100">
-              {new Date(date).toLocaleDateString('en-GB', {
-                weekday: 'long',
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric',
+              {new Date(date).toLocaleDateString("en-GB", {
+                weekday: "long",
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
               })}
             </p>
           </div>
@@ -127,25 +139,29 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
         <div className="bg-green-50 rounded-2xl border-2 border-green-300 p-6">
           <div className="flex items-center gap-3 mb-4">
             <CheckSquare className="w-6 h-6 text-green-600" />
-            <h3 className="text-xl font-bold text-green-900">Today's Log Complete!</h3>
+            <h3 className="text-xl font-bold text-green-900">
+              Today's Log Complete!
+            </h3>
           </div>
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <span className="text-green-600">✓</span>
               <span className="text-gray-700">
-                Workout: {existingLog.workoutCompleted ? 'Completed' : 'Skipped'}
+                Workout:{" "}
+                {existingLog.workoutCompleted ? "Completed" : "Skipped"}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-green-600">✓</span>
               <span className="text-gray-700">
-                Diet: {existingLog.dietFollowed ? 'Followed' : 'Not Followed'}
+                Diet: {existingLog.dietFollowed ? "Followed" : "Not Followed"}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-green-600">✓</span>
               <span className="text-gray-700">
-                Water Intake: {existingLog.waterIntake ? 'Met Goal' : 'Below Goal'}
+                Water Intake:{" "}
+                {existingLog.waterIntake ? "Met Goal" : "Below Goal"}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -156,7 +172,9 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
             </div>
             {existingLog.notes && (
               <div className="mt-4 p-3 bg-white rounded-lg">
-                <p className="text-sm font-semibold text-gray-700 mb-1">Notes:</p>
+                <p className="text-sm font-semibold text-gray-700 mb-1">
+                  Notes:
+                </p>
                 <p className="text-gray-600">{existingLog.notes}</p>
               </div>
             )}
@@ -164,20 +182,24 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
         </div>
       ) : (
         <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">Log Today's Adherence</h3>
-          
+          <h3 className="text-xl font-bold text-gray-800 mb-4">
+            Log Today's Adherence
+          </h3>
+
           {/* Checklist */}
           <div className="space-y-4 mb-6">
             <label className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
               <input
                 type="checkbox"
                 checked={todayLog.workoutCompleted}
-                onChange={() => handleCheckboxChange('workoutCompleted')}
+                onChange={() => handleCheckboxChange("workoutCompleted")}
                 className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500"
               />
               <div className="flex-1">
                 <p className="font-semibold text-gray-800">Workout Completed</p>
-                <p className="text-sm text-gray-600">Did you complete your workout today?</p>
+                <p className="text-sm text-gray-600">
+                  Did you complete your workout today?
+                </p>
               </div>
             </label>
 
@@ -185,12 +207,14 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
               <input
                 type="checkbox"
                 checked={todayLog.dietFollowed}
-                onChange={() => handleCheckboxChange('dietFollowed')}
+                onChange={() => handleCheckboxChange("dietFollowed")}
                 className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500"
               />
               <div className="flex-1">
                 <p className="font-semibold text-gray-800">Diet Followed</p>
-                <p className="text-sm text-gray-600">Did you stick to your meal plan?</p>
+                <p className="text-sm text-gray-600">
+                  Did you stick to your meal plan?
+                </p>
               </div>
             </label>
 
@@ -198,19 +222,23 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
               <input
                 type="checkbox"
                 checked={todayLog.waterIntake}
-                onChange={() => handleCheckboxChange('waterIntake')}
+                onChange={() => handleCheckboxChange("waterIntake")}
                 className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500"
               />
               <div className="flex-1">
                 <p className="font-semibold text-gray-800">Water Intake Goal</p>
-                <p className="text-sm text-gray-600">Did you meet your water intake goal?</p>
+                <p className="text-sm text-gray-600">
+                  Did you meet your water intake goal?
+                </p>
               </div>
             </label>
           </div>
 
           {/* Sleep Quality */}
           <div className="mb-6">
-            <label className="block font-semibold text-gray-800 mb-3">Sleep Quality</label>
+            <label className="block font-semibold text-gray-800 mb-3">
+              Sleep Quality
+            </label>
             <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map((rating) => (
                 <button
@@ -218,15 +246,17 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
                   onClick={() => handleSleepChange(rating)}
                   className={`flex-1 py-3 rounded-lg font-semibold transition-all ${
                     todayLog.sleepQuality >= rating
-                      ? 'bg-purple-600 text-white'
-                      : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                      ? "bg-purple-600 text-white"
+                      : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                   }`}
                 >
                   {rating}
                 </button>
               ))}
             </div>
-            <p className="text-sm text-gray-500 mt-2">1 = Poor, 5 = Excellent</p>
+            <p className="text-sm text-gray-500 mt-2">
+              1 = Poor, 5 = Excellent
+            </p>
           </div>
 
           {/* Notes */}
@@ -263,8 +293,12 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-purple-50 rounded-xl p-4">
-            <p className="text-purple-600 text-sm font-semibold mb-1">Workouts</p>
-            <p className="text-3xl font-bold text-gray-800">{weeklyStats.workouts}/7</p>
+            <p className="text-purple-600 text-sm font-semibold mb-1">
+              Workouts
+            </p>
+            <p className="text-3xl font-bold text-gray-800">
+              {weeklyStats.workouts}/7
+            </p>
             <div className="mt-2 w-full bg-purple-200 rounded-full h-2">
               <div
                 className="bg-purple-600 h-2 rounded-full transition-all"
@@ -275,7 +309,9 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
 
           <div className="bg-green-50 rounded-xl p-4">
             <p className="text-green-600 text-sm font-semibold mb-1">Diet</p>
-            <p className="text-3xl font-bold text-gray-800">{weeklyStats.diet}/7</p>
+            <p className="text-3xl font-bold text-gray-800">
+              {weeklyStats.diet}/7
+            </p>
             <div className="mt-2 w-full bg-green-200 rounded-full h-2">
               <div
                 className="bg-green-600 h-2 rounded-full transition-all"
@@ -286,7 +322,9 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
 
           <div className="bg-blue-50 rounded-xl p-4">
             <p className="text-blue-600 text-sm font-semibold mb-1">Water</p>
-            <p className="text-3xl font-bold text-gray-800">{weeklyStats.water}/7</p>
+            <p className="text-3xl font-bold text-gray-800">
+              {weeklyStats.water}/7
+            </p>
             <div className="mt-2 w-full bg-blue-200 rounded-full h-2">
               <div
                 className="bg-blue-600 h-2 rounded-full transition-all"
@@ -296,8 +334,12 @@ const AdherenceLog = ({ logs = [], onSubmit, date = new Date() }) => {
           </div>
 
           <div className="bg-pink-50 rounded-xl p-4">
-            <p className="text-pink-600 text-sm font-semibold mb-1">Avg Sleep</p>
-            <p className="text-3xl font-bold text-gray-800">{weeklyStats.avgSleep}/5</p>
+            <p className="text-pink-600 text-sm font-semibold mb-1">
+              Avg Sleep
+            </p>
+            <p className="text-3xl font-bold text-gray-800">
+              {weeklyStats.avgSleep}/5
+            </p>
             <div className="mt-2 w-full bg-pink-200 rounded-full h-2">
               <div
                 className="bg-pink-600 h-2 rounded-full transition-all"

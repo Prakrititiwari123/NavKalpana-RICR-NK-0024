@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   ArrowLeft,
@@ -8,30 +8,30 @@ import {
   AlertCircle,
   X,
   Shield,
-} from 'lucide-react';
-import DashboardLayout from '../../../components/Dashboard/DashboardLayout';
-import HealthProfile from './HealthProfile';
-import GoalSettings from './GoalSettings';
-import toast from 'react-hot-toast';
+} from "lucide-react";
+import DashboardLayout from "../../../components/Dashboard/DashboardLayout";
+import HealthProfile from "./HealthProfile";
+import GoalSettings from "./GoalSettings";
+import toast from "react-hot-toast";
 
 const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [formData, setFormData] = useState({
     // Health Profile data
-    age: initialData?.age || '',
-    sex: initialData?.sex || '',
-    height: initialData?.height || '',
-    heightUnit: initialData?.heightUnit || 'cm',
-    weight: initialData?.weight || '',
-    activityLevel: initialData?.activityLevel || '',
+    age: initialData?.age || "",
+    sex: initialData?.sex || "",
+    height: initialData?.height || "",
+    heightUnit: initialData?.heightUnit || "cm",
+    weight: initialData?.weight || "",
+    activityLevel: initialData?.activityLevel || "",
     bmi: initialData?.bmi || null,
-    bmiCategory: initialData?.bmiCategory || '',
-    
+    bmiCategory: initialData?.bmiCategory || "",
+
     // Goal Settings data
-    goalType: initialData?.goalType || '',
-    targetWeight: initialData?.targetWeight || '',
-    timeline: initialData?.timeline || '',
-    experienceLevel: initialData?.experienceLevel || '',
+    goalType: initialData?.goalType || "",
+    targetWeight: initialData?.targetWeight || "",
+    timeline: initialData?.timeline || "",
+    experienceLevel: initialData?.experienceLevel || "",
     calorieTarget: initialData?.calorieTarget || null,
   });
 
@@ -42,7 +42,12 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
 
   // Calculate maintenance calories based on activity level and weight
   const calculateMaintenanceCalories = () => {
-    if (!formData.weight || !formData.age || !formData.sex || !formData.activityLevel) {
+    if (
+      !formData.weight ||
+      !formData.age ||
+      !formData.sex ||
+      !formData.activityLevel
+    ) {
       return null;
     }
 
@@ -53,13 +58,13 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
     let height = parseFloat(formData.height);
 
     // Convert height to cm if in feet
-    if (formData.heightUnit === 'ft') {
+    if (formData.heightUnit === "ft") {
       height = height * 30.48;
     }
 
-    if (formData.sex === 'male') {
+    if (formData.sex === "male") {
       bmr = 10 * weight + 6.25 * height - 5 * age + 5;
-    } else if (formData.sex === 'female') {
+    } else if (formData.sex === "female") {
       bmr = 10 * weight + 6.25 * height - 5 * age - 161;
     } else {
       // Average for 'other'
@@ -86,46 +91,46 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
     if (step === 1) {
       // Validate Health Profile
       if (!formData.age) {
-        newErrors.age = 'Age is required';
+        newErrors.age = "Age is required";
       } else if (formData.age < 10 || formData.age > 120) {
-        newErrors.age = 'Please enter a valid age (10-120)';
+        newErrors.age = "Please enter a valid age (10-120)";
       }
 
       if (!formData.sex) {
-        newErrors.sex = 'Sex is required';
+        newErrors.sex = "Sex is required";
       }
 
       if (!formData.height) {
-        newErrors.height = 'Height is required';
+        newErrors.height = "Height is required";
       } else if (formData.height <= 0) {
-        newErrors.height = 'Please enter a valid height';
+        newErrors.height = "Please enter a valid height";
       }
 
       if (!formData.weight) {
-        newErrors.weight = 'Weight is required';
+        newErrors.weight = "Weight is required";
       } else if (formData.weight <= 0 || formData.weight > 500) {
-        newErrors.weight = 'Please enter a valid weight (1-500 kg)';
+        newErrors.weight = "Please enter a valid weight (1-500 kg)";
       }
 
       if (!formData.activityLevel) {
-        newErrors.activityLevel = 'Activity level is required';
+        newErrors.activityLevel = "Activity level is required";
       }
     } else if (step === 2) {
       // Validate Goal Settings
       if (!formData.goalType) {
-        newErrors.goalType = 'Please select your primary goal';
+        newErrors.goalType = "Please select your primary goal";
       }
 
-      if (formData.goalType !== 'maintain' && !formData.targetWeight) {
-        newErrors.targetWeight = 'Target weight is required for this goal';
+      if (formData.goalType !== "maintain" && !formData.targetWeight) {
+        newErrors.targetWeight = "Target weight is required for this goal";
       }
 
       if (!formData.timeline) {
-        newErrors.timeline = 'Timeline is required';
+        newErrors.timeline = "Timeline is required";
       }
 
       if (!formData.experienceLevel) {
-        newErrors.experienceLevel = 'Experience level is required';
+        newErrors.experienceLevel = "Experience level is required";
       }
     }
 
@@ -142,7 +147,7 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
         handleComplete();
       }
     } else {
-      toast.error('Please fill in all required fields');
+      toast.error("Please fill in all required fields");
     }
   };
 
@@ -157,35 +162,38 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
   const handleSkip = () => {
     if (currentStep < totalSteps) {
       setCurrentStep((prev) => prev + 1);
-      toast.info('Step skipped. You can complete it later from settings.');
+      toast.info("Step skipped. You can complete it later from settings.");
     }
   };
 
   // Save draft
   const handleSaveDraft = () => {
     try {
-      localStorage.setItem('healthnexus_profile_draft', JSON.stringify(formData));
+      localStorage.setItem(
+        "healthnexus_profile_draft",
+        JSON.stringify(formData),
+      );
       setIsDraftSaved(true);
-      toast.success('Draft saved successfully!');
-      
+      toast.success("Draft saved successfully!");
+
       setTimeout(() => {
         setIsDraftSaved(false);
       }, 3000);
     } catch (error) {
-      toast.error('Failed to save draft');
+      toast.error("Failed to save draft");
     }
   };
 
   // Load draft on mount
   useEffect(() => {
-    const draft = localStorage.getItem('healthnexus_profile_draft');
+    const draft = localStorage.getItem("healthnexus_profile_draft");
     if (draft && !initialData) {
       try {
         const parsedDraft = JSON.parse(draft);
         setFormData((prev) => ({ ...prev, ...parsedDraft }));
-        toast.success('Draft loaded from previous session');
+        toast.success("Draft loaded from previous session");
       } catch (error) {
-        console.error('Error loading draft:', error);
+        console.error("Error loading draft:", error);
       }
     }
   }, []);
@@ -197,7 +205,9 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
     } else {
       // Default: save to localStorage and show success
       try {
-        const existingUser = JSON.parse(localStorage.getItem('healthnexus_user') || '{}');
+        const existingUser = JSON.parse(
+          localStorage.getItem("healthnexus_user") || "{}",
+        );
         const updatedUser = {
           ...existingUser,
           healthData: {
@@ -221,12 +231,12 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
             },
           },
         };
-        
-        localStorage.setItem('healthnexus_user', JSON.stringify(updatedUser));
-        localStorage.removeItem('healthnexus_profile_draft');
-        toast.success('Profile setup completed successfully!');
+
+        localStorage.setItem("healthnexus_user", JSON.stringify(updatedUser));
+        localStorage.removeItem("healthnexus_profile_draft");
+        toast.success("Profile setup completed successfully!");
       } catch (error) {
-        toast.error('Failed to save profile');
+        toast.error("Failed to save profile");
       }
     }
   };
@@ -254,15 +264,19 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
               className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
             >
               <Save className="w-4 h-4" />
-              {isDraftSaved ? 'Saved!' : 'Save Draft'}
+              {isDraftSaved ? "Saved!" : "Save Draft"}
             </button>
           </div>
 
           {/* Progress Bar */}
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-600">Step {currentStep} of {totalSteps}</span>
-              <span className="text-sm text-gray-600">{Math.round((currentStep / totalSteps) * 100)}%</span>
+              <span className="text-sm text-gray-600">
+                Step {currentStep} of {totalSteps}
+              </span>
+              <span className="text-sm text-gray-600">
+                {Math.round((currentStep / totalSteps) * 100)}%
+              </span>
             </div>
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
               <motion.div
@@ -275,26 +289,38 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
 
             {/* Step indicators */}
             <div className="flex justify-between mt-4">
-              <div className={`flex items-center gap-2 ${currentStep >= 1 ? 'text-blue-600' : 'text-gray-400'}`}>
+              <div
+                className={`flex items-center gap-2 ${currentStep >= 1 ? "text-blue-600" : "text-gray-400"}`}
+              >
                 {currentStep > 1 ? (
                   <CheckCircle className="w-5 h-5" />
                 ) : (
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    currentStep === 1 ? 'border-blue-600 bg-blue-600' : 'border-gray-400'
-                  }`}>
+                  <div
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      currentStep === 1
+                        ? "border-blue-600 bg-blue-600"
+                        : "border-gray-400"
+                    }`}
+                  >
                     <span className="text-xs text-white">1</span>
                   </div>
                 )}
                 <span className="text-sm font-medium">Health Profile</span>
               </div>
 
-              <div className={`flex items-center gap-2 ${currentStep >= 2 ? 'text-blue-600' : 'text-gray-400'}`}>
+              <div
+                className={`flex items-center gap-2 ${currentStep >= 2 ? "text-blue-600" : "text-gray-400"}`}
+              >
                 {currentStep > 2 ? (
                   <CheckCircle className="w-5 h-5" />
                 ) : (
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    currentStep === 2 ? 'border-blue-600 bg-blue-600' : 'border-gray-400'
-                  }`}>
+                  <div
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      currentStep === 2
+                        ? "border-blue-600 bg-blue-600"
+                        : "border-gray-400"
+                    }`}
+                  >
                     <span className="text-xs text-white">2</span>
                   </div>
                 )}
@@ -313,11 +339,14 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
           <div className="flex items-start gap-3">
             <Shield className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
             <div>
-              <h4 className="font-semibold text-gray-800 text-sm mb-1">Medical Disclaimer</h4>
+              <h4 className="font-semibold text-gray-800 text-sm mb-1">
+                Medical Disclaimer
+              </h4>
               <p className="text-xs text-gray-700">
-                The information provided here is for general guidance only. Always consult with a
-                qualified healthcare professional before starting any new fitness or nutrition program,
-                especially if you have pre-existing medical conditions.
+                The information provided here is for general guidance only.
+                Always consult with a qualified healthcare professional before
+                starting any new fitness or nutrition program, especially if you
+                have pre-existing medical conditions.
               </p>
             </div>
           </div>
@@ -359,8 +388,8 @@ const ProfileSetup = ({ onComplete, initialData, step: initialStep = 1 }) => {
             disabled={currentStep === 1}
             className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all ${
               currentStep === 1
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
             <ArrowLeft className="w-4 h-4" />

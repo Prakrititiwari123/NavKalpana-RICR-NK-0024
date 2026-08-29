@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { 
-  FiTarget, FiHeart, FiTrendingUp, FiUsers, 
-  FiAward, FiArrowRight, FiCheck, FiGlobe,
-  FiStar, FiShield, FiBriefcase, FiCalendar
-} from 'react-icons/fi';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  FiTarget,
+  FiHeart,
+  FiTrendingUp,
+  FiUsers,
+  FiAward,
+  FiArrowRight,
+  FiCheck,
+  FiGlobe,
+  FiStar,
+  FiShield,
+  FiBriefcase,
+  FiCalendar,
+} from "react-icons/fi";
 
 const About = () => {
   const navigate = useNavigate();
@@ -12,90 +21,94 @@ const About = () => {
   const values = [
     {
       icon: FiHeart,
-      title: 'User First',
-      description: 'Every decision we make is centered around improving our users\'s fitness journey',
-      color: 'from-red-600 to-pink-600',
-      bgColor: 'bg-red-50'
+      title: "User First",
+      description:
+        "Every decision we make is centered around improving our users's fitness journey",
+      color: "from-red-600 to-pink-600",
+      bgColor: "bg-red-50",
     },
     {
       icon: FiStar,
-      title: 'Innovation',
-      description: 'We continuously leverage cutting-edge AI and technology to enhance results',
-      color: 'from-yellow-600 to-orange-600',
-      bgColor: 'bg-yellow-50'
+      title: "Innovation",
+      description:
+        "We continuously leverage cutting-edge AI and technology to enhance results",
+      color: "from-yellow-600 to-orange-600",
+      bgColor: "bg-yellow-50",
     },
     {
       icon: FiShield,
-      title: 'Trust & Privacy',
-      description: 'Your health data is sacred and protected with military-grade encryption',
-      color: 'from-blue-600 to-cyan-600',
-      bgColor: 'bg-blue-50'
+      title: "Trust & Privacy",
+      description:
+        "Your health data is sacred and protected with military-grade encryption",
+      color: "from-blue-600 to-cyan-600",
+      bgColor: "bg-blue-50",
     },
     {
       icon: FiTrendingUp,
-      title: 'Excellence',
-      description: 'We strive for the highest quality in every feature, workout, and meal plan',
-      color: 'from-green-600 to-emerald-600',
-      bgColor: 'bg-green-50'
-    }
+      title: "Excellence",
+      description:
+        "We strive for the highest quality in every feature, workout, and meal plan",
+      color: "from-green-600 to-emerald-600",
+      bgColor: "bg-green-50",
+    },
   ];
 
   const team = [
     {
-      name: 'Amit Sharma',
-      role: 'Founder & CEO',
-      bio: 'Ex-Google engineer with 10+ years in health tech',
-      avatar: '👨‍💼',
-      color: 'from-blue-500 to-cyan-500'
+      name: "Amit Sharma",
+      role: "Founder & CEO",
+      bio: "Ex-Google engineer with 10+ years in health tech",
+      avatar: "👨‍💼",
+      color: "from-blue-500 to-cyan-500",
     },
     {
-      name: 'Dr. Priya Patel',
-      role: 'Chief Fitness Officer',
-      bio: 'Olympic trainer & certified nutritionist',
-      avatar: '👩‍⚕️',
-      color: 'from-green-500 to-emerald-500'
+      name: "Dr. Priya Patel",
+      role: "Chief Fitness Officer",
+      bio: "Olympic trainer & certified nutritionist",
+      avatar: "👩‍⚕️",
+      color: "from-green-500 to-emerald-500",
     },
     {
-      name: 'Rajesh Singh',
-      role: 'Head of AI & ML',
-      bio: 'ML expert from Stanford working on personalization',
-      avatar: '👨‍🔬',
-      color: 'from-purple-500 to-pink-500'
+      name: "Rajesh Singh",
+      role: "Head of AI & ML",
+      bio: "ML expert from Stanford working on personalization",
+      avatar: "👨‍🔬",
+      color: "from-purple-500 to-pink-500",
     },
     {
-      name: 'Zara Khan',
-      role: 'Head of Community',
-      bio: 'Building the world\'s most supportive fitness community',
-      avatar: '👩',
-      color: 'from-orange-500 to-red-500'
-    }
+      name: "Zara Khan",
+      role: "Head of Community",
+      bio: "Building the world's most supportive fitness community",
+      avatar: "👩",
+      color: "from-orange-500 to-red-500",
+    },
   ];
 
   const milestones = [
     {
-      year: '2021',
-      title: 'Founded NavKalpana',
-      description: 'Started with a mission to democratize fitness coaching',
-      icon: FiStar
+      year: "2021",
+      title: "Founded NavKalpana",
+      description: "Started with a mission to democratize fitness coaching",
+      icon: FiStar,
     },
     {
-      year: '2022',
-      title: 'Crossed 10K Users',
-      description: 'Strong adoption in India with 4.8-star rating',
-      icon: FiUsers
+      year: "2022",
+      title: "Crossed 10K Users",
+      description: "Strong adoption in India with 4.8-star rating",
+      icon: FiUsers,
     },
     {
-      year: '2023',
-      title: '$2M Funding Round',
-      description: 'Backed by leading VCs to scale AI capabilities',
-      icon: FiTrendingUp
+      year: "2023",
+      title: "$2M Funding Round",
+      description: "Backed by leading VCs to scale AI capabilities",
+      icon: FiTrendingUp,
     },
     {
-      year: '2024',
-      title: '100K+ Active Users',
-      description: 'Expanding globally with 50+ languages',
-      icon: FiGlobe
-    }
+      year: "2024",
+      title: "100K+ Active Users",
+      description: "Expanding globally with 50+ languages",
+      icon: FiGlobe,
+    },
   ];
 
   return (
@@ -125,7 +138,9 @@ const About = () => {
               </h1>
 
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto animate-slideDown animation-delay-400">
-                Healthnexus is on a mission to make world-class fitness coaching accessible, affordable, and personalized for everyone on the planet.
+                Healthnexus is on a mission to make world-class fitness coaching
+                accessible, affordable, and personalized for everyone on the
+                planet.
               </p>
             </div>
           </div>
@@ -137,31 +152,47 @@ const About = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               {/* Left */}
               <div>
-                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">Our Mission</h2>
+                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                  Our Mission
+                </h2>
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  We believe everyone deserves access to world-class fitness coaching, personalized nutrition guidance, and a supportive community - regardless of their income or location.
+                  We believe everyone deserves access to world-class fitness
+                  coaching, personalized nutrition guidance, and a supportive
+                  community - regardless of their income or location.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  NavKalpana democratizes fitness by combining AI-powered personalization, expert coaching, and community support into one affordable platform.
+                  NavKalpana democratizes fitness by combining AI-powered
+                  personalization, expert coaching, and community support into
+                  one affordable platform.
                 </p>
                 <div className="flex items-center gap-3 mt-8">
                   <FiTarget className="w-6 h-6 text-blue-600" />
-                  <span className="text-blue-600 font-semibold">Helping 1M users achieve their goals</span>
+                  <span className="text-blue-600 font-semibold">
+                    Helping 1M users achieve their goals
+                  </span>
                 </div>
               </div>
 
               {/* Right */}
               <div>
-                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">Our Vision</h2>
+                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                  Our Vision
+                </h2>
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  A world where technology empowers everyone to become the healthiest version of themselves, transcending language, geography, and economic barriers.
+                  A world where technology empowers everyone to become the
+                  healthiest version of themselves, transcending language,
+                  geography, and economic barriers.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  We envision Healthnexus as the global standard for personalized, AI-driven fitness coaching - trusted by millions worldwide.
+                  We envision Healthnexus as the global standard for
+                  personalized, AI-driven fitness coaching - trusted by millions
+                  worldwide.
                 </p>
                 <div className="flex items-center gap-3 mt-8">
                   <FiGlobe className="w-6 h-6 text-purple-600" />
-                  <span className="text-purple-600 font-semibold">Present in 50+ countries by 2025</span>
+                  <span className="text-purple-600 font-semibold">
+                    Present in 50+ countries by 2025
+                  </span>
                 </div>
               </div>
             </div>
@@ -189,11 +220,17 @@ const About = () => {
                     className="group animate-fadeIn"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className={`${value.bgColor} rounded-2xl p-8 h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2`}>
-                      <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${value.color} text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <div
+                      className={`${value.bgColor} rounded-2xl p-8 h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2`}
+                    >
+                      <div
+                        className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${value.color} text-white mb-4 group-hover:scale-110 transition-transform duration-300`}
+                      >
                         <IconComponent className="w-7 h-7" />
                       </div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">
+                        {value.title}
+                      </h3>
                       <p className="text-gray-700">{value.description}</p>
                     </div>
                   </div>
@@ -222,14 +259,22 @@ const About = () => {
                   return (
                     <div
                       key={index}
-                      className={`flex gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
+                      className={`flex gap-8 ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}
                     >
                       {/* Content */}
-                      <div className={`flex-1 ${index % 2 === 0 ? 'md:text-right' : ''}`}>
+                      <div
+                        className={`flex-1 ${index % 2 === 0 ? "md:text-right" : ""}`}
+                      >
                         <div className="bg-white rounded-2xl p-8 hover:shadow-2xl transition-all duration-300">
-                          <div className="text-2xl font-bold text-blue-600 mb-2">{milestone.year}</div>
-                          <h3 className="text-xl font-bold text-gray-900 mb-2">{milestone.title}</h3>
-                          <p className="text-gray-600">{milestone.description}</p>
+                          <div className="text-2xl font-bold text-blue-600 mb-2">
+                            {milestone.year}
+                          </div>
+                          <h3 className="text-xl font-bold text-gray-900 mb-2">
+                            {milestone.title}
+                          </h3>
+                          <p className="text-gray-600">
+                            {milestone.description}
+                          </p>
                         </div>
                       </div>
 
@@ -269,14 +314,20 @@ const About = () => {
                   className="group bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                 >
                   {/* Avatar */}
-                  <div className={`h-32 bg-gradient-to-br ${member.color} flex items-center justify-center text-6xl`}>
+                  <div
+                    className={`h-32 bg-gradient-to-br ${member.color} flex items-center justify-center text-6xl`}
+                  >
                     {member.avatar}
                   </div>
 
                   {/* Content */}
                   <div className="p-6">
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">{member.name}</h3>
-                    <p className="text-sm font-semibold text-blue-600 mb-3">{member.role}</p>
+                    <h3 className="text-lg font-bold text-gray-900 mb-1">
+                      {member.name}
+                    </h3>
+                    <p className="text-sm font-semibold text-blue-600 mb-3">
+                      {member.role}
+                    </p>
                     <p className="text-gray-600 text-sm">{member.bio}</p>
                   </div>
                 </div>
@@ -290,10 +341,14 @@ const About = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
-                { number: '100K+', label: 'Active Users', icon: FiUsers },
-                { number: '1M+', label: 'Workouts Completed', icon: FiAward },
-                { number: '50+', label: 'Countries & Languages', icon: FiGlobe },
-                { number: '4.8★', label: 'Average Rating', icon: FiTrendingUp }
+                { number: "100K+", label: "Active Users", icon: FiUsers },
+                { number: "1M+", label: "Workouts Completed", icon: FiAward },
+                {
+                  number: "50+",
+                  label: "Countries & Languages",
+                  icon: FiGlobe,
+                },
+                { number: "4.8★", label: "Average Rating", icon: FiTrendingUp },
               ].map((stat, index) => {
                 const IconComponent = stat.icon;
                 return (
@@ -304,7 +359,9 @@ const About = () => {
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
                       <IconComponent className="w-8 h-8" />
                     </div>
-                    <p className="text-4xl font-bold text-gray-900 mb-2">{stat.number}</p>
+                    <p className="text-4xl font-bold text-gray-900 mb-2">
+                      {stat.number}
+                    </p>
                     <p className="text-gray-600">{stat.label}</p>
                   </div>
                 );
@@ -322,15 +379,17 @@ const About = () => {
               </h2>
 
               <p className="text-lg sm:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                Be part of the fitness revolution. Transform your body, mind, and life with NavKalpana.
+                Be part of the fitness revolution. Transform your body, mind,
+                and life with NavKalpana.
               </p>
 
               <button
-                onClick={() => navigate('/register')}
+                onClick={() => navigate("/register")}
                 className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-white text-blue-600 rounded-xl font-bold text-lg hover:text-blue-700 transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden inline-flex items-center gap-2"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  Get Started Today <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  Get Started Today{" "}
+                  <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </span>
                 <div className="absolute inset-0 bg-gray-100 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
               </button>

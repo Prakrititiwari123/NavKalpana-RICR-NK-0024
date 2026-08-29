@@ -10,7 +10,9 @@ export const genToken = (user, res) => {
 
     // Check if user is still active (optional - if you have an active flag)
     if (user.isActive === false) {
-      console.error("Token generation failed: User account is inactive/deleted");
+      console.error(
+        "Token generation failed: User account is inactive/deleted",
+      );
       return null;
     }
 
@@ -24,7 +26,7 @@ export const genToken = (user, res) => {
     });
 
     // Only log in development environment
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.log("Token generated for user:", user._id);
     }
 
@@ -32,7 +34,7 @@ export const genToken = (user, res) => {
     res.cookie("health", token, {
       maxAge: 1000 * 60 * 60 * 24, // 1 day
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // true in production
+      secure: process.env.NODE_ENV === "production", // true in production
       sameSite: "lax",
       // domain: process.env.COOKIE_DOMAIN || undefined, // optional
     });
@@ -45,29 +47,23 @@ export const genToken = (user, res) => {
   }
 };
 
+export const genOtpToken = (user, res) => {
+  const payload = {
+    id: user._id,
+    role: user.role,
+  };
 
-export const genOtpToken = (user,res)=>{
-  try {
-    const payload={
-      id:user._id,
-      role:user.role,
-    }
+  const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: "10m",
+  });
+  console.log(token);
 
-    const token = jwt.sign(payload,process.env.JWT_SECRET,{
-      expiresIn:"10m"
-    })
-    console.log(token);
+  res.cookie("otpToken", token, {
+    maxAge: 100 * 60 * 10,
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+  });
 
-    res.cookie("otpToken",token,{
-      maxAge:100*60*10,
-      httpOnly:true,
-      secure:false,
-      sameSite:"lax"
-    })
-    
-    
-  } catch (error) {
-    throw error;
-    
-  }
-}
+  return token;
+};

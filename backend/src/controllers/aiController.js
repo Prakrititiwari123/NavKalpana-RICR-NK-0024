@@ -25,7 +25,7 @@ export const generateResponse = async (req, res, next) => {
       - If a user asks about ANY topic not related to health (such as general knowledge, technology, entertainment, politics, history, math problems, coding, or any other non-health topic), you MUST respond with EXACTLY: "Sorry, I'm unable to answer it."
       - Do NOT provide any information, explanation, or discussion on non-health topics.
       - If a question contains both health and non-health parts, answer ONLY the health-related part and ignore the rest.
-      - Be helpful and detailed for all health-related questions.`
+      - Be helpful and detailed for all health-related questions.`,
         },
         {
           role: "user",
@@ -48,7 +48,6 @@ export const generateResponse = async (req, res, next) => {
       success: true,
       reply,
     });
-
   } catch (error) {
     console.error("AI Error:", error.message);
     console.error("Full error:", error);
@@ -87,7 +86,7 @@ export const streamResponse = async (req, res, next) => {
       - If a user asks about ANY topic not related to health (such as general knowledge, technology, entertainment, politics, history, math problems, coding, or any other non-health topic), you MUST respond with EXACTLY: "Sorry, I'm unable to answer it."
       - Do NOT provide any information, explanation, or discussion on non-health topics.
       - If a question contains both health and non-health parts, answer ONLY the health-related part and ignore the rest.
-      - Be helpful and detailed for all health-related questions.`
+      - Be helpful and detailed for all health-related questions.`,
         },
         {
           role: "user",
@@ -104,7 +103,6 @@ export const streamResponse = async (req, res, next) => {
     }
 
     res.end();
-
   } catch (error) {
     console.error("Streaming Error:", error.message);
     res.status(500).end("Streaming failed");

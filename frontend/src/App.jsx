@@ -1,13 +1,14 @@
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import React, { Suspense, lazy } from "react";
 
-// Layouts
 import PublicLayout from "./Layout/PublicLayout";
 import PrivateLayout from "./Layout/PrivateLayout";
 import { PageLoader } from "./components/Common/Loaders";
-import { ProtectedRouteGuard } from "./components/ProtectedRouteGuard";
+import ProtectedRouteGuard from "./components/ProtectedRouteGuard";
 import ScrollToTop from "./context/ScrollToTop";
+
+// Layouts
 // Lazy load pages for better performance
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -45,9 +46,12 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
           <div className="text-center p-8 max-w-md">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Something went wrong</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              Something went wrong
+            </h2>
             <p className="text-gray-600 mb-6">
-              We're sorry, but something unexpected happened. Please try refreshing the page.
+              We're sorry, but something unexpected happened. Please try
+              refreshing the page.
             </p>
             <button
               onClick={() => window.location.reload()}
@@ -63,23 +67,18 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-
-
-
-
-
-
-
 const NotFound = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50">
     <div className="text-center p-8 max-w-md">
       <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
-      <h2 className="text-2xl font-semibold text-gray-700 mb-4">Page Not Found</h2>
+      <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+        Page Not Found
+      </h2>
       <p className="text-gray-600 mb-6">
         The page you're looking for doesn't exist or has been moved.
       </p>
       <button
-        onClick={() => window.location.href = '/'}
+        onClick={() => (window.location.href = "/")}
         className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
       >
         Go Home
@@ -92,27 +91,27 @@ const App = () => {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <ScrollToTop/>
+        <ScrollToTop />
         <Toaster
           position="top-right"
           toastOptions={{
             duration: 4000,
             style: {
-              background: '#363636',
-              color: '#fff',
+              background: "#363636",
+              color: "#fff",
             },
             success: {
               duration: 3000,
               iconTheme: {
-                primary: '#10b981',
-                secondary: '#fff',
+                primary: "#10b981",
+                secondary: "#fff",
               },
             },
             error: {
               duration: 4000,
               iconTheme: {
-                primary: '#ef4444',
-                secondary: '#fff',
+                primary: "#ef4444",
+                secondary: "#fff",
               },
             },
           }}

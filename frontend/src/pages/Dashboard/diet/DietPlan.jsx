@@ -1,68 +1,83 @@
-import React, { useMemo, useState } from 'react';
-import { Calendar, RefreshCw, Printer, ShoppingBag, ArrowRightLeft } from 'lucide-react';
-import MealDetail from './MealDetail.jsx';
-import MacroCalculator from './MacroCalculator.jsx';
+import React, { useMemo, useState } from "react";
+import {
+  Calendar,
+  RefreshCw,
+  Printer,
+  ShoppingBag,
+  ArrowRightLeft,
+} from "lucide-react";
+import MealDetail from "./MealDetail.jsx";
+import MacroCalculator from "./MacroCalculator.jsx";
 
 const DietPlan = ({ plan, dayOffset = 0, onSwap }) => {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [macroTargets, setMacroTargets] = useState(null);
 
   const currentPlan = plan || {
-    dayName: 'Tuesday',
+    dayName: "Tuesday",
     calories: 2200,
-    goal: 'Lean Muscle',
+    goal: "Lean Muscle",
     meals: [
       {
-        id: 'breakfast',
-        name: 'Breakfast',
-        time: '8:00 AM',
+        id: "breakfast",
+        name: "Breakfast",
+        time: "8:00 AM",
         calories: 480,
         macros: { protein: 35, carbs: 55, fats: 12 },
-        items: ['Greek yogurt', 'Oats', 'Blueberries', 'Almond butter'],
-        prepTime: '10 min',
+        items: ["Greek yogurt", "Oats", "Blueberries", "Almond butter"],
+        prepTime: "10 min",
       },
       {
-        id: 'lunch',
-        name: 'Lunch',
-        time: '1:00 PM',
+        id: "lunch",
+        name: "Lunch",
+        time: "1:00 PM",
         calories: 650,
         macros: { protein: 45, carbs: 70, fats: 18 },
-        items: ['Chicken breast', 'Brown rice', 'Vegetables', 'Olive oil'],
-        prepTime: '20 min',
+        items: ["Chicken breast", "Brown rice", "Vegetables", "Olive oil"],
+        prepTime: "20 min",
       },
       {
-        id: 'snack',
-        name: 'Snack',
-        time: '4:00 PM',
+        id: "snack",
+        name: "Snack",
+        time: "4:00 PM",
         calories: 260,
         macros: { protein: 20, carbs: 25, fats: 8 },
-        items: ['Protein shake', 'Banana'],
-        prepTime: '5 min',
+        items: ["Protein shake", "Banana"],
+        prepTime: "5 min",
       },
       {
-        id: 'dinner',
-        name: 'Dinner',
-        time: '7:30 PM',
+        id: "dinner",
+        name: "Dinner",
+        time: "7:30 PM",
         calories: 620,
         macros: { protein: 40, carbs: 50, fats: 20 },
-        items: ['Salmon', 'Sweet potato', 'Broccoli', 'Lemon'],
-        prepTime: '25 min',
+        items: ["Salmon", "Sweet potato", "Broccoli", "Lemon"],
+        prepTime: "25 min",
       },
     ],
-    shoppingList: ['Chicken breast', 'Salmon', 'Oats', 'Greek yogurt', 'Blueberries'],
+    shoppingList: [
+      "Chicken breast",
+      "Salmon",
+      "Oats",
+      "Greek yogurt",
+      "Blueberries",
+    ],
   };
 
   const planDate = useMemo(() => {
     const date = new Date();
     date.setDate(date.getDate() + dayOffset);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'short',
-      day: 'numeric',
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "short",
+      day: "numeric",
     });
   }, [dayOffset]);
 
-  const totalCalories = currentPlan.meals.reduce((sum, meal) => sum + meal.calories, 0);
+  const totalCalories = currentPlan.meals.reduce(
+    (sum, meal) => sum + meal.calories,
+    0,
+  );
 
   return (
     <div className="space-y-6">
@@ -73,8 +88,12 @@ const DietPlan = ({ plan, dayOffset = 0, onSwap }) => {
               <Calendar className="w-4 h-4" />
               <span className="text-sm">{planDate}</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mt-1">{currentPlan.goal} Plan</h2>
-            <p className="text-sm text-gray-500">Target {currentPlan.calories} kcal</p>
+            <h2 className="text-2xl font-bold text-gray-800 mt-1">
+              {currentPlan.goal} Plan
+            </h2>
+            <p className="text-sm text-gray-500">
+              Target {currentPlan.calories} kcal
+            </p>
           </div>
           <div className="flex flex-wrap gap-2">
             <button className="px-4 py-2 bg-linear-to-r from-green-600 to-emerald-600 text-white rounded-lg font-semibold flex items-center gap-2">
@@ -92,7 +111,9 @@ const DietPlan = ({ plan, dayOffset = 0, onSwap }) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Planned Calories</p>
-              <p className="text-2xl font-bold text-emerald-700">{totalCalories} kcal</p>
+              <p className="text-2xl font-bold text-emerald-700">
+                {totalCalories} kcal
+              </p>
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-600">Remaining</p>
@@ -117,7 +138,9 @@ const DietPlan = ({ plan, dayOffset = 0, onSwap }) => {
           <div className="mt-2 grid grid-cols-3 gap-2 text-sm">
             <div className="bg-emerald-50 rounded-lg p-3">
               <p className="text-gray-500">Protein</p>
-              <p className="font-bold text-emerald-700">{macroTargets.protein} g</p>
+              <p className="font-bold text-emerald-700">
+                {macroTargets.protein} g
+              </p>
             </div>
             <div className="bg-blue-50 rounded-lg p-3">
               <p className="text-gray-500">Carbs</p>
@@ -139,8 +162,12 @@ const DietPlan = ({ plan, dayOffset = 0, onSwap }) => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-gray-800">{meal.name}</h3>
-                <p className="text-sm text-gray-500">{meal.time} · {meal.prepTime}</p>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {meal.name}
+                </h3>
+                <p className="text-sm text-gray-500">
+                  {meal.time} · {meal.prepTime}
+                </p>
               </div>
               <button
                 className="text-sm text-emerald-600 font-semibold flex items-center gap-1"
@@ -154,7 +181,9 @@ const DietPlan = ({ plan, dayOffset = 0, onSwap }) => {
             <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
               <div className="bg-emerald-50 rounded-lg p-2 text-center">
                 <p className="text-gray-500">Protein</p>
-                <p className="font-bold text-emerald-700">{meal.macros.protein}g</p>
+                <p className="font-bold text-emerald-700">
+                  {meal.macros.protein}g
+                </p>
               </div>
               <div className="bg-blue-50 rounded-lg p-2 text-center">
                 <p className="text-gray-500">Carbs</p>

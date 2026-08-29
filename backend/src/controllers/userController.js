@@ -3,10 +3,8 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 
 export const updateUserProfile = async (req, res, next) => {
-
   try {
-
-    const userId = req.body?.id;
+    const userId = req.user?._id;
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -93,17 +91,13 @@ export const updateUserProfile = async (req, res, next) => {
     //   };
     // }
 
-
     /* ================= HEALTH DATA ================= */
 
     if (healthData !== undefined) {
       updates.healthData = healthData;
 
       // Auto BMI calculation (if vitals present)
-      if (
-        healthData?.vitals?.height &&
-        healthData?.vitals?.weight
-      ) {
+      if (healthData?.vitals?.height && healthData?.vitals?.weight) {
         const h = healthData.vitals.height / 100;
         updates.healthData.vitals.bmi =
           Math.round((healthData.vitals.weight / (h * h)) * 10) / 10;
@@ -115,7 +109,7 @@ export const updateUserProfile = async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updates },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select("-password -__v");
 
     res.status(200).json({
@@ -126,17 +120,6 @@ export const updateUserProfile = async (req, res, next) => {
     next(error);
   }
 };
-
-
-
-
-
-
-
-
-
-
-
 
 // ================= CHANGE PROFILE PHOTO =================
 export const UserChangePhoto = async (req, res, next) => {
@@ -204,7 +187,7 @@ export const UserResetPassword = async (req, res, next) => {
     }
 
     // Fetch user with password field
-    const user = await User.findById(userId).select('+password');
+    const user = await User.findById(userId).select("+password");
     if (!user) {
       const error = new Error("User not found");
       error.statusCode = 404;
@@ -229,4 +212,3 @@ export const UserResetPassword = async (req, res, next) => {
     next(error);
   }
 };
-

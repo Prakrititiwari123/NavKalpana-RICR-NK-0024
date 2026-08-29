@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import {
   User,
   Ruler,
@@ -8,57 +8,80 @@ import {
   Calendar,
   TrendingUp,
   AlertCircle,
-} from 'lucide-react';
+} from "lucide-react";
 
 const HealthProfile = ({ onChange, values, errors }) => {
   const [formData, setFormData] = useState({
-    age: values?.age || '',
-    sex: values?.sex || '',
-    height: values?.height || '',
-    heightUnit: values?.heightUnit || 'cm',
-    weight: values?.weight || '',
-    activityLevel: values?.activityLevel || '',
+    age: values?.age || "",
+    sex: values?.sex || "",
+    height: values?.height || "",
+    heightUnit: values?.heightUnit || "cm",
+    weight: values?.weight || "",
+    activityLevel: values?.activityLevel || "",
   });
 
   const [bmi, setBmi] = useState(null);
-  const [bmiCategory, setBmiCategory] = useState('');
+  const [bmiCategory, setBmiCategory] = useState("");
 
   // Activity level options
   const activityLevels = [
-    { value: 'sedentary', label: 'Sedentary', description: 'Little or no exercise' },
-    { value: 'light', label: 'Lightly Active', description: 'Exercise 1-3 days/week' },
-    { value: 'moderate', label: 'Moderately Active', description: 'Exercise 3-5 days/week' },
-    { value: 'active', label: 'Very Active', description: 'Exercise 6-7 days/week' },
-    { value: 'extreme', label: 'Extremely Active', description: 'Physical job or 2x training' },
+    {
+      value: "sedentary",
+      label: "Sedentary",
+      description: "Little or no exercise",
+    },
+    {
+      value: "light",
+      label: "Lightly Active",
+      description: "Exercise 1-3 days/week",
+    },
+    {
+      value: "moderate",
+      label: "Moderately Active",
+      description: "Exercise 3-5 days/week",
+    },
+    {
+      value: "active",
+      label: "Very Active",
+      description: "Exercise 6-7 days/week",
+    },
+    {
+      value: "extreme",
+      label: "Extremely Active",
+      description: "Physical job or 2x training",
+    },
   ];
 
   // Calculate BMI whenever height or weight changes
   useEffect(() => {
     if (formData.height && formData.weight) {
       let heightInMeters;
-      if (formData.heightUnit === 'cm') {
+      if (formData.heightUnit === "cm") {
         heightInMeters = formData.height / 100;
       } else {
         // Convert feet to meters (assuming format is decimal, e.g., 5.8 feet)
         heightInMeters = formData.height * 0.3048;
       }
 
-      const calculatedBmi = (formData.weight / (heightInMeters * heightInMeters)).toFixed(1);
+      const calculatedBmi = (
+        formData.weight /
+        (heightInMeters * heightInMeters)
+      ).toFixed(1);
       setBmi(calculatedBmi);
 
       // Determine BMI category
       if (calculatedBmi < 18.5) {
-        setBmiCategory('Underweight');
+        setBmiCategory("Underweight");
       } else if (calculatedBmi >= 18.5 && calculatedBmi < 25) {
-        setBmiCategory('Normal weight');
+        setBmiCategory("Normal weight");
       } else if (calculatedBmi >= 25 && calculatedBmi < 30) {
-        setBmiCategory('Overweight');
+        setBmiCategory("Overweight");
       } else {
-        setBmiCategory('Obese');
+        setBmiCategory("Obese");
       }
     } else {
       setBmi(null);
-      setBmiCategory('');
+      setBmiCategory("");
     }
   }, [formData.height, formData.weight, formData.heightUnit]);
 
@@ -75,20 +98,23 @@ const HealthProfile = ({ onChange, values, errors }) => {
   };
 
   const getBmiColor = () => {
-    if (!bmi) return 'text-gray-600';
-    if (bmi < 18.5) return 'text-blue-600';
-    if (bmi >= 18.5 && bmi < 25) return 'text-green-600';
-    if (bmi >= 25 && bmi < 30) return 'text-yellow-600';
-    return 'text-red-600';
+    if (!bmi) return "text-gray-600";
+    if (bmi < 18.5) return "text-blue-600";
+    if (bmi >= 18.5 && bmi < 25) return "text-green-600";
+    if (bmi >= 25 && bmi < 30) return "text-yellow-600";
+    return "text-red-600";
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Health Profile</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          Health Profile
+        </h2>
         <p className="text-gray-600 text-sm">
-          Tell us about your physical characteristics to personalize your experience
+          Tell us about your physical characteristics to personalize your
+          experience
         </p>
       </div>
 
@@ -111,8 +137,8 @@ const HealthProfile = ({ onChange, values, errors }) => {
             max="120"
             className={`w-full px-4 py-3 border-2 rounded-lg transition-all outline-none ${
               errors?.age
-                ? 'border-red-300 bg-red-50 focus:border-red-500'
-                : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
+                ? "border-red-300 bg-red-50 focus:border-red-500"
+                : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
             }`}
             placeholder="Enter your age"
           />
@@ -138,8 +164,8 @@ const HealthProfile = ({ onChange, values, errors }) => {
             onChange={handleInputChange}
             className={`w-full px-4 py-3 border-2 rounded-lg transition-all outline-none ${
               errors?.sex
-                ? 'border-red-300 bg-red-50 focus:border-red-500'
-                : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
+                ? "border-red-300 bg-red-50 focus:border-red-500"
+                : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
             }`}
           >
             <option value="">Select sex</option>
@@ -174,10 +200,10 @@ const HealthProfile = ({ onChange, values, errors }) => {
             step="0.1"
             className={`flex-1 px-4 py-3 border-2 rounded-lg transition-all outline-none ${
               errors?.height
-                ? 'border-red-300 bg-red-50 focus:border-red-500'
-                : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
+                ? "border-red-300 bg-red-50 focus:border-red-500"
+                : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
             }`}
-            placeholder={formData.heightUnit === 'cm' ? '170' : '5.6'}
+            placeholder={formData.heightUnit === "cm" ? "170" : "5.6"}
           />
           <select
             name="heightUnit"
@@ -214,8 +240,8 @@ const HealthProfile = ({ onChange, values, errors }) => {
           step="0.1"
           className={`w-full px-4 py-3 border-2 rounded-lg transition-all outline-none ${
             errors?.weight
-              ? 'border-red-300 bg-red-50 focus:border-red-500'
-              : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
+              ? "border-red-300 bg-red-50 focus:border-red-500"
+              : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
           }`}
           placeholder="Enter your weight in kg"
         />
@@ -241,8 +267,8 @@ const HealthProfile = ({ onChange, values, errors }) => {
           onChange={handleInputChange}
           className={`w-full px-4 py-3 border-2 rounded-lg transition-all outline-none ${
             errors?.activityLevel
-              ? 'border-red-300 bg-red-50 focus:border-red-500'
-              : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white'
+              ? "border-red-300 bg-red-50 focus:border-red-500"
+              : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
           }`}
         >
           <option value="">Select activity level</option>
@@ -269,12 +295,18 @@ const HealthProfile = ({ onChange, values, errors }) => {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-1">Body Mass Index (BMI)</h3>
-              <p className="text-sm text-gray-600">Based on your height and weight</p>
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                Body Mass Index (BMI)
+              </h3>
+              <p className="text-sm text-gray-600">
+                Based on your height and weight
+              </p>
             </div>
             <div className="text-right">
               <p className={`text-4xl font-bold ${getBmiColor()}`}>{bmi}</p>
-              <p className={`text-sm font-medium ${getBmiColor()}`}>{bmiCategory}</p>
+              <p className={`text-sm font-medium ${getBmiColor()}`}>
+                {bmiCategory}
+              </p>
             </div>
           </div>
 
@@ -292,9 +324,9 @@ const HealthProfile = ({ onChange, values, errors }) => {
           {/* BMI Information */}
           <div className="mt-4 p-3 bg-white/60 rounded-lg">
             <p className="text-xs text-gray-700">
-              <strong>Note:</strong> BMI is a general indicator and may not account for muscle mass,
-              bone density, and other factors. Consult with a healthcare professional for personalized
-              advice.
+              <strong>Note:</strong> BMI is a general indicator and may not
+              account for muscle mass, bone density, and other factors. Consult
+              with a healthcare professional for personalized advice.
             </p>
           </div>
         </motion.div>

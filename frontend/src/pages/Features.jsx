@@ -1,8 +1,14 @@
-import { useNavigate } from 'react-router-dom';
-import { 
-  FiActivity, FiCoffee, FiTrendingUp, FiZap, 
-  FiMessageSquare, FiSmartphone, FiArrowRight, FiCheck
-} from 'react-icons/fi';
+import { useNavigate } from "react-router-dom";
+import {
+  FiActivity,
+  FiCoffee,
+  FiTrendingUp,
+  FiZap,
+  FiMessageSquare,
+  FiSmartphone,
+  FiArrowRight,
+  FiCheck,
+} from "react-icons/fi";
 
 const Features = () => {
   const navigate = useNavigate();
@@ -11,81 +17,81 @@ const Features = () => {
     {
       id: 1,
       icon: FiActivity,
-      title: 'AI Workout Generator',
-      color: 'from-blue-600 to-cyan-600',
-      bgColor: 'bg-blue-50',
+      title: "AI Workout Generator",
+      color: "from-blue-600 to-cyan-600",
+      bgColor: "bg-blue-50",
       highlights: [
-        'Daily personalized workouts',
-        'Based on your level (Beginner/Intermediate)',
-        'Adjusts as you progress',
-        'Exercise videos & form guidance'
-      ]
+        "Daily personalized workouts",
+        "Based on your level (Beginner/Intermediate)",
+        "Adjusts as you progress",
+        "Exercise videos & form guidance",
+      ],
     },
     {
       id: 2,
       icon: FiCoffee,
-      title: 'Smart Meal Planner',
-      color: 'from-orange-600 to-red-600',
-      bgColor: 'bg-orange-50',
+      title: "Smart Meal Planner",
+      color: "from-orange-600 to-red-600",
+      bgColor: "bg-orange-50",
       highlights: [
-        'Calories calculated for your goal',
-        'Macro split (Protein/Carbs/Fats)',
-        'Diet preferences (Veg/Non-veg/Vegan)',
-        'Meal reminders'
-      ]
+        "Calories calculated for your goal",
+        "Macro split (Protein/Carbs/Fats)",
+        "Diet preferences (Veg/Non-veg/Vegan)",
+        "Meal reminders",
+      ],
     },
     {
       id: 3,
       icon: FiTrendingUp,
-      title: 'Progress Tracker',
-      color: 'from-green-600 to-emerald-600',
-      bgColor: 'bg-green-50',
+      title: "Progress Tracker",
+      color: "from-green-600 to-emerald-600",
+      bgColor: "bg-green-50",
       highlights: [
-        'Weight tracking graph',
-        'Body measurements (Chest, Waist, Arms)',
-        'Workout completion %',
-        'Diet adherence %'
-      ]
+        "Weight tracking graph",
+        "Body measurements (Chest, Waist, Arms)",
+        "Workout completion %",
+        "Diet adherence %",
+      ],
     },
     {
       id: 4,
       icon: FiZap,
-      title: 'Habit Score',
-      color: 'from-purple-600 to-pink-600',
-      bgColor: 'bg-purple-50',
+      title: "Habit Score",
+      color: "from-purple-600 to-pink-600",
+      bgColor: "bg-purple-50",
       highlights: [
-        'Daily habit tracking',
-        'Streak counter',
-        'Motivation messages',
-        'Consistency rewards'
-      ]
+        "Daily habit tracking",
+        "Streak counter",
+        "Motivation messages",
+        "Consistency rewards",
+      ],
     },
     {
       id: 5,
       icon: FiMessageSquare,
-      title: 'AI Chat Assistant',
-      color: 'from-indigo-600 to-purple-600',
-      bgColor: 'bg-indigo-50',
+      title: "AI Chat Assistant",
+      color: "from-indigo-600 to-purple-600",
+      bgColor: "bg-indigo-50",
       highlights: [
-        'Ask fitness questions',
-        'Get instant answers',
-        'Workout modifications',
-        'Diet suggestions'
-      ]
+        "Ask fitness questions",
+        "Get instant answers",
+        "Workout modifications",
+        "Diet suggestions",
+      ],
     },
     {
       id: 6,
       icon: FiSmartphone,
-      title: 'Mobile Friendly',
-      color: 'from-gray-600 to-slate-600',
-      bgColor: 'bg-gray-50',
+      title: "Mobile Friendly",
+      color: "from-gray-600 to-slate-600",
+      bgColor: "bg-gray-50",
       highlights: [
-        'Works on phone, tablet, laptop',
-        'Easy to use anywhere',
-        'No app download needed',
-        'Sync across all devices'
-      ]
-    }
+        "Works on phone, tablet, laptop",
+        "Easy to use anywhere",
+        "No app download needed",
+        "Sync across all devices",
+      ],
+    },
   ];
 
   return (
@@ -115,7 +121,9 @@ const Features = () => {
               </h1>
 
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto animate-slideDown animation-delay-400">
-                Harness the power of AI-driven insights, personalized guidance, and comprehensive tracking to achieve your fitness goals faster than ever before.
+                Harness the power of AI-driven insights, personalized guidance,
+                and comprehensive tracking to achieve your fitness goals faster
+                than ever before.
               </p>
             </div>
           </div>
@@ -133,9 +141,13 @@ const Features = () => {
                     className="group animate-fadeIn"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className={`${feature.bgColor} rounded-2xl p-8 h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 cursor-pointer`}>
+                    <div
+                      className={`${feature.bgColor} rounded-2xl p-8 h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 cursor-pointer`}
+                    >
                       {/* Icon */}
-                      <div className={`inline-flex items-center justify-center w-16 h-16 rounded-xl bg-linear-to-br ${feature.color} text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                      <div
+                        className={`inline-flex items-center justify-center w-16 h-16 rounded-xl bg-linear-to-br ${feature.color} text-white mb-6 group-hover:scale-110 transition-transform duration-300`}
+                      >
                         <IconComponent className="w-8 h-8" />
                       </div>
 
@@ -148,12 +160,12 @@ const Features = () => {
                       <ul className="space-y-4">
                         {feature.highlights.map((highlight, idx) => (
                           <li key={idx} className="flex items-start gap-3">
-                            <div className={`yshrink-0 w-5 h-5 rounded-full bg-linear-to-br ${feature.color} text-white flex items-center justify-center mt-0.5`}>
+                            <div
+                              className={`yshrink-0 w-5 h-5 rounded-full bg-linear-to-br ${feature.color} text-white flex items-center justify-center mt-0.5`}
+                            >
                               <FiCheck className="w-3 h-3" />
                             </div>
-                            <span className="text-gray-700">
-                              {highlight}
-                            </span>
+                            <span className="text-gray-700">{highlight}</span>
                           </li>
                         ))}
                       </ul>
@@ -187,8 +199,13 @@ const Features = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">AI-Powered Personalization</h3>
-                    <p className="text-gray-600 mt-2">Get recommendations tailored to your fitness level, goals, and preferences</p>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      AI-Powered Personalization
+                    </h3>
+                    <p className="text-gray-600 mt-2">
+                      Get recommendations tailored to your fitness level, goals,
+                      and preferences
+                    </p>
                   </div>
                 </div>
 
@@ -199,8 +216,13 @@ const Features = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">Real-Time Progress Monitoring</h3>
-                    <p className="text-gray-600 mt-2">Track your improvements with detailed analytics and visual progress graphs</p>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      Real-Time Progress Monitoring
+                    </h3>
+                    <p className="text-gray-600 mt-2">
+                      Track your improvements with detailed analytics and visual
+                      progress graphs
+                    </p>
                   </div>
                 </div>
 
@@ -211,8 +233,13 @@ const Features = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">24/7 AI Support</h3>
-                    <p className="text-gray-600 mt-2">Get instant answers to your fitness and nutrition questions anytime</p>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      24/7 AI Support
+                    </h3>
+                    <p className="text-gray-600 mt-2">
+                      Get instant answers to your fitness and nutrition
+                      questions anytime
+                    </p>
                   </div>
                 </div>
 
@@ -223,8 +250,13 @@ const Features = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">Seamless Experience</h3>
-                    <p className="text-gray-600 mt-2">Access your dashboard across all devices with automatic synchronization</p>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      Seamless Experience
+                    </h3>
+                    <p className="text-gray-600 mt-2">
+                      Access your dashboard across all devices with automatic
+                      synchronization
+                    </p>
                   </div>
                 </div>
               </div>
@@ -234,19 +266,25 @@ const Features = () => {
                 <div className="group bg-linear-to-br from-blue-600 to-cyan-600 rounded-2xl p-8 text-white cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                   <p className="text-5xl font-bold mb-2">1000+</p>
                   <p className="text-xl opacity-90">Workout Programs</p>
-                  <p className="text-sm opacity-75 mt-2">Updated regularly based on fitness science</p>
+                  <p className="text-sm opacity-75 mt-2">
+                    Updated regularly based on fitness science
+                  </p>
                 </div>
 
                 <div className="group bg-linear-to-br from-green-600 to-emerald-600 rounded-2xl p-8 text-white cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                   <p className="text-5xl font-bold mb-2">5000+</p>
                   <p className="text-xl opacity-90">Meal Plans</p>
-                  <p className="text-sm opacity-75 mt-2">Customized for different diets and goals</p>
+                  <p className="text-sm opacity-75 mt-2">
+                    Customized for different diets and goals
+                  </p>
                 </div>
 
                 <div className="group bg-linear-to-br from-purple-600 to-pink-600 rounded-2xl p-8 text-white cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                   <p className="text-5xl font-bold mb-2">100K+</p>
                   <p className="text-xl opacity-90">Happy Users</p>
-                  <p className="text-sm opacity-75 mt-2">Achieving their fitness goals daily</p>
+                  <p className="text-sm opacity-75 mt-2">
+                    Achieving their fitness goals daily
+                  </p>
                 </div>
               </div>
             </div>
@@ -262,15 +300,17 @@ const Features = () => {
               </h2>
 
               <p className="text-lg sm:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                Join thousands of users who are achieving their goals with NavKalpana's AI-powered fitness platform.
+                Join thousands of users who are achieving their goals with
+                NavKalpana's AI-powered fitness platform.
               </p>
 
               <button
-                onClick={() => navigate('/register')}
+                onClick={() => navigate("/register")}
                 className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-white text-blue-600 rounded-xl font-bold text-lg hover:text-blue-700 transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden inline-flex items-center gap-2"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  Start Free Trial <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  Start Free Trial{" "}
+                  <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </span>
                 <div className="absolute inset-0 bg-gray-100 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
               </button>
@@ -296,21 +336,25 @@ const Features = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { label: 'Personalized Workouts', value: '✓', color: 'blue' },
-                { label: 'Smart Nutrition Plans', value: '✓', color: 'orange' },
-                { label: 'Progress Analytics', value: '✓', color: 'green' },
-                { label: 'Habit Tracking', value: '✓', color: 'purple' },
-                { label: '24/7 AI Assistant', value: '✓', color: 'indigo' },
-                { label: 'Mobile App Access', value: '✓', color: 'gray' },
+                { label: "Personalized Workouts", value: "✓", color: "blue" },
+                { label: "Smart Nutrition Plans", value: "✓", color: "orange" },
+                { label: "Progress Analytics", value: "✓", color: "green" },
+                { label: "Habit Tracking", value: "✓", color: "purple" },
+                { label: "24/7 AI Assistant", value: "✓", color: "indigo" },
+                { label: "Mobile App Access", value: "✓", color: "gray" },
               ].map((item, index) => (
                 <div
                   key={index}
                   className="bg-white rounded-xl p-6 flex items-center gap-4 hover:shadow-lg transition-shadow duration-300"
                 >
-                  <div className={`yshrink-0 w-12 h-12 rounded-full bg-${item.color}-100 text-${item.color}-600 flex items-center justify-center text-xl font-bold`}>
+                  <div
+                    className={`yshrink-0 w-12 h-12 rounded-full bg-${item.color}-100 text-${item.color}-600 flex items-center justify-center text-xl font-bold`}
+                  >
                     {item.value}
                   </div>
-                  <span className="text-lg font-semibold text-gray-900">{item.label}</span>
+                  <span className="text-lg font-semibold text-gray-900">
+                    {item.label}
+                  </span>
                 </div>
               ))}
             </div>

@@ -1,20 +1,25 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FileText, Calendar, BarChart3, TrendingUp, Award } from 'lucide-react';
-import DashboardLayout from '../../../components/Dashboard/DashboardLayout';
-import MultiWeekReport from './MultiWeekReport';
-import WeeklyReport from './WeeklyReport';
-import MonthlyReport from './MonthlyReport';
-import YearlyReport from './YearlyReport';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FileText, Calendar, BarChart3, TrendingUp, Award } from "lucide-react";
+import DashboardLayout from "../../../components/Dashboard/DashboardLayout";
+import MultiWeekReport from "./MultiWeekReport";
+import WeeklyReport from "./WeeklyReport";
+import MonthlyReport from "./MonthlyReport";
+import YearlyReport from "./YearlyReport";
 
 export default function Reports() {
-  const [activeTab, setActiveTab] = useState('weekly');
+  const [activeTab, setActiveTab] = useState("weekly");
 
   const tabs = [
-    { id: 'weekly', label: 'Weekly Report', icon: Calendar, color: 'indigo' },
-    { id: 'monthly', label: 'Monthly Report', icon: BarChart3, color: 'green' },
-    { id: 'multiweek', label: 'Multi-Week Report', icon: TrendingUp, color: 'blue' },
-    { id: 'yearly', label: 'Yearly Report', icon: Award, color: 'purple' },
+    { id: "weekly", label: "Weekly Report", icon: Calendar, color: "indigo" },
+    { id: "monthly", label: "Monthly Report", icon: BarChart3, color: "green" },
+    {
+      id: "multiweek",
+      label: "Multi-Week Report",
+      icon: TrendingUp,
+      color: "blue",
+    },
+    { id: "yearly", label: "Yearly Report", icon: Award, color: "purple" },
   ];
 
   return (
@@ -30,7 +35,8 @@ export default function Reports() {
               </h1>
             </div>
             <p className="text-gray-600">
-              Comprehensive insights into your fitness journey with detailed analytics and trends.
+              Comprehensive insights into your fitness journey with detailed
+              analytics and trends.
             </p>
           </div>
 
@@ -45,8 +51,8 @@ export default function Reports() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
                       activeTab === tab.id
-                        ? 'bg-linear-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        ? "bg-linear-to-r from-indigo-600 to-purple-600 text-white shadow-md"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
                   >
                     <Icon className="w-5 h-5" />
@@ -66,10 +72,10 @@ export default function Reports() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              {activeTab === 'weekly' && <WeeklyReport />}
-              {activeTab === 'monthly' && <MonthlyReport />}
-              {activeTab === 'multiweek' && <MultiWeekReport />}
-              {activeTab === 'yearly' && <YearlyReport />}
+              {activeTab === "weekly" && <WeeklyReport />}
+              {activeTab === "monthly" && <MonthlyReport />}
+              {activeTab === "multiweek" && <MultiWeekReport />}
+              {activeTab === "yearly" && <YearlyReport />}
             </motion.div>
           </AnimatePresence>
         </div>

@@ -7,8 +7,7 @@ export const UploadMultipleToCloudinary = async (multipleImages) => {
       const dataURI = `data:${imgfile.mimetype};base64,${b64}`;
 
       const result = await cloudinary.uploader.upload(dataURI, {
-       
-    //    folder: "HealthNexus/<Name of page>"
+        //    folder: "HealthNexus/<Name of page>"
         folder: "HealthNexus/documents",
         width: 500,
         height: 500,
@@ -26,6 +25,6 @@ export const UploadMultipleToCloudinary = async (multipleImages) => {
     return uploadedImages;
   } catch (error) {
     console.log("Cloudinary Error ", error);
-    throw new Error("Image upload failed");
+    throw new Error("Image upload failed", { cause: error });
   }
 };

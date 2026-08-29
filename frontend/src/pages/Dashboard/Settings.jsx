@@ -1,43 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import DashboardLayout from '../../components/Dashboard/DashboardLayout';
-import { getUserData, updateUserData } from '../../Services/authService';
-import toast from 'react-hot-toast';
-import ResetPasswordModal from '../../modals/ResetPasswordModal';
-import api from "../../config/Api"
+import React, { useState, useEffect } from "react";
+import DashboardLayout from "../../components/Dashboard/DashboardLayout";
+import { getUserData, updateUserData } from "../../Services/authService";
+import toast from "react-hot-toast";
+import ResetPasswordModal from "../../modals/ResetPasswordModal";
+import api from "../../config/Api";
 
 const Settings = () => {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
-   const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
+  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
     useState(false);
-     const [deleteConfirmText, setDeleteConfirmText] = useState('');
-  
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+
   // Profile Information State
   const [profileData, setProfileData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    dateOfBirth: '',
-    gender: '',
+    fullName: "",
+    email: "",
+    phone: "",
+    dateOfBirth: "",
+    gender: "",
     profilePicture: null,
-    address: '',
-    city: '',
-    pin: '',
+    address: "",
+    city: "",
+    pin: "",
   });
   console.log(profileData);
-  
 
   // Body Parameters State (from healthData.vitals)
   const [bodyData, setBodyData] = useState({
-    height: '',
-    heightUnit: 'cm',
-    currentWeight: '',
-    goalWeight: '',
-    bloodGroup: '',
-    heartRate: '',
-    bloodPressure: '',
-    oxygenSaturation: '',
-    temperature: '',
+    height: "",
+    heightUnit: "cm",
+    currentWeight: "",
+    goalWeight: "",
+    bloodGroup: "",
+    heartRate: "",
+    bloodPressure: "",
+    oxygenSaturation: "",
+    temperature: "",
   });
 
   // Medical History State
@@ -51,8 +50,8 @@ const Settings = () => {
   const [lifestyle, setLifestyle] = useState({
     smoking: false,
     alcohol: false,
-    exerciseFrequency: 'None',
-    diet: 'N/A',
+    exerciseFrequency: "None",
+    diet: "N/A",
   });
 
   // Emergency Contacts State
@@ -60,9 +59,9 @@ const Settings = () => {
 
   // Fitness Goals State
   const [fitnessGoals, setFitnessGoals] = useState({
-    primaryGoal: 'maintain',
-    targetDate: '',
-    weeklyWeightGoal: '0.5',
+    primaryGoal: "maintain",
+    targetDate: "",
+    weeklyWeightGoal: "0.5",
   });
 
   // Diet Preferences State
@@ -75,9 +74,9 @@ const Settings = () => {
       keto: false,
       noRestrictions: true,
     },
-    allergies: '',
-    foodsToAvoid: '',
-    mealsPerDay: '4',
+    allergies: "",
+    foodsToAvoid: "",
+    mealsPerDay: "4",
   });
 
   // Notification Settings State
@@ -98,17 +97,17 @@ const Settings = () => {
 
   // App Preferences State
   const [appPreferences, setAppPreferences] = useState({
-    units: 'metric',
-    language: 'English',
-    theme: 'light',
-    weeklyReportDay: 'Monday',
+    units: "metric",
+    language: "English",
+    theme: "light",
+    weeklyReportDay: "Monday",
   });
 
   // Documents State
   const [documents, setDocuments] = useState({
-    gst: '',
-    uidai: '',
-    pan: '',
+    gst: "",
+    uidai: "",
+    pan: "",
   });
 
   // UI State
@@ -116,17 +115,16 @@ const Settings = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
   const [showDeactivateModal, setShowDeactivateModal] = useState(false);
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState("profile");
 
   // Load user data on mount
   useEffect(() => {
     loadUserData();
   }, []);
 
-
-   const deleteAccount = async () => {
+  const deleteAccount = async () => {
     try {
-      const response = await api.delete('/auth/delete-account');
+      const response = await api.delete("/auth/delete-account");
       return response.data;
     } catch (error) {
       console.error("API call failed:", error);
@@ -134,66 +132,64 @@ const Settings = () => {
     }
   };
 
-   const handleDeleteAccount = async() => {
+  const handleDeleteAccount = async () => {
     try {
       setLoading(true);
       await deleteAccount();
-      toast.success('Your account has been deleted. Redirecting...');
-      localStorage.removeItem('healthnexus_user');
+      toast.success("Your account has been deleted. Redirecting...");
+      localStorage.removeItem("healthnexus_user");
       setTimeout(() => {
-        window.location.href = '/';
+        window.location.href = "/";
       }, 2000);
     } catch (error) {
-      toast.error(error?.response?.data?.message || 'Failed to delete account');
+      toast.error(error?.response?.data?.message || "Failed to delete account");
       setLoading(false);
     } finally {
       setShowDeleteModal(false);
-      setDeleteConfirmText('');
+      setDeleteConfirmText("");
     }
   };
 
-
-
-  
   const loadUserData = () => {
     try {
       const user = getUserData();
       if (user) {
         setUserData(user);
-        
+
         // Set profile data
         setProfileData({
-          fullName: user.fullName || '',
-          email: user.email || '',
-          phone: user.phone || '',
-          dateOfBirth: user.dob || '',
-          gender: user.gender || '',
+          fullName: user.fullName || "",
+          email: user.email || "",
+          phone: user.phone || "",
+          dateOfBirth: user.dob || "",
+          gender: user.gender || "",
           profilePicture: user.photo?.url || null,
-          address: user.address || '',
-          city: user.city || '',
-          pin: user.pin || '',
+          address: user.address || "",
+          city: user.city || "",
+          pin: user.pin || "",
         });
 
         // Set body data from healthData.vitals
         if (user.healthData?.vitals) {
           const vitals = user.healthData.vitals;
           setBodyData({
-            height: vitals.height || '',
-            heightUnit: 'cm',
-            currentWeight: vitals.weight || '',
-            goalWeight: '',
-            bloodGroup: vitals.bloodGroup || 'N/A',
-            heartRate: vitals.heartRate || '',
-            bloodPressure: vitals.bloodPressure || 'N/A',
-            oxygenSaturation: vitals.oxygenSaturation || '',
-            temperature: vitals.temperature || '',
+            height: vitals.height || "",
+            heightUnit: "cm",
+            currentWeight: vitals.weight || "",
+            goalWeight: "",
+            bloodGroup: vitals.bloodGroup || "N/A",
+            heartRate: vitals.heartRate || "",
+            bloodPressure: vitals.bloodPressure || "N/A",
+            oxygenSaturation: vitals.oxygenSaturation || "",
+            temperature: vitals.temperature || "",
           });
         }
 
         // Set medical history
         if (user.healthData?.medicalHistory) {
           setMedicalHistory({
-            chronicDiseases: user.healthData.medicalHistory.chronicDiseases || [],
+            chronicDiseases:
+              user.healthData.medicalHistory.chronicDiseases || [],
             surgeries: user.healthData.medicalHistory.surgeries || [],
             allergies: user.healthData.medicalHistory.allergies || [],
           });
@@ -215,8 +211,8 @@ const Settings = () => {
         }
       }
     } catch (error) {
-      console.error('Error loading user data:', error);
-      toast.error('Failed to load user data');
+      console.error("Error loading user data:", error);
+      toast.error("Failed to load user data");
     } finally {
       setLoading(false);
     }
@@ -237,7 +233,9 @@ const Settings = () => {
       bodyData.currentWeight,
       bodyData.bloodGroup,
     ];
-    const filledFields = fields.filter(field => field && field !== 'N/A' && field !== '').length;
+    const filledFields = fields.filter(
+      (field) => field && field !== "N/A" && field !== "",
+    ).length;
     return Math.round((filledFields / fields.length) * 100);
   };
 
@@ -269,7 +267,10 @@ const Settings = () => {
   };
 
   const addEmergencyContact = () => {
-    setEmergencyContacts([...emergencyContacts, { name: '', relationship: '', phone: '' }]);
+    setEmergencyContacts([
+      ...emergencyContacts,
+      { name: "", relationship: "", phone: "" },
+    ]);
     setHasChanges(true);
   };
 
@@ -290,13 +291,15 @@ const Settings = () => {
       restrictions: {
         ...dietPreferences.restrictions,
         [restriction]: !dietPreferences.restrictions[restriction],
-        ...(restriction === 'noRestrictions' ? {
-          vegetarian: false,
-          vegan: false,
-          glutenFree: false,
-          dairyFree: false,
-          keto: false,
-        } : { noRestrictions: false }),
+        ...(restriction === "noRestrictions"
+          ? {
+              vegetarian: false,
+              vegan: false,
+              glutenFree: false,
+              dairyFree: false,
+              keto: false,
+            }
+          : { noRestrictions: false }),
       },
     };
     setDietPreferences(updated);
@@ -309,7 +312,10 @@ const Settings = () => {
   };
 
   const handleNotificationToggle = (notification) => {
-    setNotifications({ ...notifications, [notification]: !notifications[notification] });
+    setNotifications({
+      ...notifications,
+      [notification]: !notifications[notification],
+    });
     setHasChanges(true);
   };
 
@@ -332,10 +338,10 @@ const Settings = () => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        toast.error('File size must be less than 5MB');
+        toast.error("File size must be less than 5MB");
         return;
       }
-      
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileData({ ...profileData, profilePicture: reader.result });
@@ -348,7 +354,7 @@ const Settings = () => {
   const handleSaveChanges = async () => {
     try {
       setLoading(true);
-      
+
       // Prepare updated user data
       const updatedUserData = {
         ...userData,
@@ -384,48 +390,42 @@ const Settings = () => {
       };
 
       // Update in localStorage
-      updateUserData(updatedUserData );
-      
-      toast.success('Settings saved successfully!');
+      updateUserData(updatedUserData);
+
+      toast.success("Settings saved successfully!");
       setHasChanges(false);
     } catch (error) {
-      console.error('Error saving settings:', error);
-      toast.error('Failed to save settings');
+      console.error("Error saving settings:", error);
+      toast.error("Failed to save settings");
     } finally {
       setLoading(false);
     }
   };
 
   console.log(documents);
-  
-  
 
   const handleExportData = () => {
     const dataStr = JSON.stringify(userData, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
     const exportFileDefaultName = `healthnexus-data-${new Date().toISOString()}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
-    toast.success('Data exported successfully!');
+    toast.success("Data exported successfully!");
   };
 
   const handleResetProgress = () => {
     setShowResetModal(false);
-    toast.success('Progress reset successfully');
+    toast.success("Progress reset successfully");
   };
 
   const handleDeactivateAccount = () => {
     setShowDeactivateModal(false);
-    toast.success('Account deactivated successfully');
+    toast.success("Account deactivated successfully");
   };
-
-  
-
- 
-
 
   if (loading) {
     return (
@@ -450,58 +450,60 @@ const Settings = () => {
             <div className="profile-completion">
               <span className="completion-label">Profile Completion</span>
               <div className="completion-bar">
-                <div 
-                  className="completion-fill" 
+                <div
+                  className="completion-fill"
                   style={{ width: `${calculateProfileCompletion()}%` }}
                 ></div>
               </div>
-              <span className="completion-percentage">{calculateProfileCompletion()}%</span>
+              <span className="completion-percentage">
+                {calculateProfileCompletion()}%
+              </span>
             </div>
           </div>
-          <button 
-            className={`btn btn-primary ${!hasChanges ? 'disabled' : ''}`}
+          <button
+            className={`btn btn-primary ${!hasChanges ? "disabled" : ""}`}
             onClick={handleSaveChanges}
             disabled={!hasChanges || loading}
           >
-            {loading ? 'Saving...' : '💾 Save Changes'}
+            {loading ? "Saving..." : "💾 Save Changes"}
           </button>
         </div>
 
         {/* Settings Tabs */}
         <div className="settings-tabs">
-          <button 
-            className={`tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
-            onClick={() => setActiveTab('profile')}
+          <button
+            className={`tab-btn ${activeTab === "profile" ? "active" : ""}`}
+            onClick={() => setActiveTab("profile")}
           >
             👤 Profile
           </button>
-          <button 
-            className={`tab-btn ${activeTab === 'health' ? 'active' : ''}`}
-            onClick={() => setActiveTab('health')}
+          <button
+            className={`tab-btn ${activeTab === "health" ? "active" : ""}`}
+            onClick={() => setActiveTab("health")}
           >
             ❤️ Health Data
           </button>
-          <button 
-            className={`tab-btn ${activeTab === 'medical' ? 'active' : ''}`}
-            onClick={() => setActiveTab('medical')}
+          <button
+            className={`tab-btn ${activeTab === "medical" ? "active" : ""}`}
+            onClick={() => setActiveTab("medical")}
           >
             🏥 Medical History
           </button>
-          <button 
-            className={`tab-btn ${activeTab === 'emergency' ? 'active' : ''}`}
-            onClick={() => setActiveTab('emergency')}
+          <button
+            className={`tab-btn ${activeTab === "emergency" ? "active" : ""}`}
+            onClick={() => setActiveTab("emergency")}
           >
             🚨 Emergency
           </button>
-          <button 
-            className={`tab-btn ${activeTab === 'preferences' ? 'active' : ''}`}
-            onClick={() => setActiveTab('preferences')}
+          <button
+            className={`tab-btn ${activeTab === "preferences" ? "active" : ""}`}
+            onClick={() => setActiveTab("preferences")}
           >
             ⚙️ Preferences
           </button>
-          <button 
-            className={`tab-btn ${activeTab === 'documents' ? 'active' : ''}`}
-            onClick={() => setActiveTab('documents')}
+          <button
+            className={`tab-btn ${activeTab === "documents" ? "active" : ""}`}
+            onClick={() => setActiveTab("documents")}
           >
             📄 Documents
           </button>
@@ -509,17 +511,17 @@ const Settings = () => {
 
         <div className="settings-container">
           {/* Tab 1: Profile Information */}
-          {activeTab === 'profile' && (
+          {activeTab === "profile" && (
             <div className="settings-section">
               <h2>Personal Information</h2>
-              
+
               <div className="profile-picture-section">
                 <div className="current-picture">
                   {profileData.profilePicture ? (
                     <img src={profileData.profilePicture} alt="Profile" />
                   ) : (
                     <div className="placeholder-avatar">
-                      {profileData.fullName?.charAt(0) || '👤'}
+                      {profileData.fullName?.charAt(0) || "👤"}
                     </div>
                   )}
                 </div>
@@ -532,7 +534,7 @@ const Settings = () => {
                     type="file"
                     accept="image/*"
                     onChange={handleProfilePictureUpload}
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                   />
                   <p className="upload-hint">JPG, PNG or GIF (MAX. 5MB)</p>
                 </div>
@@ -544,7 +546,9 @@ const Settings = () => {
                   <input
                     type="text"
                     value={profileData.fullName}
-                    onChange={(e) => handleProfileChange('fullName', e.target.value)}
+                    onChange={(e) =>
+                      handleProfileChange("fullName", e.target.value)
+                    }
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -554,7 +558,9 @@ const Settings = () => {
                   <input
                     type="email"
                     value={profileData.email}
-                    onChange={(e) => handleProfileChange('email', e.target.value)}
+                    onChange={(e) =>
+                      handleProfileChange("email", e.target.value)
+                    }
                     placeholder="your.email@example.com"
                     disabled
                     className="disabled-input"
@@ -567,7 +573,9 @@ const Settings = () => {
                   <input
                     type="tel"
                     value={profileData.phone}
-                    onChange={(e) => handleProfileChange('phone', e.target.value)}
+                    onChange={(e) =>
+                      handleProfileChange("phone", e.target.value)
+                    }
                     placeholder="+91 934 567 89**"
                   />
                 </div>
@@ -577,7 +585,9 @@ const Settings = () => {
                   <input
                     type="date"
                     value={profileData.dateOfBirth}
-                    onChange={(e) => handleProfileChange('dateOfBirth', e.target.value)}
+                    onChange={(e) =>
+                      handleProfileChange("dateOfBirth", e.target.value)
+                    }
                   />
                 </div>
 
@@ -585,7 +595,9 @@ const Settings = () => {
                   <label>Gender</label>
                   <select
                     value={profileData.gender}
-                    onChange={(e) => handleProfileChange('gender', e.target.value)}
+                    onChange={(e) =>
+                      handleProfileChange("gender", e.target.value)
+                    }
                   >
                     <option value="N/A">Not Specified</option>
                     <option value="male">Male</option>
@@ -599,7 +611,9 @@ const Settings = () => {
                   <input
                     type="text"
                     value={profileData.address}
-                    onChange={(e) => handleProfileChange('address', e.target.value)}
+                    onChange={(e) =>
+                      handleProfileChange("address", e.target.value)
+                    }
                     placeholder="Your address"
                   />
                 </div>
@@ -609,7 +623,9 @@ const Settings = () => {
                   <input
                     type="text"
                     value={profileData.city}
-                    onChange={(e) => handleProfileChange('city', e.target.value)}
+                    onChange={(e) =>
+                      handleProfileChange("city", e.target.value)
+                    }
                     placeholder="Your city"
                   />
                 </div>
@@ -619,7 +635,7 @@ const Settings = () => {
                   <input
                     type="text"
                     value={profileData.pin}
-                    onChange={(e) => handleProfileChange('pin', e.target.value)}
+                    onChange={(e) => handleProfileChange("pin", e.target.value)}
                     placeholder="PIN code"
                   />
                 </div>
@@ -628,17 +644,19 @@ const Settings = () => {
           )}
 
           {/* Tab 2: Health Data */}
-          {activeTab === 'health' && (
+          {activeTab === "health" && (
             <div className="settings-section">
               <h2>Health Data</h2>
-              
+
               <div className="form-grid">
                 <div className="form-group">
                   <label>Height (cm)</label>
                   <input
                     type="number"
                     value={bodyData.height}
-                    onChange={(e) => handleBodyDataChange('height', e.target.value)}
+                    onChange={(e) =>
+                      handleBodyDataChange("height", e.target.value)
+                    }
                     placeholder="175"
                   />
                 </div>
@@ -649,7 +667,9 @@ const Settings = () => {
                     type="number"
                     step="0.1"
                     value={bodyData.currentWeight}
-                    onChange={(e) => handleBodyDataChange('currentWeight', e.target.value)}
+                    onChange={(e) =>
+                      handleBodyDataChange("currentWeight", e.target.value)
+                    }
                     placeholder="82.5"
                   />
                 </div>
@@ -660,7 +680,9 @@ const Settings = () => {
                     type="number"
                     step="0.1"
                     value={bodyData.goalWeight}
-                    onChange={(e) => handleBodyDataChange('goalWeight', e.target.value)}
+                    onChange={(e) =>
+                      handleBodyDataChange("goalWeight", e.target.value)
+                    }
                     placeholder="75"
                   />
                 </div>
@@ -669,7 +691,9 @@ const Settings = () => {
                   <label>Blood Group</label>
                   <select
                     value={bodyData.bloodGroup}
-                    onChange={(e) => handleBodyDataChange('bloodGroup', e.target.value)}
+                    onChange={(e) =>
+                      handleBodyDataChange("bloodGroup", e.target.value)
+                    }
                   >
                     <option value="N/A">Not Specified</option>
                     <option value="A+">A+</option>
@@ -688,7 +712,9 @@ const Settings = () => {
                   <input
                     type="number"
                     value={bodyData.heartRate}
-                    onChange={(e) => handleBodyDataChange('heartRate', e.target.value)}
+                    onChange={(e) =>
+                      handleBodyDataChange("heartRate", e.target.value)
+                    }
                     placeholder="72"
                   />
                 </div>
@@ -698,7 +724,9 @@ const Settings = () => {
                   <input
                     type="text"
                     value={bodyData.bloodPressure}
-                    onChange={(e) => handleBodyDataChange('bloodPressure', e.target.value)}
+                    onChange={(e) =>
+                      handleBodyDataChange("bloodPressure", e.target.value)
+                    }
                     placeholder="120/80"
                   />
                 </div>
@@ -708,7 +736,9 @@ const Settings = () => {
                   <input
                     type="number"
                     value={bodyData.oxygenSaturation}
-                    onChange={(e) => handleBodyDataChange('oxygenSaturation', e.target.value)}
+                    onChange={(e) =>
+                      handleBodyDataChange("oxygenSaturation", e.target.value)
+                    }
                     placeholder="98"
                     min="0"
                     max="100"
@@ -721,7 +751,9 @@ const Settings = () => {
                     type="number"
                     step="0.1"
                     value={bodyData.temperature}
-                    onChange={(e) => handleBodyDataChange('temperature', e.target.value)}
+                    onChange={(e) =>
+                      handleBodyDataChange("temperature", e.target.value)
+                    }
                     placeholder="36.5"
                   />
                 </div>
@@ -734,7 +766,9 @@ const Settings = () => {
                     <input
                       type="checkbox"
                       checked={lifestyle.smoking}
-                      onChange={(e) => handleLifestyleChange('smoking', e.target.checked)}
+                      onChange={(e) =>
+                        handleLifestyleChange("smoking", e.target.checked)
+                      }
                     />
                     <span className="checkbox-label">🚬 Smoking</span>
                   </label>
@@ -742,7 +776,9 @@ const Settings = () => {
                     <input
                       type="checkbox"
                       checked={lifestyle.alcohol}
-                      onChange={(e) => handleLifestyleChange('alcohol', e.target.checked)}
+                      onChange={(e) =>
+                        handleLifestyleChange("alcohol", e.target.checked)
+                      }
                     />
                     <span className="checkbox-label">🍷 Alcohol</span>
                   </label>
@@ -753,7 +789,9 @@ const Settings = () => {
                 <label>Exercise Frequency</label>
                 <select
                   value={lifestyle.exerciseFrequency}
-                  onChange={(e) => handleLifestyleChange('exerciseFrequency', e.target.value)}
+                  onChange={(e) =>
+                    handleLifestyleChange("exerciseFrequency", e.target.value)
+                  }
                 >
                   <option value="None">None</option>
                   <option value="Light">Light (1-2 days/week)</option>
@@ -767,7 +805,9 @@ const Settings = () => {
                 <label>Diet Type</label>
                 <select
                   value={lifestyle.diet}
-                  onChange={(e) => handleLifestyleChange('diet', e.target.value)}
+                  onChange={(e) =>
+                    handleLifestyleChange("diet", e.target.value)
+                  }
                 >
                   <option value="N/A">Not Specified</option>
                   <option value="Vegetarian">Vegetarian</option>
@@ -781,55 +821,76 @@ const Settings = () => {
           )}
 
           {/* Tab 3: Medical History */}
-          {activeTab === 'medical' && (
+          {activeTab === "medical" && (
             <div className="settings-section">
               <h2>Medical History</h2>
-              
+
               <div className="form-group">
                 <label>Chronic Diseases</label>
                 <input
                   type="text"
-                  value={medicalHistory.chronicDiseases.join(', ')}
-                  onChange={(e) => handleMedicalHistoryChange('chronicDiseases', e.target.value.split(',').map(s => s.trim()))}
+                  value={medicalHistory.chronicDiseases.join(", ")}
+                  onChange={(e) =>
+                    handleMedicalHistoryChange(
+                      "chronicDiseases",
+                      e.target.value.split(",").map((s) => s.trim()),
+                    )
+                  }
                   placeholder="e.g., Diabetes, Hypertension (comma separated)"
                 />
-                <small className="field-note">Separate multiple entries with commas</small>
+                <small className="field-note">
+                  Separate multiple entries with commas
+                </small>
               </div>
 
               <div className="form-group">
                 <label>Surgeries</label>
                 <input
                   type="text"
-                  value={medicalHistory.surgeries.join(', ')}
-                  onChange={(e) => handleMedicalHistoryChange('surgeries', e.target.value.split(',').map(s => s.trim()))}
+                  value={medicalHistory.surgeries.join(", ")}
+                  onChange={(e) =>
+                    handleMedicalHistoryChange(
+                      "surgeries",
+                      e.target.value.split(",").map((s) => s.trim()),
+                    )
+                  }
                   placeholder="e.g., Appendectomy, Tonsillectomy (comma separated)"
                 />
-                <small className="field-note">Separate multiple entries with commas</small>
+                <small className="field-note">
+                  Separate multiple entries with commas
+                </small>
               </div>
 
               <div className="form-group">
                 <label>Allergies</label>
                 <input
                   type="text"
-                  value={medicalHistory.allergies.join(', ')}
-                  onChange={(e) => handleMedicalHistoryChange('allergies', e.target.value.split(',').map(s => s.trim()))}
+                  value={medicalHistory.allergies.join(", ")}
+                  onChange={(e) =>
+                    handleMedicalHistoryChange(
+                      "allergies",
+                      e.target.value.split(",").map((s) => s.trim()),
+                    )
+                  }
                   placeholder="e.g., Penicillin, Peanuts (comma separated)"
                 />
-                <small className="field-note">Separate multiple entries with commas</small>
+                <small className="field-note">
+                  Separate multiple entries with commas
+                </small>
               </div>
             </div>
           )}
 
           {/* Tab 4: Emergency Contacts */}
-          {activeTab === 'emergency' && (
+          {activeTab === "emergency" && (
             <div className="settings-section">
               <h2>Emergency Contacts</h2>
-              
+
               {emergencyContacts.map((contact, index) => (
                 <div key={index} className="emergency-contact-card">
                   <div className="contact-header">
                     <h4>Contact {index + 1}</h4>
-                    <button 
+                    <button
                       className="btn-icon btn-danger"
                       onClick={() => removeEmergencyContact(index)}
                     >
@@ -842,7 +903,13 @@ const Settings = () => {
                       <input
                         type="text"
                         value={contact.name}
-                        onChange={(e) => handleEmergencyContactChange(index, 'name', e.target.value)}
+                        onChange={(e) =>
+                          handleEmergencyContactChange(
+                            index,
+                            "name",
+                            e.target.value,
+                          )
+                        }
                         placeholder="Contact name"
                       />
                     </div>
@@ -851,7 +918,13 @@ const Settings = () => {
                       <input
                         type="text"
                         value={contact.relationship}
-                        onChange={(e) => handleEmergencyContactChange(index, 'relationship', e.target.value)}
+                        onChange={(e) =>
+                          handleEmergencyContactChange(
+                            index,
+                            "relationship",
+                            e.target.value,
+                          )
+                        }
                         placeholder="e.g., Spouse, Parent"
                       />
                     </div>
@@ -860,7 +933,13 @@ const Settings = () => {
                       <input
                         type="tel"
                         value={contact.phone}
-                        onChange={(e) => handleEmergencyContactChange(index, 'phone', e.target.value)}
+                        onChange={(e) =>
+                          handleEmergencyContactChange(
+                            index,
+                            "phone",
+                            e.target.value,
+                          )
+                        }
                         placeholder="Phone number"
                       />
                     </div>
@@ -868,26 +947,29 @@ const Settings = () => {
                 </div>
               ))}
 
-              <button className="btn btn-secondary" onClick={addEmergencyContact}>
+              <button
+                className="btn btn-secondary"
+                onClick={addEmergencyContact}
+              >
                 ➕ Add Emergency Contact
               </button>
             </div>
           )}
 
           {/* Tab 5: Preferences */}
-          {activeTab === 'preferences' && (
+          {activeTab === "preferences" && (
             <>
               {/* Fitness Goals */}
               <div className="settings-section">
                 <h2>Fitness Goals</h2>
-                
+
                 <div className="form-group">
                   <label>Primary Goal</label>
                   <div className="radio-group">
                     {[
-                      { value: 'weight-loss', label: '🔥 Weight Loss' },
-                      { value: 'muscle-gain', label: '💪 Muscle Gain' },
-                      { value: 'maintain', label: '✓ Maintain Weight' },
+                      { value: "weight-loss", label: "🔥 Weight Loss" },
+                      { value: "muscle-gain", label: "💪 Muscle Gain" },
+                      { value: "maintain", label: "✓ Maintain Weight" },
                     ].map((goal) => (
                       <label key={goal.value} className="radio-option">
                         <input
@@ -895,7 +977,12 @@ const Settings = () => {
                           name="primaryGoal"
                           value={goal.value}
                           checked={fitnessGoals.primaryGoal === goal.value}
-                          onChange={(e) => handleFitnessGoalsChange('primaryGoal', e.target.value)}
+                          onChange={(e) =>
+                            handleFitnessGoalsChange(
+                              "primaryGoal",
+                              e.target.value,
+                            )
+                          }
                         />
                         <span className="radio-label">{goal.label}</span>
                       </label>
@@ -909,7 +996,9 @@ const Settings = () => {
                     <input
                       type="date"
                       value={fitnessGoals.targetDate}
-                      onChange={(e) => handleFitnessGoalsChange('targetDate', e.target.value)}
+                      onChange={(e) =>
+                        handleFitnessGoalsChange("targetDate", e.target.value)
+                      }
                     />
                   </div>
 
@@ -917,7 +1006,12 @@ const Settings = () => {
                     <label>Weekly Weight Goal</label>
                     <select
                       value={fitnessGoals.weeklyWeightGoal}
-                      onChange={(e) => handleFitnessGoalsChange('weeklyWeightGoal', e.target.value)}
+                      onChange={(e) =>
+                        handleFitnessGoalsChange(
+                          "weeklyWeightGoal",
+                          e.target.value,
+                        )
+                      }
                     >
                       <option value="0.25">0.25 kg per week</option>
                       <option value="0.5">0.5 kg per week</option>
@@ -931,25 +1025,31 @@ const Settings = () => {
               {/* Diet Preferences */}
               <div className="settings-section">
                 <h2>Diet Preferences</h2>
-                
+
                 <div className="form-group">
                   <label>Dietary Restrictions</label>
                   <div className="checkbox-group">
                     {[
-                      { key: 'vegetarian', label: '🥗 Vegetarian' },
-                      { key: 'vegan', label: '🌱 Vegan' },
-                      { key: 'glutenFree', label: '🌾 Gluten-free' },
-                      { key: 'dairyFree', label: '🥛 Dairy-free' },
-                      { key: 'keto', label: '🥑 Keto' },
-                      { key: 'noRestrictions', label: '✓ No restrictions' },
+                      { key: "vegetarian", label: "🥗 Vegetarian" },
+                      { key: "vegan", label: "🌱 Vegan" },
+                      { key: "glutenFree", label: "🌾 Gluten-free" },
+                      { key: "dairyFree", label: "🥛 Dairy-free" },
+                      { key: "keto", label: "🥑 Keto" },
+                      { key: "noRestrictions", label: "✓ No restrictions" },
                     ].map((restriction) => (
                       <label key={restriction.key} className="checkbox-option">
                         <input
                           type="checkbox"
-                          checked={dietPreferences.restrictions[restriction.key]}
-                          onChange={() => handleDietRestrictionChange(restriction.key)}
+                          checked={
+                            dietPreferences.restrictions[restriction.key]
+                          }
+                          onChange={() =>
+                            handleDietRestrictionChange(restriction.key)
+                          }
                         />
-                        <span className="checkbox-label">{restriction.label}</span>
+                        <span className="checkbox-label">
+                          {restriction.label}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -961,7 +1061,9 @@ const Settings = () => {
                     <input
                       type="text"
                       value={dietPreferences.allergies}
-                      onChange={(e) => handleDietPreferenceChange('allergies', e.target.value)}
+                      onChange={(e) =>
+                        handleDietPreferenceChange("allergies", e.target.value)
+                      }
                       placeholder="e.g., Peanuts, Shellfish"
                     />
                   </div>
@@ -971,7 +1073,12 @@ const Settings = () => {
                     <input
                       type="text"
                       value={dietPreferences.foodsToAvoid}
-                      onChange={(e) => handleDietPreferenceChange('foodsToAvoid', e.target.value)}
+                      onChange={(e) =>
+                        handleDietPreferenceChange(
+                          "foodsToAvoid",
+                          e.target.value,
+                        )
+                      }
                       placeholder="e.g., Mushrooms, Olives"
                     />
                   </div>
@@ -980,7 +1087,12 @@ const Settings = () => {
                     <label>Meals Per Day</label>
                     <select
                       value={dietPreferences.mealsPerDay}
-                      onChange={(e) => handleDietPreferenceChange('mealsPerDay', e.target.value)}
+                      onChange={(e) =>
+                        handleDietPreferenceChange(
+                          "mealsPerDay",
+                          e.target.value,
+                        )
+                      }
                     >
                       <option value="3">3 meals</option>
                       <option value="4">4 meals</option>
@@ -994,26 +1106,54 @@ const Settings = () => {
               {/* Notification Settings */}
               <div className="settings-section">
                 <h2>Notifications</h2>
-                
+
                 <div className="toggle-list">
                   {[
-                    { key: 'workoutReminders', label: 'Workout Reminders', description: 'Get notified when it\'s time to work out' },
-                    { key: 'mealReminders', label: 'Meal Reminders', description: 'Reminders for meal logging and prep' },
-                    { key: 'progressUpdates', label: 'Progress Updates', description: 'Weekly summary of your achievements' },
-                    { key: 'motivationMessages', label: 'Motivation Messages', description: 'Daily inspirational quotes and tips' },
-                    { key: 'emailSummaries', label: 'Email Summaries', description: 'Monthly progress reports via email' },
-                    { key: 'smsAlerts', label: 'SMS Alerts', description: 'Important notifications via SMS' },
+                    {
+                      key: "workoutReminders",
+                      label: "Workout Reminders",
+                      description: "Get notified when it's time to work out",
+                    },
+                    {
+                      key: "mealReminders",
+                      label: "Meal Reminders",
+                      description: "Reminders for meal logging and prep",
+                    },
+                    {
+                      key: "progressUpdates",
+                      label: "Progress Updates",
+                      description: "Weekly summary of your achievements",
+                    },
+                    {
+                      key: "motivationMessages",
+                      label: "Motivation Messages",
+                      description: "Daily inspirational quotes and tips",
+                    },
+                    {
+                      key: "emailSummaries",
+                      label: "Email Summaries",
+                      description: "Monthly progress reports via email",
+                    },
+                    {
+                      key: "smsAlerts",
+                      label: "SMS Alerts",
+                      description: "Important notifications via SMS",
+                    },
                   ].map((notification) => (
                     <div key={notification.key} className="toggle-item">
                       <div className="toggle-info">
                         <div className="toggle-label">{notification.label}</div>
-                        <div className="toggle-description">{notification.description}</div>
+                        <div className="toggle-description">
+                          {notification.description}
+                        </div>
                       </div>
                       <label className="toggle-switch">
                         <input
                           type="checkbox"
                           checked={notifications[notification.key]}
-                          onChange={() => handleNotificationToggle(notification.key)}
+                          onChange={() =>
+                            handleNotificationToggle(notification.key)
+                          }
                         />
                         <span className="toggle-slider"></span>
                       </label>
@@ -1025,7 +1165,7 @@ const Settings = () => {
               {/* App Preferences */}
               <div className="settings-section">
                 <h2>App Settings</h2>
-                
+
                 <div className="form-group">
                   <label>Units</label>
                   <div className="radio-group horizontal">
@@ -1034,8 +1174,10 @@ const Settings = () => {
                         type="radio"
                         name="units"
                         value="metric"
-                        checked={appPreferences.units === 'metric'}
-                        onChange={(e) => handleAppPreferenceChange('units', e.target.value)}
+                        checked={appPreferences.units === "metric"}
+                        onChange={(e) =>
+                          handleAppPreferenceChange("units", e.target.value)
+                        }
                       />
                       <span className="radio-label">Metric (kg/cm)</span>
                     </label>
@@ -1044,8 +1186,10 @@ const Settings = () => {
                         type="radio"
                         name="units"
                         value="imperial"
-                        checked={appPreferences.units === 'imperial'}
-                        onChange={(e) => handleAppPreferenceChange('units', e.target.value)}
+                        checked={appPreferences.units === "imperial"}
+                        onChange={(e) =>
+                          handleAppPreferenceChange("units", e.target.value)
+                        }
                       />
                       <span className="radio-label">Imperial (lbs/inches)</span>
                     </label>
@@ -1057,7 +1201,9 @@ const Settings = () => {
                     <label>Language</label>
                     <select
                       value={appPreferences.language}
-                      onChange={(e) => handleAppPreferenceChange('language', e.target.value)}
+                      onChange={(e) =>
+                        handleAppPreferenceChange("language", e.target.value)
+                      }
                     >
                       <option value="English">English</option>
                       <option value="Spanish">Spanish</option>
@@ -1070,7 +1216,12 @@ const Settings = () => {
                     <label>Weekly Report Day</label>
                     <select
                       value={appPreferences.weeklyReportDay}
-                      onChange={(e) => handleAppPreferenceChange('weeklyReportDay', e.target.value)}
+                      onChange={(e) =>
+                        handleAppPreferenceChange(
+                          "weeklyReportDay",
+                          e.target.value,
+                        )
+                      }
                     >
                       <option value="Monday">Monday</option>
                       <option value="Sunday">Sunday</option>
@@ -1082,9 +1233,9 @@ const Settings = () => {
                   <label>Theme</label>
                   <div className="radio-group horizontal">
                     {[
-                      { value: 'light', label: '☀️ Light' },
-                      { value: 'dark', label: '🌙 Dark' },
-                      { value: 'system', label: '💻 System' },
+                      { value: "light", label: "☀️ Light" },
+                      { value: "dark", label: "🌙 Dark" },
+                      { value: "system", label: "💻 System" },
                     ].map((theme) => (
                       <label key={theme.value} className="radio-option">
                         <input
@@ -1092,7 +1243,9 @@ const Settings = () => {
                           name="theme"
                           value={theme.value}
                           checked={appPreferences.theme === theme.value}
-                          onChange={(e) => handleAppPreferenceChange('theme', e.target.value)}
+                          onChange={(e) =>
+                            handleAppPreferenceChange("theme", e.target.value)
+                          }
                         />
                         <span className="radio-label">{theme.label}</span>
                       </label>
@@ -1104,17 +1257,19 @@ const Settings = () => {
           )}
 
           {/* Tab 6: Documents */}
-          {activeTab === 'documents' && (
+          {activeTab === "documents" && (
             <div className="settings-section">
               <h2>Documents</h2>
-              
+
               <div className="form-grid">
                 <div className="form-group">
                   <label>GST Number</label>
                   <input
                     type="text"
                     value={documents.gst}
-                    onChange={(e) => handleDocumentsChange('gst', e.target.value)}
+                    onChange={(e) =>
+                      handleDocumentsChange("gst", e.target.value)
+                    }
                     placeholder="GST number"
                   />
                 </div>
@@ -1124,7 +1279,9 @@ const Settings = () => {
                   <input
                     type="text"
                     value={documents.uidai}
-                    onChange={(e) => handleDocumentsChange('uidai', e.target.value)}
+                    onChange={(e) =>
+                      handleDocumentsChange("uidai", e.target.value)
+                    }
                     placeholder="Aadhaar number"
                   />
                 </div>
@@ -1134,7 +1291,9 @@ const Settings = () => {
                   <input
                     type="text"
                     value={documents.pan}
-                    onChange={(e) => handleDocumentsChange('pan', e.target.value)}
+                    onChange={(e) =>
+                      handleDocumentsChange("pan", e.target.value)
+                    }
                     placeholder="PAN number"
                   />
                 </div>
@@ -1145,32 +1304,36 @@ const Settings = () => {
           {/* Privacy & Security */}
           <div className="settings-section">
             <h2>Privacy & Security</h2>
-            
+
             <div className="action-list">
               <div className="action-item">
                 <div className="action-info">
                   <div className="action-label">🔒 Change Password</div>
-                  <div className="action-description">Update your account password</div>
+                  <div className="action-description">
+                    Update your account password
+                  </div>
                 </div>
                 <button
-                type="button"
-                onClick={() => setIsResetPasswordModalOpen(true)}
-                className="px-6 py-2 rounded-md bg-[#6626c0] text-white hover:scale-105 hover:shadow-2xl hover:bg-[#481b86] transition duration-300"
-              >
-                Change
-              </button>
+                  type="button"
+                  onClick={() => setIsResetPasswordModalOpen(true)}
+                  className="px-6 py-2 rounded-md bg-[#6626c0] text-white hover:scale-105 hover:shadow-2xl hover:bg-[#481b86] transition duration-300"
+                >
+                  Change
+                </button>
               </div>
 
               <div className="action-item">
                 <div className="action-info">
                   <div className="action-label">Two-Factor Authentication</div>
-                  <div className="action-description">Add an extra layer of security</div>
+                  <div className="action-description">
+                    Add an extra layer of security
+                  </div>
                 </div>
                 <label className="toggle-switch">
                   <input
                     type="checkbox"
                     checked={privacy.twoFactorAuth}
-                    onChange={() => handlePrivacyToggle('twoFactorAuth')}
+                    onChange={() => handlePrivacyToggle("twoFactorAuth")}
                   />
                   <span className="toggle-slider"></span>
                 </label>
@@ -1179,9 +1342,14 @@ const Settings = () => {
               <div className="action-item">
                 <div className="action-info">
                   <div className="action-label">📊 Export Data</div>
-                  <div className="action-description">Download all your data in JSON format</div>
+                  <div className="action-description">
+                    Download all your data in JSON format
+                  </div>
                 </div>
-                <button className="btn btn-secondary" onClick={handleExportData}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleExportData}
+                >
                   Export
                 </button>
               </div>
@@ -1189,13 +1357,15 @@ const Settings = () => {
               <div className="action-item">
                 <div className="action-info">
                   <div className="action-label">Medical Disclaimer</div>
-                  <div className="action-description">I acknowledge this app is not medical advice</div>
+                  <div className="action-description">
+                    I acknowledge this app is not medical advice
+                  </div>
                 </div>
                 <label className="toggle-switch">
                   <input
                     type="checkbox"
                     checked={privacy.medicalDisclaimer}
-                    onChange={() => handlePrivacyToggle('medicalDisclaimer')}
+                    onChange={() => handlePrivacyToggle("medicalDisclaimer")}
                   />
                   <span className="toggle-slider"></span>
                 </label>
@@ -1206,15 +1376,19 @@ const Settings = () => {
           {/* Danger Zone */}
           <div className="settings-section danger-zone">
             <h2>⚠️ Danger Zone</h2>
-            <p className="danger-warning">These actions are irreversible. Please be certain.</p>
-            
+            <p className="danger-warning">
+              These actions are irreversible. Please be certain.
+            </p>
+
             <div className="danger-actions">
               <div className="danger-item">
                 <div className="danger-info">
                   <div className="danger-label">Reset All Progress</div>
-                  <div className="danger-description">Clear all workout and diet data, start fresh</div>
+                  <div className="danger-description">
+                    Clear all workout and diet data, start fresh
+                  </div>
                 </div>
-                <button 
+                <button
                   className="btn btn-danger-outline"
                   onClick={() => setShowResetModal(true)}
                 >
@@ -1225,9 +1399,11 @@ const Settings = () => {
               <div className="danger-item">
                 <div className="danger-info">
                   <div className="danger-label">Deactivate Account</div>
-                  <div className="danger-description">Temporarily disable your account (reversible)</div>
+                  <div className="danger-description">
+                    Temporarily disable your account (reversible)
+                  </div>
                 </div>
-                <button 
+                <button
                   className="btn btn-danger-outline"
                   onClick={() => setShowDeactivateModal(true)}
                 >
@@ -1238,12 +1414,13 @@ const Settings = () => {
               <div className="danger-item">
                 <div className="danger-info">
                   <div className="danger-label">Delete Account</div>
-                  <div className="danger-description">Permanently delete your account and all data</div>
+                  <div className="danger-description">
+                    Permanently delete your account and all data
+                  </div>
                 </div>
-                <button 
+                <button
                   className="btn btn-danger"
-                  onClick={()=>handleDeleteAccount()}
-                  
+                  onClick={() => handleDeleteAccount()}
                 >
                   Delete Account
                 </button>
@@ -1254,15 +1431,27 @@ const Settings = () => {
 
         {/* Modals */}
         {showResetModal && (
-          <div className="modal-overlay" onClick={() => setShowResetModal(false)}>
+          <div
+            className="modal-overlay"
+            onClick={() => setShowResetModal(false)}
+          >
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <h3>Reset All Progress?</h3>
-              <p>This will permanently delete all your workout and diet data. This action cannot be undone.</p>
+              <p>
+                This will permanently delete all your workout and diet data.
+                This action cannot be undone.
+              </p>
               <div className="modal-actions">
-                <button className="btn btn-secondary" onClick={() => setShowResetModal(false)}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowResetModal(false)}
+                >
                   Cancel
                 </button>
-                <button className="btn btn-danger" onClick={handleResetProgress}>
+                <button
+                  className="btn btn-danger"
+                  onClick={handleResetProgress}
+                >
                   Yes, Reset Everything
                 </button>
               </div>
@@ -1271,15 +1460,27 @@ const Settings = () => {
         )}
 
         {showDeactivateModal && (
-          <div className="modal-overlay" onClick={() => setShowDeactivateModal(false)}>
+          <div
+            className="modal-overlay"
+            onClick={() => setShowDeactivateModal(false)}
+          >
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <h3>Deactivate Account?</h3>
-              <p>Your account will be temporarily disabled. You can reactivate it anytime by logging in.</p>
+              <p>
+                Your account will be temporarily disabled. You can reactivate it
+                anytime by logging in.
+              </p>
               <div className="modal-actions">
-                <button className="btn btn-secondary" onClick={() => setShowDeactivateModal(false)}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowDeactivateModal(false)}
+                >
                   Cancel
                 </button>
-                <button className="btn btn-danger" onClick={handleDeactivateAccount}>
+                <button
+                  className="btn btn-danger"
+                  onClick={handleDeactivateAccount}
+                >
                   Deactivate Account
                 </button>
               </div>
@@ -1288,17 +1489,33 @@ const Settings = () => {
         )}
 
         {showDeleteModal && (
-          <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
+          <div
+            className="modal-overlay"
+            onClick={() => setShowDeleteModal(false)}
+          >
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <h3>Delete Account Permanently?</h3>
-              <p>⚠️ This action is irreversible. All your data will be permanently deleted.</p>
+              <p>
+                ⚠️ This action is irreversible. All your data will be
+                permanently deleted.
+              </p>
               <p className="danger-text">Type "DELETE" to confirm:</p>
-              <input type="text" className="confirm-input" placeholder="Type DELETE" />
+              <input
+                type="text"
+                className="confirm-input"
+                placeholder="Type DELETE"
+              />
               <div className="modal-actions">
-                <button className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowDeleteModal(false)}
+                >
                   Cancel
                 </button>
-                <button className="btn btn-danger" onClick={handleDeleteAccount}>
+                <button
+                  className="btn btn-danger"
+                  onClick={handleDeleteAccount}
+                >
                   Permanently Delete
                 </button>
               </div>
@@ -1306,49 +1523,57 @@ const Settings = () => {
           </div>
         )}
 
-       
         {isResetPasswordModalOpen && (
-          <ResetPasswordModal onClose={() =>
-            setIsResetPasswordModalOpen(false)
-          } />
+          <ResetPasswordModal
+            onClose={() => setIsResetPasswordModalOpen(false)}
+          />
         )}
 
         {showDeleteModal && (
-  <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
-    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-      <h3>Delete Account Permanently?</h3>
-      <p>⚠️ This action is irreversible. All your data will be permanently deleted.</p>
-      <p className="danger-text">Type <strong>DELETE</strong> to confirm:</p>
-      <input
-        type="text"
-        className="confirm-input"
-        placeholder="Type DELETE"
-        value={deleteConfirmText}
-        onChange={(e) => setDeleteConfirmText(e.target.value)}
-      />
-      <div className="modal-actions">
-        <button className="btn btn-secondary" onClick={() => {
-          setShowDeleteModal(false);
-          setDeleteConfirmText('');
-        }}>
-          Cancel
-        </button>
-        <button
-          className="btn btn-danger"
-          disabled={deleteConfirmText !== 'DELETE'}
-          onClick={handleDeleteAccount}
-        >
-          Permanently Delete
-        </button>
+          <div
+            className="modal-overlay"
+            onClick={() => setShowDeleteModal(false)}
+          >
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <h3>Delete Account Permanently?</h3>
+              <p>
+                ⚠️ This action is irreversible. All your data will be
+                permanently deleted.
+              </p>
+              <p className="danger-text">
+                Type <strong>DELETE</strong> to confirm:
+              </p>
+              <input
+                type="text"
+                className="confirm-input"
+                placeholder="Type DELETE"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+              />
+              <div className="modal-actions">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setDeleteConfirmText("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-danger"
+                  disabled={deleteConfirmText !== "DELETE"}
+                  onClick={handleDeleteAccount}
+                >
+                  Permanently Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  </div>
-)}  
 
-
-      </div>
-
-      <style >{`
+      <style>{`
         .settings-page {
           padding: 2rem;
           max-width: 1400px;

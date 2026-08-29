@@ -37,7 +37,6 @@ const ResetPasswordModal = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50 px-4">
       <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl animate-fadeIn">
-
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b">
           <h2 className="text-xl font-semibold text-gray-800">
@@ -54,7 +53,6 @@ const ResetPasswordModal = ({ onClose }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
-
           <InputField
             label="Old Password *"
             name="oldPassword"
@@ -129,9 +127,7 @@ const InputField = ({ label, error, ...props }) => (
         ${error ? "border-red-500 bg-red-50" : "border-gray-300"}
       `}
     />
-    {error && (
-      <p className="text-red-500 text-xs mt-1">{error}</p>
-    )}
+    {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
   </div>
 );
 

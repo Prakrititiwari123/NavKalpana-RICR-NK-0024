@@ -15,8 +15,7 @@ const SendEmail = async (to, subject, message) => {
     });
 
     console.log("121212");
-    
-   
+
     const mailOption = {
       from: process.env.GMAIL_USER,
       to,

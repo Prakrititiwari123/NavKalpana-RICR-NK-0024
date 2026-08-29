@@ -55,7 +55,7 @@ The API base URL is defined in `src/config/Api.jsx`.
 Current default:
 
 ```js
-baseURL: "http://localhost:4500"
+baseURL: "http://localhost:4500";
 ```
 
 If your backend runs on a different host or port, update this value. The backend defaults to port 5000 unless overridden with `PORT`.
