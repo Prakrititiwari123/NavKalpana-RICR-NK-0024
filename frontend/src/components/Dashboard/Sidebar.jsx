@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   FiBarChart2,
   FiMessageSquare,
@@ -7,12 +7,12 @@ import {
   FiMenu,
   FiX,
   FiSettings,
-  FiUser
-} from 'react-icons/fi';
-import { GiWeightLiftingUp } from 'react-icons/gi';
-import { IoRestaurant } from 'react-icons/io5';
-import { GiFlexibleLamp } from 'react-icons/gi';
-import { GiTreeGrowth } from 'react-icons/gi';
+  FiUser,
+} from "react-icons/fi";
+import { GiWeightLiftingUp } from "react-icons/gi";
+import { IoRestaurant } from "react-icons/io5";
+import { GiFlexibleLamp } from "react-icons/gi";
+import { GiTreeGrowth } from "react-icons/gi";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -22,74 +22,74 @@ const Sidebar = () => {
   const menuItems = [
     {
       id: 0,
-      label: 'Profile',
+      label: "Profile",
       icon: FiUser,
-      path: '/profile',
-      color: 'text-pink-600'
+      path: "/profile",
+      color: "text-pink-600",
     },
     {
       id: 1,
-      label: 'Tracking',
+      label: "Tracking",
       icon: FiTrendingUp,
-      path: '/tracking',
-      color: 'text-purple-600'
+      path: "/tracking",
+      color: "text-purple-600",
     },
     {
       id: 2,
-      label: 'Analytics',
+      label: "Analytics",
       icon: FiBarChart2,
-      path: '/analytics',
-      color: 'text-blue-600'
+      path: "/analytics",
+      color: "text-blue-600",
     },
     {
       id: 2.5,
-      label: 'Reports',
+      label: "Reports",
       icon: FiBarChart2,
-      path: '/reports',
-      color: 'text-green-600'
+      path: "/reports",
+      color: "text-green-600",
     },
     {
       id: 3,
-      label: 'Chat',
+      label: "Chat",
       icon: FiMessageSquare,
-      path: '/chat',
-      color: 'text-purple-600'
+      path: "/chat",
+      color: "text-purple-600",
     },
     {
       id: 4,
-      label: 'Diet',
+      label: "Diet",
       icon: IoRestaurant,
-      path: '/diet',
-      color: 'text-orange-600'
+      path: "/diet",
+      color: "text-orange-600",
     },
     {
       id: 5,
-      label: 'Workout',
+      label: "Workout",
       icon: GiWeightLiftingUp,
-      path: '/workout',
-      color: 'text-indigo-600'
+      path: "/workout",
+      color: "text-indigo-600",
     },
     {
       id: 5.5,
-      label: 'Overtraining',
+      label: "Overtraining",
       icon: GiFlexibleLamp,
-      path: '/overtraining',
-      color: 'text-red-600'
+      path: "/overtraining",
+      color: "text-red-600",
     },
     {
       id: 5.75,
-      label: 'Sustainability',
+      label: "Sustainability",
       icon: GiTreeGrowth,
-      path: '/sustainability',
-      color: 'text-teal-600'
+      path: "/sustainability",
+      color: "text-teal-600",
     },
     {
       id: 6,
-      label: 'Settings',
+      label: "Settings",
       icon: FiSettings,
-      path: '/settings',
-      color: 'text-red-600'
-    }
+      path: "/settings",
+      color: "text-red-600",
+    },
   ];
 
   const handleNavigation = (path) => {
@@ -98,7 +98,9 @@ const Sidebar = () => {
   };
 
   const isActive = (path) => {
-    return location.pathname === path || location.pathname.startsWith(path + '/');
+    return (
+      location.pathname === path || location.pathname.startsWith(path + "/")
+    );
   };
 
   return (
@@ -118,7 +120,7 @@ const Sidebar = () => {
       {/* Sidebar - Fixed positioning starting below navbar */}
       <aside
         className={`fixed left-0 top-20 h-[calc(100vh-80px)] bg-linear-to-b from-white to-gray-50 shadow-lg lg:shadow-xl border-r border-gray-200 transition-all duration-300 z-40 ${
-          isOpen ? 'w-64' : 'w-64 -translate-x-full lg:translate-x-0'
+          isOpen ? "w-64" : "w-64 -translate-x-full lg:translate-x-0"
         }`}
       >
         {/* Navigation Menu */}
@@ -133,13 +135,13 @@ const Sidebar = () => {
                 onClick={() => handleNavigation(item.path)}
                 className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 group ${
                   active
-                    ? 'bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? "bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 <Icon
                   className={`w-5 h-5 ${
-                    active ? 'text-white' : item.color
+                    active ? "text-white" : item.color
                   } transition-colors group-hover:scale-110 duration-300`}
                 />
                 <span className="font-semibold text-sm">{item.label}</span>

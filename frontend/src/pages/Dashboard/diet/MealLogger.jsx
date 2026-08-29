@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
-import { Camera, Clock, CheckCircle2 } from 'lucide-react';
+import React, { useState } from "react";
+import { Camera, Clock, CheckCircle2 } from "lucide-react";
 
 const MealLogger = ({ meal, onSubmit, date }) => {
   const [portion, setPortion] = useState(1);
-  const [notes, setNotes] = useState('');
-  const [time, setTime] = useState('');
+  const [notes, setNotes] = useState("");
+  const [time, setTime] = useState("");
   const [photo, setPhoto] = useState(null);
 
   const handleSubmit = () => {
-    onSubmit && onSubmit({
-      meal,
-      portion,
-      notes,
-      time: time || new Date().toLocaleTimeString(),
-      date: date || new Date().toISOString(),
-      photo,
-    });
+    onSubmit &&
+      onSubmit({
+        meal,
+        portion,
+        notes,
+        time: time || new Date().toLocaleTimeString(),
+        date: date || new Date().toISOString(),
+        photo,
+      });
   };
 
   return (
@@ -26,7 +27,7 @@ const MealLogger = ({ meal, onSubmit, date }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {['Ate as planned', 'Half portion', 'Skipped meal'].map((label) => (
+        {["Ate as planned", "Half portion", "Skipped meal"].map((label) => (
           <button
             key={label}
             className="py-2 rounded-lg border border-gray-200 hover:border-emerald-400 hover:bg-emerald-50 text-sm font-semibold text-gray-700"
@@ -38,7 +39,9 @@ const MealLogger = ({ meal, onSubmit, date }) => {
       </div>
 
       <div>
-        <label className="text-sm font-semibold text-gray-700">Portion Size</label>
+        <label className="text-sm font-semibold text-gray-700">
+          Portion Size
+        </label>
         <input
           type="range"
           min="0.5"
@@ -53,7 +56,9 @@ const MealLogger = ({ meal, onSubmit, date }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="text-sm font-semibold text-gray-700">Meal Time</label>
+          <label className="text-sm font-semibold text-gray-700">
+            Meal Time
+          </label>
           <div className="flex items-center gap-2 mt-2">
             <Clock className="w-4 h-4 text-gray-500" />
             <input
@@ -65,7 +70,9 @@ const MealLogger = ({ meal, onSubmit, date }) => {
           </div>
         </div>
         <div>
-          <label className="text-sm font-semibold text-gray-700">Upload Photo</label>
+          <label className="text-sm font-semibold text-gray-700">
+            Upload Photo
+          </label>
           <div className="mt-2 flex items-center gap-2">
             <label className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg cursor-pointer flex items-center gap-2">
               <Camera className="w-4 h-4" />
@@ -77,7 +84,9 @@ const MealLogger = ({ meal, onSubmit, date }) => {
                 onChange={(event) => setPhoto(event.target.files?.[0] || null)}
               />
             </label>
-            {photo && <span className="text-xs text-gray-500">{photo.name}</span>}
+            {photo && (
+              <span className="text-xs text-gray-500">{photo.name}</span>
+            )}
           </div>
         </div>
       </div>

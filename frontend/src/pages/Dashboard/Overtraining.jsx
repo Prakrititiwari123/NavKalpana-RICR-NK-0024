@@ -1,22 +1,37 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Heart, AlertTriangle, Activity, BarChart3 } from 'lucide-react';
-import DashboardLayout from '../../components/Dashboard/DashboardLayout';
-import FatigueScore from './overtraining/FatigueScore';
-import RecoveryRate from './overtraining/RecoveryRate';
-import InjuryRiskLevel from './overtraining/InjuryRiskLevel';
-import OvertrainingAlertCount from './overtraining/OvertrainingAlertCount';
-import RecoveryDayFrequency from './overtraining/RecoveryDayFrequency';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Zap, Heart, AlertTriangle, Activity, BarChart3 } from "lucide-react";
+import DashboardLayout from "../../components/Dashboard/DashboardLayout";
+import FatigueScore from "./overtraining/FatigueScore";
+import RecoveryRate from "./overtraining/RecoveryRate";
+import InjuryRiskLevel from "./overtraining/InjuryRiskLevel";
+import OvertrainingAlertCount from "./overtraining/OvertrainingAlertCount";
+import RecoveryDayFrequency from "./overtraining/RecoveryDayFrequency";
 
 const Overtraining = () => {
-  const [activeTab, setActiveTab] = useState('fatigue');
+  const [activeTab, setActiveTab] = useState("fatigue");
 
   const tabs = [
-    { id: 'fatigue', label: 'Fatigue Score', icon: Zap, color: 'orange' },
-    { id: 'recovery', label: 'Recovery Rate', icon: Heart, color: 'red' },
-    { id: 'injury', label: 'Injury Risk', icon: AlertTriangle, color: 'yellow' },
-    { id: 'alerts', label: 'Overtraining Alerts', icon: Activity, color: 'blue' },
-    { id: 'frequency', label: 'Recovery Days', icon: BarChart3, color: 'green' },
+    { id: "fatigue", label: "Fatigue Score", icon: Zap, color: "orange" },
+    { id: "recovery", label: "Recovery Rate", icon: Heart, color: "red" },
+    {
+      id: "injury",
+      label: "Injury Risk",
+      icon: AlertTriangle,
+      color: "yellow",
+    },
+    {
+      id: "alerts",
+      label: "Overtraining Alerts",
+      icon: Activity,
+      color: "blue",
+    },
+    {
+      id: "frequency",
+      label: "Recovery Days",
+      icon: BarChart3,
+      color: "green",
+    },
   ];
 
   return (
@@ -32,7 +47,8 @@ const Overtraining = () => {
               </h1>
             </div>
             <p className="text-gray-600">
-              Monitor your fatigue, recovery rate, injury risk, and training load to prevent overtraining syndrome.
+              Monitor your fatigue, recovery rate, injury risk, and training
+              load to prevent overtraining syndrome.
             </p>
           </div>
 
@@ -47,8 +63,8 @@ const Overtraining = () => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
                       activeTab === tab.id
-                        ? 'bg-linear-to-r from-orange-600 to-red-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        ? "bg-linear-to-r from-orange-600 to-red-600 text-white shadow-md"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
                   >
                     <Icon className="w-5 h-5" />
@@ -68,11 +84,11 @@ const Overtraining = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              {activeTab === 'fatigue' && <FatigueScore />}
-              {activeTab === 'recovery' && <RecoveryRate />}
-              {activeTab === 'injury' && <InjuryRiskLevel />}
-              {activeTab === 'alerts' && <OvertrainingAlertCount />}
-              {activeTab === 'frequency' && <RecoveryDayFrequency />}
+              {activeTab === "fatigue" && <FatigueScore />}
+              {activeTab === "recovery" && <RecoveryRate />}
+              {activeTab === "injury" && <InjuryRiskLevel />}
+              {activeTab === "alerts" && <OvertrainingAlertCount />}
+              {activeTab === "frequency" && <RecoveryDayFrequency />}
             </motion.div>
           </AnimatePresence>
         </div>

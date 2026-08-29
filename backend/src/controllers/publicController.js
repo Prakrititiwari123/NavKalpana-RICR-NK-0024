@@ -1,3 +1,5 @@
+import Contact from "../models/contactModel.js";
+
 export const NewContact = async (req, res, next) => {
   try {
     const { fullName, email, mobileNumber, message } = req.body;
@@ -8,7 +10,7 @@ export const NewContact = async (req, res, next) => {
       return next(error);
     }
 
-    const newContact = await Contact.Create({
+    const newContact = await Contact.create({
       fullName,
       email,
       mobileNumber,
@@ -17,8 +19,9 @@ export const NewContact = async (req, res, next) => {
 
     console.log(newContact);
 
-    res.Status(201).json({
-      message: "Thanks for Contacting us. we will get Back to you soon",
+    res.status(201).json({
+      success: true,
+      message: "Form Submit Successfully",
     });
   } catch (error) {
     next(error);

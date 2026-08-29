@@ -1,10 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
-  FiActivity, FiHome, FiUser, FiSettings, FiBell, FiLogOut,
-  FiMenu, FiX, FiSearch, FiChevronDown, FiLogIn, FiUserPlus
-} from 'react-icons/fi';
-import { useAuth } from '../../context/AuthContext';
+  FiActivity,
+  FiHome,
+  FiUser,
+  FiSettings,
+  FiBell,
+  FiLogOut,
+  FiMenu,
+  FiX,
+  FiSearch,
+  FiChevronDown,
+  FiLogIn,
+  FiUserPlus,
+} from "react-icons/fi";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const location = useLocation();
@@ -20,22 +30,26 @@ const Header = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (isProfileMenuOpen && !e.target.closest('.profile-menu')) {
+      if (isProfileMenuOpen && !e.target.closest(".profile-menu")) {
         setIsProfileMenuOpen(false);
       }
-      if (isMobileMenuOpen && !e.target.closest('.mobile-menu') && !e.target.closest('.mobile-menu-button')) {
+      if (
+        isMobileMenuOpen &&
+        !e.target.closest(".mobile-menu") &&
+        !e.target.closest(".mobile-menu-button")
+      ) {
         setIsMobileMenuOpen(false);
       }
     };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [isProfileMenuOpen, isMobileMenuOpen]);
 
   // Handle navigation
@@ -47,11 +61,11 @@ const Header = () => {
 
   // Get user initials for avatar
   const getUserInitials = () => {
-    if (!userData?.fullName) return 'U';
+    if (!userData?.fullName) return "U";
     return userData.fullName
-      .split(' ')
-      .map(name => name[0])
-      .join('')
+      .split(" ")
+      .map((name) => name[0])
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
@@ -59,17 +73,18 @@ const Header = () => {
   // Get greeting based on time
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 18) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
   };
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-500 shadow-xl shadow-gray-400 ${isScrolled
-        ? 'bg-white/95 backdrop-blur-md shadow-lg py-2'
-        : 'bg-white/80 backdrop-blur-sm py-3'
-        }`}
+      className={`sticky top-0 z-50 transition-all duration-500 shadow-xl shadow-gray-400 ${
+        isScrolled
+          ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
+          : "bg-white/80 backdrop-blur-sm py-3"
+      }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
@@ -77,7 +92,7 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             {/* Logo */}
             <button
-              onClick={() => handleNavigation('/')}
+              onClick={() => handleNavigation("/")}
               className="flex items-center space-x-2 group"
             >
               <div className="bg-linear-to-r from-blue-500 to-indigo-500 p-1.5 rounded-xl transform group-hover:rotate-12 transition-all duration-500 group-hover:scale-110">
@@ -87,7 +102,9 @@ const Header = () => {
                 <span className="text-lg sm:text-xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   HealthNexus
                 </span>
-                <span className="text-[10px] sm:text-xs text-gray-500 hidden sm:block">Your Health Companion</span>
+                <span className="text-[10px] sm:text-xs text-gray-500 hidden sm:block">
+                  Your Health Companion
+                </span>
               </div>
             </button>
           </div>
@@ -98,14 +115,14 @@ const Header = () => {
               <>
                 <div className="flex items-center gap-1 sm:gap-2">
                   <button
-                    onClick={() => handleNavigation('/login')}
+                    onClick={() => handleNavigation("/login")}
                     className="px-3 sm:px-5 py-1.5 sm:py-2 text-sm sm:text-base text-gray-700 font-medium hover:text-blue-600 transition-colors duration-300 flex items-center gap-1"
                   >
                     <FiLogIn className="w-4 h-4 sm:hidden" />
                     <span className="hidden sm:inline">Sign In</span>
                   </button>
                   <button
-                    onClick={() => handleNavigation('/register')}
+                    onClick={() => handleNavigation("/register")}
                     className="px-3 sm:px-5 py-1.5 sm:py-2 bg-blue-600 text-white rounded-xl text-sm sm:text-base font-medium hover:bg-blue-700 transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-1 sm:gap-2"
                   >
                     <FiUserPlus className="w-4 h-4 sm:hidden" />
@@ -141,15 +158,18 @@ const Header = () => {
                     {/* User Info - Hidden on mobile */}
                     <div className="hidden md:block text-left">
                       <p className="text-xs sm:text-sm font-semibold text-gray-800">
-                        {userData?.fullName?.split(' ')[0] || 'User'}
+                        {userData?.fullName?.split(" ")[0] || "User"}
                       </p>
                       <p className="text-[10px] sm:text-xs text-gray-500">
-                        {userData?.role || 'Member'}
+                        {userData?.role || "Member"}
                       </p>
                     </div>
 
-                    <FiChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-500 transition-transform duration-300 mr-1 ${isProfileMenuOpen ? 'rotate-180' : ''
-                      }`} />
+                    <FiChevronDown
+                      className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-500 transition-transform duration-300 mr-1 ${
+                        isProfileMenuOpen ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
 
                   {/* Dropdown Menu */}
@@ -162,8 +182,12 @@ const Header = () => {
                             {getUserInitials()}
                           </div>
                           <div className="truncate">
-                            <p className="font-semibold text-sm sm:text-base truncate">{userData?.fullName || 'User'}</p>
-                            <p className="text-[10px] sm:text-xs opacity-90 truncate">{userData?.email || 'user@email.com'}</p>
+                            <p className="font-semibold text-sm sm:text-base truncate">
+                              {userData?.fullName || "User"}
+                            </p>
+                            <p className="text-[10px] sm:text-xs opacity-90 truncate">
+                              {userData?.email || "user@email.com"}
+                            </p>
                           </div>
                         </div>
                         <p className="text-[10px] sm:text-xs mt-2 opacity-75">
@@ -174,35 +198,40 @@ const Header = () => {
                       {/* Menu Items */}
                       <div className="p-2">
                         <button
-                          onClick={() => handleNavigation('/profile')}
+                          onClick={() => handleNavigation("/profile")}
                           className="flex items-center space-x-3 w-full px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-all duration-300 group"
                         >
                           <FiUser className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 group-hover:text-blue-600" />
-                          <span className="group-hover:text-blue-600">My Profile</span>
+                          <span className="group-hover:text-blue-600">
+                            My Profile
+                          </span>
                         </button>
 
                         <button
-                          onClick={() => handleNavigation('/dashboard')}
+                          onClick={() => handleNavigation("/dashboard")}
                           className="flex items-center space-x-3 w-full px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-all duration-300 group"
                         >
                           <FiHome className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 group-hover:text-blue-600" />
-                          <span className="group-hover:text-blue-600">Dashboard</span>
+                          <span className="group-hover:text-blue-600">
+                            Dashboard
+                          </span>
                         </button>
 
                         <button
-                          onClick={() => handleNavigation('/settings')}
+                          onClick={() => handleNavigation("/settings")}
                           className="flex items-center space-x-3 w-full px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-all duration-300 group"
                         >
                           <FiSettings className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 group-hover:text-blue-600" />
-                          <span className="group-hover:text-blue-600">Settings</span>
+                          <span className="group-hover:text-blue-600">
+                            Settings
+                          </span>
                         </button>
 
                         <div className="border-t border-gray-100 my-2"></div>
 
                         <button
                           onClick={() => {
-                            logout(),
-                            navigate("/")
+                            (logout(), navigate("/"));
                           }}
                           className="flex items-center space-x-3 w-full px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm text-red-600 hover:bg-red-50 rounded-lg transition-all duration-300 group"
                         >
@@ -223,38 +252,42 @@ const Header = () => {
           <div className="lg:hidden mt-4 pb-3 border-t border-gray-100 animate-slideDown mobile-menu">
             <div className="flex flex-col space-y-1 pt-3">
               <button
-                onClick={() => handleNavigation('/')}
-                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${location.pathname === '/'
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
+                onClick={() => handleNavigation("/")}
+                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${
+                  location.pathname === "/"
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                }`}
               >
                 Home
               </button>
               <button
-                onClick={() => handleNavigation('/features')}
-                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${location.pathname === '/features'
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
+                onClick={() => handleNavigation("/features")}
+                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${
+                  location.pathname === "/features"
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                }`}
               >
                 Features
               </button>
               <button
-                onClick={() => handleNavigation('/benefits')}
-                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${location.pathname === '/benefits'
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
+                onClick={() => handleNavigation("/benefits")}
+                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${
+                  location.pathname === "/benefits"
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                }`}
               >
                 Benefits
               </button>
               <button
-                onClick={() => handleNavigation('/about')}
-                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${location.pathname === '/about'
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
+                onClick={() => handleNavigation("/about")}
+                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${
+                  location.pathname === "/about"
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                }`}
               >
                 About
               </button>
@@ -263,7 +296,7 @@ const Header = () => {
         )}
       </div>
 
-      <style >{`
+      <style>{`
         @keyframes slideDown {
           from {
             opacity: 0;

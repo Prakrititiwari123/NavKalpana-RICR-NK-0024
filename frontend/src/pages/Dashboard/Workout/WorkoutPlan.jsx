@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   Calendar,
   ChevronLeft,
@@ -12,8 +12,8 @@ import {
   ChevronUp,
   Clock,
   Dumbbell,
-} from 'lucide-react';
-import WorkoutDetail from './WorkoutDetail';
+} from "lucide-react";
+import WorkoutDetail from "./WorkoutDetail";
 
 const WorkoutPlan = ({ plan, weekOffset = 0, onUpdate }) => {
   const [selectedWeek, setSelectedWeek] = useState(0);
@@ -23,356 +23,356 @@ const WorkoutPlan = ({ plan, weekOffset = 0, onUpdate }) => {
 
   // Mock workout plan data
   const workoutPlan = plan || {
-    level: 'Intermediate',
-    goal: 'Muscle Building',
+    level: "Intermediate",
+    goal: "Muscle Building",
     weeks: [
       {
         weekNumber: 1,
-        startDate: 'March 3, 2026',
-        endDate: 'March 9, 2026',
+        startDate: "March 3, 2026",
+        endDate: "March 9, 2026",
         days: [
           {
             id: 1,
-            day: 'Monday',
-            date: 'Mar 3',
-            focus: 'Chest & Triceps',
-            duration: '60 min',
+            day: "Monday",
+            date: "Mar 3",
+            focus: "Chest & Triceps",
+            duration: "60 min",
             completed: false,
             exercises: [
               {
                 id: 1,
-                name: 'Barbell Bench Press',
+                name: "Barbell Bench Press",
                 sets: 4,
-                reps: '8-10',
-                rest: '90s',
-                equipment: 'Barbell',
-                muscleGroup: 'Chest',
-                difficulty: 'Intermediate',
-                notes: 'Keep back flat, squeeze chest at top',
-                videoUrl: '#',
+                reps: "8-10",
+                rest: "90s",
+                equipment: "Barbell",
+                muscleGroup: "Chest",
+                difficulty: "Intermediate",
+                notes: "Keep back flat, squeeze chest at top",
+                videoUrl: "#",
               },
               {
                 id: 2,
-                name: 'Incline Dumbbell Press',
+                name: "Incline Dumbbell Press",
                 sets: 3,
-                reps: '10-12',
-                rest: '60s',
-                equipment: 'Dumbbells',
-                muscleGroup: 'Chest',
-                difficulty: 'Intermediate',
-                notes: 'Set bench at 30-45 degrees',
-                videoUrl: '#',
+                reps: "10-12",
+                rest: "60s",
+                equipment: "Dumbbells",
+                muscleGroup: "Chest",
+                difficulty: "Intermediate",
+                notes: "Set bench at 30-45 degrees",
+                videoUrl: "#",
               },
               {
                 id: 3,
-                name: 'Cable Flyes',
+                name: "Cable Flyes",
                 sets: 3,
-                reps: '12-15',
-                rest: '60s',
-                equipment: 'Cable',
-                muscleGroup: 'Chest',
-                difficulty: 'Beginner',
-                notes: 'Focus on stretch and contraction',
-                videoUrl: '#',
+                reps: "12-15",
+                rest: "60s",
+                equipment: "Cable",
+                muscleGroup: "Chest",
+                difficulty: "Beginner",
+                notes: "Focus on stretch and contraction",
+                videoUrl: "#",
               },
               {
                 id: 4,
-                name: 'Tricep Dips',
+                name: "Tricep Dips",
                 sets: 3,
-                reps: '10-12',
-                rest: '60s',
-                equipment: 'Bodyweight',
-                muscleGroup: 'Triceps',
-                difficulty: 'Intermediate',
-                notes: 'Lean forward for chest emphasis',
-                videoUrl: '#',
+                reps: "10-12",
+                rest: "60s",
+                equipment: "Bodyweight",
+                muscleGroup: "Triceps",
+                difficulty: "Intermediate",
+                notes: "Lean forward for chest emphasis",
+                videoUrl: "#",
               },
               {
                 id: 5,
-                name: 'Tricep Pushdown',
+                name: "Tricep Pushdown",
                 sets: 3,
-                reps: '12-15',
-                rest: '45s',
-                equipment: 'Cable',
-                muscleGroup: 'Triceps',
-                difficulty: 'Beginner',
-                notes: 'Keep elbows tucked',
-                videoUrl: '#',
+                reps: "12-15",
+                rest: "45s",
+                equipment: "Cable",
+                muscleGroup: "Triceps",
+                difficulty: "Beginner",
+                notes: "Keep elbows tucked",
+                videoUrl: "#",
               },
             ],
           },
           {
             id: 2,
-            day: 'Tuesday',
-            date: 'Mar 4',
-            focus: 'Back & Biceps',
-            duration: '65 min',
+            day: "Tuesday",
+            date: "Mar 4",
+            focus: "Back & Biceps",
+            duration: "65 min",
             completed: false,
             exercises: [
               {
                 id: 6,
-                name: 'Deadlift',
+                name: "Deadlift",
                 sets: 4,
-                reps: '6-8',
-                rest: '120s',
-                equipment: 'Barbell',
-                muscleGroup: 'Back',
-                difficulty: 'Advanced',
-                notes: 'Maintain neutral spine throughout',
-                videoUrl: '#',
+                reps: "6-8",
+                rest: "120s",
+                equipment: "Barbell",
+                muscleGroup: "Back",
+                difficulty: "Advanced",
+                notes: "Maintain neutral spine throughout",
+                videoUrl: "#",
               },
               {
                 id: 7,
-                name: 'Pull-ups',
+                name: "Pull-ups",
                 sets: 4,
-                reps: '8-10',
-                rest: '90s',
-                equipment: 'Pull-up Bar',
-                muscleGroup: 'Back',
-                difficulty: 'Intermediate',
-                notes: 'Full range of motion',
-                videoUrl: '#',
+                reps: "8-10",
+                rest: "90s",
+                equipment: "Pull-up Bar",
+                muscleGroup: "Back",
+                difficulty: "Intermediate",
+                notes: "Full range of motion",
+                videoUrl: "#",
               },
               {
                 id: 8,
-                name: 'Barbell Row',
+                name: "Barbell Row",
                 sets: 3,
-                reps: '10-12',
-                rest: '60s',
-                equipment: 'Barbell',
-                muscleGroup: 'Back',
-                difficulty: 'Intermediate',
-                notes: 'Pull to lower chest',
-                videoUrl: '#',
+                reps: "10-12",
+                rest: "60s",
+                equipment: "Barbell",
+                muscleGroup: "Back",
+                difficulty: "Intermediate",
+                notes: "Pull to lower chest",
+                videoUrl: "#",
               },
               {
                 id: 9,
-                name: 'Barbell Curl',
+                name: "Barbell Curl",
                 sets: 3,
-                reps: '10-12',
-                rest: '60s',
-                equipment: 'Barbell',
-                muscleGroup: 'Biceps',
-                difficulty: 'Beginner',
-                notes: 'No swinging, controlled motion',
-                videoUrl: '#',
+                reps: "10-12",
+                rest: "60s",
+                equipment: "Barbell",
+                muscleGroup: "Biceps",
+                difficulty: "Beginner",
+                notes: "No swinging, controlled motion",
+                videoUrl: "#",
               },
               {
                 id: 10,
-                name: 'Hammer Curls',
+                name: "Hammer Curls",
                 sets: 3,
-                reps: '12-15',
-                rest: '45s',
-                equipment: 'Dumbbells',
-                muscleGroup: 'Biceps',
-                difficulty: 'Beginner',
-                notes: 'Keep wrists neutral',
-                videoUrl: '#',
+                reps: "12-15",
+                rest: "45s",
+                equipment: "Dumbbells",
+                muscleGroup: "Biceps",
+                difficulty: "Beginner",
+                notes: "Keep wrists neutral",
+                videoUrl: "#",
               },
             ],
           },
           {
             id: 3,
-            day: 'Wednesday',
-            date: 'Mar 5',
-            focus: 'Legs',
-            duration: '70 min',
+            day: "Wednesday",
+            date: "Mar 5",
+            focus: "Legs",
+            duration: "70 min",
             completed: false,
             exercises: [
               {
                 id: 11,
-                name: 'Barbell Squat',
+                name: "Barbell Squat",
                 sets: 4,
-                reps: '8-10',
-                rest: '120s',
-                equipment: 'Barbell',
-                muscleGroup: 'Legs',
-                difficulty: 'Intermediate',
-                notes: 'Depth to parallel or below',
-                videoUrl: '#',
+                reps: "8-10",
+                rest: "120s",
+                equipment: "Barbell",
+                muscleGroup: "Legs",
+                difficulty: "Intermediate",
+                notes: "Depth to parallel or below",
+                videoUrl: "#",
               },
               {
                 id: 12,
-                name: 'Romanian Deadlift',
+                name: "Romanian Deadlift",
                 sets: 3,
-                reps: '10-12',
-                rest: '90s',
-                equipment: 'Barbell',
-                muscleGroup: 'Hamstrings',
-                difficulty: 'Intermediate',
-                notes: 'Feel stretch in hamstrings',
-                videoUrl: '#',
+                reps: "10-12",
+                rest: "90s",
+                equipment: "Barbell",
+                muscleGroup: "Hamstrings",
+                difficulty: "Intermediate",
+                notes: "Feel stretch in hamstrings",
+                videoUrl: "#",
               },
               {
                 id: 13,
-                name: 'Leg Press',
+                name: "Leg Press",
                 sets: 3,
-                reps: '12-15',
-                rest: '60s',
-                equipment: 'Machine',
-                muscleGroup: 'Legs',
-                difficulty: 'Beginner',
-                notes: 'Full range of motion',
-                videoUrl: '#',
+                reps: "12-15",
+                rest: "60s",
+                equipment: "Machine",
+                muscleGroup: "Legs",
+                difficulty: "Beginner",
+                notes: "Full range of motion",
+                videoUrl: "#",
               },
               {
                 id: 14,
-                name: 'Calf Raises',
+                name: "Calf Raises",
                 sets: 4,
-                reps: '15-20',
-                rest: '45s',
-                equipment: 'Machine',
-                muscleGroup: 'Calves',
-                difficulty: 'Beginner',
-                notes: 'Pause at top',
-                videoUrl: '#',
+                reps: "15-20",
+                rest: "45s",
+                equipment: "Machine",
+                muscleGroup: "Calves",
+                difficulty: "Beginner",
+                notes: "Pause at top",
+                videoUrl: "#",
               },
             ],
           },
           {
             id: 4,
-            day: 'Thursday',
-            date: 'Mar 6',
-            focus: 'Shoulders & Abs',
-            duration: '55 min',
+            day: "Thursday",
+            date: "Mar 6",
+            focus: "Shoulders & Abs",
+            duration: "55 min",
             completed: false,
             exercises: [
               {
                 id: 15,
-                name: 'Military Press',
+                name: "Military Press",
                 sets: 4,
-                reps: '8-10',
-                rest: '90s',
-                equipment: 'Barbell',
-                muscleGroup: 'Shoulders',
-                difficulty: 'Intermediate',
-                notes: 'Press straight up',
-                videoUrl: '#',
+                reps: "8-10",
+                rest: "90s",
+                equipment: "Barbell",
+                muscleGroup: "Shoulders",
+                difficulty: "Intermediate",
+                notes: "Press straight up",
+                videoUrl: "#",
               },
               {
                 id: 16,
-                name: 'Lateral Raises',
+                name: "Lateral Raises",
                 sets: 3,
-                reps: '12-15',
-                rest: '60s',
-                equipment: 'Dumbbells',
-                muscleGroup: 'Shoulders',
-                difficulty: 'Beginner',
-                notes: 'Control the weight, no swinging',
-                videoUrl: '#',
+                reps: "12-15",
+                rest: "60s",
+                equipment: "Dumbbells",
+                muscleGroup: "Shoulders",
+                difficulty: "Beginner",
+                notes: "Control the weight, no swinging",
+                videoUrl: "#",
               },
               {
                 id: 17,
-                name: 'Face Pulls',
+                name: "Face Pulls",
                 sets: 3,
-                reps: '15-20',
-                rest: '45s',
-                equipment: 'Cable',
-                muscleGroup: 'Shoulders',
-                difficulty: 'Beginner',
-                notes: 'Pull to face level',
-                videoUrl: '#',
+                reps: "15-20",
+                rest: "45s",
+                equipment: "Cable",
+                muscleGroup: "Shoulders",
+                difficulty: "Beginner",
+                notes: "Pull to face level",
+                videoUrl: "#",
               },
               {
                 id: 18,
-                name: 'Plank',
+                name: "Plank",
                 sets: 3,
-                reps: '60s',
-                rest: '45s',
-                equipment: 'Bodyweight',
-                muscleGroup: 'Abs',
-                difficulty: 'Beginner',
-                notes: 'Keep body straight',
-                videoUrl: '#',
+                reps: "60s",
+                rest: "45s",
+                equipment: "Bodyweight",
+                muscleGroup: "Abs",
+                difficulty: "Beginner",
+                notes: "Keep body straight",
+                videoUrl: "#",
               },
             ],
           },
           {
             id: 5,
-            day: 'Friday',
-            date: 'Mar 7',
-            focus: 'Full Body',
-            duration: '60 min',
+            day: "Friday",
+            date: "Mar 7",
+            focus: "Full Body",
+            duration: "60 min",
             completed: false,
             exercises: [
               {
                 id: 19,
-                name: 'Squat',
+                name: "Squat",
                 sets: 3,
-                reps: '10-12',
-                rest: '90s',
-                equipment: 'Barbell',
-                muscleGroup: 'Legs',
-                difficulty: 'Intermediate',
-                notes: 'Lighter weight, focus on form',
-                videoUrl: '#',
+                reps: "10-12",
+                rest: "90s",
+                equipment: "Barbell",
+                muscleGroup: "Legs",
+                difficulty: "Intermediate",
+                notes: "Lighter weight, focus on form",
+                videoUrl: "#",
               },
               {
                 id: 20,
-                name: 'Bench Press',
+                name: "Bench Press",
                 sets: 3,
-                reps: '10-12',
-                rest: '90s',
-                equipment: 'Barbell',
-                muscleGroup: 'Chest',
-                difficulty: 'Intermediate',
-                notes: 'Moderate weight',
-                videoUrl: '#',
+                reps: "10-12",
+                rest: "90s",
+                equipment: "Barbell",
+                muscleGroup: "Chest",
+                difficulty: "Intermediate",
+                notes: "Moderate weight",
+                videoUrl: "#",
               },
               {
                 id: 21,
-                name: 'Rows',
+                name: "Rows",
                 sets: 3,
-                reps: '10-12',
-                rest: '60s',
-                equipment: 'Barbell',
-                muscleGroup: 'Back',
-                difficulty: 'Intermediate',
-                notes: 'Squeeze at top',
-                videoUrl: '#',
+                reps: "10-12",
+                rest: "60s",
+                equipment: "Barbell",
+                muscleGroup: "Back",
+                difficulty: "Intermediate",
+                notes: "Squeeze at top",
+                videoUrl: "#",
               },
             ],
           },
           {
             id: 6,
-            day: 'Saturday',
-            date: 'Mar 8',
-            focus: 'Active Recovery',
-            duration: '30 min',
+            day: "Saturday",
+            date: "Mar 8",
+            focus: "Active Recovery",
+            duration: "30 min",
             completed: false,
             exercises: [
               {
                 id: 22,
-                name: 'Light Cardio',
+                name: "Light Cardio",
                 sets: 1,
-                reps: '20-30 min',
-                rest: 'N/A',
-                equipment: 'Cardio Machine',
-                muscleGroup: 'Full Body',
-                difficulty: 'Beginner',
-                notes: 'Keep heart rate moderate',
-                videoUrl: '#',
+                reps: "20-30 min",
+                rest: "N/A",
+                equipment: "Cardio Machine",
+                muscleGroup: "Full Body",
+                difficulty: "Beginner",
+                notes: "Keep heart rate moderate",
+                videoUrl: "#",
               },
               {
                 id: 23,
-                name: 'Stretching',
+                name: "Stretching",
                 sets: 1,
-                reps: '10 min',
-                rest: 'N/A',
-                equipment: 'None',
-                muscleGroup: 'Full Body',
-                difficulty: 'Beginner',
-                notes: 'Focus on tight areas',
-                videoUrl: '#',
+                reps: "10 min",
+                rest: "N/A",
+                equipment: "None",
+                muscleGroup: "Full Body",
+                difficulty: "Beginner",
+                notes: "Focus on tight areas",
+                videoUrl: "#",
               },
             ],
           },
           {
             id: 7,
-            day: 'Sunday',
-            date: 'Mar 9',
-            focus: 'Rest Day',
-            duration: '0 min',
+            day: "Sunday",
+            date: "Mar 9",
+            focus: "Rest Day",
+            duration: "0 min",
             completed: false,
             exercises: [],
           },
@@ -381,11 +381,14 @@ const WorkoutPlan = ({ plan, weekOffset = 0, onUpdate }) => {
     ],
   };
 
-  const currentPlan = workoutPlan.weeks[selectedWeek + weekOffset] || workoutPlan.weeks[0];
+  const currentPlan =
+    workoutPlan.weeks[selectedWeek + weekOffset] || workoutPlan.weeks[0];
 
   const toggleDay = (dayId) => {
     setExpandedDays((prev) =>
-      prev.includes(dayId) ? prev.filter((id) => id !== dayId) : [...prev, dayId]
+      prev.includes(dayId)
+        ? prev.filter((id) => id !== dayId)
+        : [...prev, dayId],
     );
   };
 
@@ -406,7 +409,7 @@ const WorkoutPlan = ({ plan, weekOffset = 0, onUpdate }) => {
   };
 
   const handleDownload = () => {
-    alert('PDF download functionality would be implemented here');
+    alert("PDF download functionality would be implemented here");
   };
 
   return (
@@ -414,9 +417,12 @@ const WorkoutPlan = ({ plan, weekOffset = 0, onUpdate }) => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Weekly Workout Plan</h2>
+          <h2 className="text-2xl font-bold text-gray-800">
+            Weekly Workout Plan
+          </h2>
           <p className="text-gray-600 text-sm mt-1">
-            {currentPlan.startDate} - {currentPlan.endDate} • Week {currentPlan.weekNumber}
+            {currentPlan.startDate} - {currentPlan.endDate} • Week{" "}
+            {currentPlan.weekNumber}
           </p>
         </div>
 
@@ -429,7 +435,9 @@ const WorkoutPlan = ({ plan, weekOffset = 0, onUpdate }) => {
           </button>
           <button
             onClick={() =>
-              setSelectedWeek(Math.min(workoutPlan.weeks.length - 1, selectedWeek + 1))
+              setSelectedWeek(
+                Math.min(workoutPlan.weeks.length - 1, selectedWeek + 1),
+              )
             }
             className="p-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
           >
@@ -465,7 +473,8 @@ const WorkoutPlan = ({ plan, weekOffset = 0, onUpdate }) => {
         <div className="bg-linear-to-br from-green-50 to-green-100 rounded-lg p-4 col-span-2 md:col-span-1">
           <p className="text-sm text-gray-600 mb-1">Completion</p>
           <p className="text-lg font-bold text-gray-800">
-            {currentPlan.days.filter((d) => d.completed).length}/{currentPlan.days.length} days
+            {currentPlan.days.filter((d) => d.completed).length}/
+            {currentPlan.days.length} days
           </p>
         </div>
       </div>
@@ -474,7 +483,7 @@ const WorkoutPlan = ({ plan, weekOffset = 0, onUpdate }) => {
       <div className="space-y-3">
         {currentPlan.days.map((dayPlan) => {
           const isExpanded = expandedDays.includes(dayPlan.id);
-          const isRestDay = dayPlan.focus === 'Rest Day';
+          const isRestDay = dayPlan.focus === "Rest Day";
 
           return (
             <motion.div
@@ -483,8 +492,8 @@ const WorkoutPlan = ({ plan, weekOffset = 0, onUpdate }) => {
               animate={{ opacity: 1, y: 0 }}
               className={`bg-white rounded-xl shadow-sm border-2 transition-all ${
                 dayPlan.completed
-                  ? 'border-green-500 bg-green-50'
-                  : 'border-gray-200 hover:border-blue-300'
+                  ? "border-green-500 bg-green-50"
+                  : "border-gray-200 hover:border-blue-300"
               }`}
             >
               {/* Day Header */}
@@ -549,7 +558,9 @@ const WorkoutPlan = ({ plan, weekOffset = 0, onUpdate }) => {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-800">{exercise.name}</h4>
+                          <h4 className="font-medium text-gray-800">
+                            {exercise.name}
+                          </h4>
                           <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
                             <span>
                               {exercise.sets} × {exercise.reps}

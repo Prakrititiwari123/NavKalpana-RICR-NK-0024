@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Droplet, Flame, PieChart } from 'lucide-react';
+import React, { useMemo, useState } from "react";
+import { Droplet, Flame, PieChart } from "lucide-react";
 
 const CalorieTracker = ({ logs = [], target = {}, onLog }) => {
   const [water, setWater] = useState(5);
@@ -19,19 +19,22 @@ const CalorieTracker = ({ logs = [], target = {}, onLog }) => {
         acc.fats += entry.fats || 0;
         return acc;
       },
-      { calories: 0, protein: 0, carbs: 0, fats: 0 }
+      { calories: 0, protein: 0, carbs: 0, fats: 0 },
     );
 
     return totalsData;
   }, [logs]);
 
   const remaining = Math.max(calorieTarget - totals.calories, 0);
-  const caloriePercent = Math.min(Math.round((totals.calories / calorieTarget) * 100), 100);
+  const caloriePercent = Math.min(
+    Math.round((totals.calories / calorieTarget) * 100),
+    100,
+  );
 
   const logWater = () => {
     const nextWater = Math.min(water + 1, 10);
     setWater(nextWater);
-    onLog && onLog({ type: 'water', value: nextWater });
+    onLog && onLog({ type: "water", value: nextWater });
   };
 
   const macroRing = (label, value, color) => (
@@ -39,7 +42,7 @@ const CalorieTracker = ({ logs = [], target = {}, onLog }) => {
       <div
         className="w-20 h-20 rounded-full mx-auto flex items-center justify-center"
         style={{
-          background: `conic-gradient(${color} ${value}%, #e5e7eb 0)`
+          background: `conic-gradient(${color} ${value}%, #e5e7eb 0)`,
         }}
       >
         <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center">
@@ -61,7 +64,9 @@ const CalorieTracker = ({ logs = [], target = {}, onLog }) => {
         <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-emerald-50 rounded-xl p-4">
             <p className="text-sm text-gray-600">Consumed</p>
-            <p className="text-2xl font-bold text-emerald-700">{totals.calories} kcal</p>
+            <p className="text-2xl font-bold text-emerald-700">
+              {totals.calories} kcal
+            </p>
           </div>
           <div className="bg-blue-50 rounded-xl p-4">
             <p className="text-sm text-gray-600">Remaining</p>
@@ -69,7 +74,9 @@ const CalorieTracker = ({ logs = [], target = {}, onLog }) => {
           </div>
           <div className="bg-amber-50 rounded-xl p-4">
             <p className="text-sm text-gray-600">Target</p>
-            <p className="text-2xl font-bold text-amber-700">{calorieTarget} kcal</p>
+            <p className="text-2xl font-bold text-amber-700">
+              {calorieTarget} kcal
+            </p>
           </div>
         </div>
 
@@ -87,9 +94,21 @@ const CalorieTracker = ({ logs = [], target = {}, onLog }) => {
           <h3 className="text-xl font-bold text-gray-800">Macro Balance</h3>
         </div>
         <div className="mt-5 grid grid-cols-3 gap-3">
-          {macroRing('Protein', Math.min(Math.round((totals.protein / proteinTarget) * 100), 100), '#10b981')}
-          {macroRing('Carbs', Math.min(Math.round((totals.carbs / carbsTarget) * 100), 100), '#3b82f6')}
-          {macroRing('Fats', Math.min(Math.round((totals.fats / fatTarget) * 100), 100), '#f59e0b')}
+          {macroRing(
+            "Protein",
+            Math.min(Math.round((totals.protein / proteinTarget) * 100), 100),
+            "#10b981",
+          )}
+          {macroRing(
+            "Carbs",
+            Math.min(Math.round((totals.carbs / carbsTarget) * 100), 100),
+            "#3b82f6",
+          )}
+          {macroRing(
+            "Fats",
+            Math.min(Math.round((totals.fats / fatTarget) * 100), 100),
+            "#f59e0b",
+          )}
         </div>
       </div>
 
@@ -110,7 +129,7 @@ const CalorieTracker = ({ logs = [], target = {}, onLog }) => {
           {Array.from({ length: 10 }).map((_, index) => (
             <div
               key={index}
-              className={`w-6 h-10 rounded-md ${index < water ? 'bg-blue-500' : 'bg-blue-100'}`}
+              className={`w-6 h-10 rounded-md ${index < water ? "bg-blue-500" : "bg-blue-100"}`}
             />
           ))}
           <span className="text-sm text-gray-500">{water}/10</span>

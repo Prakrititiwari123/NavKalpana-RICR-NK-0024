@@ -48,9 +48,22 @@ const userSchema = new mongoose.Schema(
 
     // ✅ Health Data (Optional – profile completion phase)
     healthData: {
+      profile: {
+        age: Number,
+        gender: String,
+        activityLevel: String,
+      },
+      goals: {
+        primaryGoal: String,
+        timeline: String,
+        experienceLevel: String,
+        calorieTarget: Number,
+      },
       vitals: {
         height: Number,
         weight: Number,
+        currentWeight: Number,
+        goalWeight: Number,
         bmi: Number,
         bloodGroup: String,
         heartRate: Number,
@@ -127,8 +140,17 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    workouts: { type: [mongoose.Schema.Types.Mixed], default: [] },
+    meals: { type: [mongoose.Schema.Types.Mixed], default: [] },
+    weightTracking: { type: [mongoose.Schema.Types.Mixed], default: [] },
+    measurements: { type: [mongoose.Schema.Types.Mixed], default: [] },
+    progressPhotos: { type: [mongoose.Schema.Types.Mixed], default: [] },
+    adherenceLogs: { type: [mongoose.Schema.Types.Mixed], default: [] },
+    dietPlan: { type: mongoose.Schema.Types.Mixed, default: {} },
+    workoutPlan: { type: mongoose.Schema.Types.Mixed, default: {} },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const User = mongoose.model("User", userSchema);

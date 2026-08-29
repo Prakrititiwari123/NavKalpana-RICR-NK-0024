@@ -4,7 +4,7 @@ import { PageLoader } from "./Common/Loaders";
 
 /**
  * ProtectedRouteGuard - Handles route protection and redirects based on auth state
- * 
+ *
  * @param {Object} props
  * @param {React.ReactNode} props.children - Component to render when access is allowed
  * @param {string} props.type - Route type: "protected" (requires auth) or "public" (blocks authenticated users)

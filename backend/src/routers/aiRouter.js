@@ -1,5 +1,8 @@
 import express from "express";
-import { generateResponse, streamResponse } from "../controllers/aiController.js";
+import {
+  generateResponse,
+  streamResponse,
+} from "../controllers/aiController.js";
 
 const router = express.Router();
 

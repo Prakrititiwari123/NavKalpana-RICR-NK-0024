@@ -17,7 +17,7 @@ import axiosInstance from "../../../config/Api";
 const GoalSettings = ({
   onChange,
   values,
-  
+
   maintenanceCalories,
 }) => {
   const [formData, setFormData] = useState({
@@ -27,11 +27,9 @@ const GoalSettings = ({
     experienceLevel: "",
   });
 
-  const [calorieTarget, setCalorieTarget] =
-    useState(null);
+  const [calorieTarget, setCalorieTarget] = useState(null);
 
-  const [safetyWarnings, setSafetyWarnings] =
-    useState([]);
+  const [safetyWarnings, setSafetyWarnings] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -135,30 +133,21 @@ const GoalSettings = ({
   useEffect(() => {
     const fetchGoal = async () => {
       try {
-        const res = await axiosInstance.get(
-          
-          "/api/goals"
-        );
+        const res = await axiosInstance.get("/api/goals");
 
         if (res.data?.goal) {
           const goal = res.data.goal;
 
           setFormData({
             goalType: goal.goalType || "",
-            targetWeight:
-              goal.targetWeight || "",
+            targetWeight: goal.targetWeight || "",
             timeline: goal.timeline || "",
-            experienceLevel:
-              goal.experienceLevel || "",
+            experienceLevel: goal.experienceLevel || "",
           });
 
-          setCalorieTarget(
-            goal.calorieTarget || null
-          );
+          setCalorieTarget(goal.calorieTarget || null);
 
-          setSafetyWarnings(
-            goal.safetyWarnings || []
-          );
+          setSafetyWarnings(goal.safetyWarnings || []);
         }
       } catch (error) {
         console.log(error);
@@ -181,97 +170,58 @@ const GoalSettings = ({
       formData.targetWeight &&
       values?.currentWeight
     ) {
-      const weightDiff = Math.abs(
-        formData.targetWeight -
-          values.currentWeight
-      );
+      const weightDiff = Math.abs(formData.targetWeight - values.currentWeight);
 
-      const months = parseInt(
-        formData.timeline
-      );
+      const months = parseInt(formData.timeline);
 
-      let calculatedCalories =
-        maintenanceCalories;
+      let calculatedCalories = maintenanceCalories;
 
       // LOSE
       if (formData.goalType === "lose") {
-        const weeklyLoss =
-          weightDiff / (months * 4);
+        const weeklyLoss = weightDiff / (months * 4);
 
         if (weeklyLoss > 1) {
-          warnings.push(
-            "Your target exceeds 1kg/week."
-          );
+          warnings.push("Your target exceeds 1kg/week.");
         }
 
-        const dailyDeficit =
-          (weightDiff * 7700) /
-          (months * 30);
+        const dailyDeficit = (weightDiff * 7700) / (months * 30);
 
-        calculatedCalories = Math.round(
-          maintenanceCalories -
-            dailyDeficit
-        );
+        calculatedCalories = Math.round(maintenanceCalories - dailyDeficit);
 
         if (calculatedCalories < 1200) {
-          warnings.push(
-            "Calories below 1200/day are unsafe."
-          );
+          warnings.push("Calories below 1200/day are unsafe.");
 
           calculatedCalories = 1200;
         }
       }
 
       // GAIN
-      else if (
-        formData.goalType === "gain" ||
-        formData.goalType === "muscle"
-      ) {
-        const weeklyGain =
-          weightDiff / (months * 4);
+      else if (formData.goalType === "gain" || formData.goalType === "muscle") {
+        const weeklyGain = weightDiff / (months * 4);
 
         if (weeklyGain > 0.5) {
-          warnings.push(
-            "Weight gain exceeds 0.5kg/week."
-          );
+          warnings.push("Weight gain exceeds 0.5kg/week.");
         }
 
-        const dailySurplus =
-          (weightDiff * 7700) /
-          (months * 30);
+        const dailySurplus = (weightDiff * 7700) / (months * 30);
 
-        calculatedCalories = Math.round(
-          maintenanceCalories +
-            dailySurplus
-        );
+        calculatedCalories = Math.round(maintenanceCalories + dailySurplus);
 
-        if (
-          calculatedCalories >
-          maintenanceCalories + 500
-        ) {
-          warnings.push(
-            "Large calorie surplus detected."
-          );
+        if (calculatedCalories > maintenanceCalories + 500) {
+          warnings.push("Large calorie surplus detected.");
         }
       }
 
       // MAINTAIN
       else {
-        calculatedCalories =
-          maintenanceCalories;
+        calculatedCalories = maintenanceCalories;
       }
 
-      setCalorieTarget(
-        calculatedCalories
-      );
+      setCalorieTarget(calculatedCalories);
 
       setSafetyWarnings(warnings);
     }
-  }, [
-    formData,
-    maintenanceCalories,
-    values?.currentWeight,
-  ]);
+  }, [formData, maintenanceCalories, values?.currentWeight]);
 
   // ===============================
   // SEND DATA TO PARENT
@@ -285,12 +235,7 @@ const GoalSettings = ({
         safetyWarnings,
       });
     }
-  }, [
-    formData,
-    calorieTarget,
-    safetyWarnings,
-    onChange,
-  ]);
+  }, [formData, calorieTarget, safetyWarnings, onChange]);
 
   // ===============================
   // INPUT HANDLER
@@ -315,18 +260,13 @@ const GoalSettings = ({
 
       const payload = {
         ...formData,
-        currentWeight:
-          values?.currentWeight,
+        currentWeight: values?.currentWeight,
         maintenanceCalories,
         calorieTarget,
         safetyWarnings,
       };
 
-      const res =
-        await axiosInstance.post(
-          "/api/goals/save",
-          payload
-        );
+      const res = await axiosInstance.post("/api/goals/save", payload);
 
       console.log(res.data);
 
@@ -345,13 +285,9 @@ const GoalSettings = ({
       {/* HEADER */}
 
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Goal Settings
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">Goal Settings</h2>
 
-        <p className="text-gray-600 text-sm">
-          Define your fitness goals
-        </p>
+        <p className="text-gray-600 text-sm">Define your fitness goals</p>
       </div>
 
       {/* GOAL TYPES */}
@@ -365,9 +301,7 @@ const GoalSettings = ({
           {goalTypes.map((goal) => {
             const Icon = goal.icon;
 
-            const isSelected =
-              formData.goalType ===
-              goal.value;
+            const isSelected = formData.goalType === goal.value;
 
             return (
               <motion.button
@@ -394,17 +328,13 @@ const GoalSettings = ({
                 <div className="flex flex-col items-center gap-2">
                   <Icon
                     className={`w-8 h-8 ${
-                      isSelected
-                        ? goal.color
-                        : "text-gray-400"
+                      isSelected ? goal.color : "text-gray-400"
                     }`}
                   />
 
                   <span
                     className={`text-sm font-medium ${
-                      isSelected
-                        ? "text-gray-800"
-                        : "text-gray-600"
+                      isSelected ? "text-gray-800" : "text-gray-600"
                     }`}
                   >
                     {goal.label}
@@ -418,28 +348,22 @@ const GoalSettings = ({
 
       {/* TARGET WEIGHT */}
 
-      {formData.goalType !==
-        "maintain" &&
-        formData.goalType && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Target Weight (kg)
-            </label>
+      {formData.goalType !== "maintain" && formData.goalType && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Target Weight (kg)
+          </label>
 
-            <input
-              type="number"
-              name="targetWeight"
-              value={
-                formData.targetWeight
-              }
-              onChange={
-                handleInputChange
-              }
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 focus:border-blue-400 outline-none"
-              placeholder="Enter target weight"
-            />
-          </div>
-        )}
+          <input
+            type="number"
+            name="targetWeight"
+            value={formData.targetWeight}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 focus:border-blue-400 outline-none"
+            placeholder="Enter target weight"
+          />
+        </div>
+      )}
 
       {/* TIMELINE */}
 
@@ -454,21 +378,13 @@ const GoalSettings = ({
           onChange={handleInputChange}
           className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 focus:border-blue-400 outline-none"
         >
-          <option value="">
-            Select Timeline
-          </option>
+          <option value="">Select Timeline</option>
 
-          {timelineOptions.map(
-            (option) => (
-              <option
-                key={option.value}
-                value={option.value}
-              >
-                {option.label} -{" "}
-                {option.description}
-              </option>
-            )
-          )}
+          {timelineOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label} - {option.description}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -480,44 +396,33 @@ const GoalSettings = ({
         </label>
 
         <div className="grid md:grid-cols-3 gap-4">
-          {experienceLevels.map(
-            (level) => {
-              const isSelected =
-                formData.experienceLevel ===
-                level.value;
+          {experienceLevels.map((level) => {
+            const isSelected = formData.experienceLevel === level.value;
 
-              return (
-                <button
-                  key={level.value}
-                  type="button"
-                  onClick={() =>
-                    setFormData(
-                      (prev) => ({
-                        ...prev,
-                        experienceLevel:
-                          level.value,
-                      })
-                    )
-                  }
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${
-                    isSelected
-                      ? "bg-purple-50 border-purple-500"
-                      : "bg-white border-gray-200"
-                  }`}
-                >
-                  <p className="font-semibold">
-                    {level.label}
-                  </p>
+            return (
+              <button
+                key={level.value}
+                type="button"
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    experienceLevel: level.value,
+                  }))
+                }
+                className={`p-4 rounded-xl border-2 text-left transition-all ${
+                  isSelected
+                    ? "bg-purple-50 border-purple-500"
+                    : "bg-white border-gray-200"
+                }`}
+              >
+                <p className="font-semibold">{level.label}</p>
 
-                  <p className="text-xs text-gray-500 mt-1">
-                    {
-                      level.description
-                    }
-                  </p>
-                </button>
-              );
-            }
-          )}
+                <p className="text-xs text-gray-500 mt-1">
+                  {level.description}
+                </p>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -527,13 +432,9 @@ const GoalSettings = ({
         <div className="bg-orange-50 border border-orange-200 rounded-xl p-6">
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="text-lg font-semibold">
-                Daily Calorie Target
-              </h3>
+              <h3 className="text-lg font-semibold">Daily Calorie Target</h3>
 
-              <p className="text-sm text-gray-600">
-                Personalized calories
-              </p>
+              <p className="text-sm text-gray-600">Personalized calories</p>
             </div>
 
             <div className="text-right">
@@ -545,9 +446,7 @@ const GoalSettings = ({
                 </p>
               </div>
 
-              <p className="text-sm text-gray-600">
-                calories/day
-              </p>
+              <p className="text-sm text-gray-600">calories/day</p>
             </div>
           </div>
         </div>
@@ -555,31 +454,20 @@ const GoalSettings = ({
 
       {/* WARNINGS */}
 
-      {safetyWarnings.length >
-        0 && (
+      {safetyWarnings.length > 0 && (
         <div className="bg-yellow-50 border-l-4 border-yellow-400 rounded-lg p-4">
           <div className="flex gap-3">
             <AlertTriangle className="w-5 h-5 text-yellow-600 shrink-0" />
 
             <div>
-              <h4 className="font-semibold">
-                Safety Warnings
-              </h4>
+              <h4 className="font-semibold">Safety Warnings</h4>
 
               <ul className="mt-2 space-y-1">
-                {safetyWarnings.map(
-                  (
-                    warning,
-                    index
-                  ) => (
-                    <li
-                      key={index}
-                      className="text-sm"
-                    >
-                      • {warning}
-                    </li>
-                  )
-                )}
+                {safetyWarnings.map((warning, index) => (
+                  <li key={index} className="text-sm">
+                    • {warning}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -588,20 +476,17 @@ const GoalSettings = ({
 
       {/* SUCCESS */}
 
-      {calorieTarget &&
-        safetyWarnings.length ===
-          0 && (
-          <div className="bg-green-50 border-l-4 border-green-400 rounded-lg p-4">
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+      {calorieTarget && safetyWarnings.length === 0 && (
+        <div className="bg-green-50 border-l-4 border-green-400 rounded-lg p-4">
+          <div className="flex items-center gap-3">
+            <CheckCircle className="w-5 h-5 text-green-600" />
 
-              <p className="text-sm text-gray-700">
-                Your goal setup looks
-                safe and sustainable.
-              </p>
-            </div>
+            <p className="text-sm text-gray-700">
+              Your goal setup looks safe and sustainable.
+            </p>
           </div>
-        )}
+        </div>
+      )}
 
       {/* SAVE BUTTON */}
 
@@ -611,9 +496,7 @@ const GoalSettings = ({
         disabled={loading}
         className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-3 rounded-xl font-semibold transition-all"
       >
-        {loading
-          ? "Saving..."
-          : "Save Goal"}
+        {loading ? "Saving..." : "Save Goal"}
       </button>
     </div>
   );

@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import { Scale, TrendingDown, TrendingUp, Trash2, Plus } from 'lucide-react';
+import React, { useState, useMemo } from "react";
+import { Scale, TrendingDown, TrendingUp, Trash2, Plus } from "lucide-react";
 
 const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
-  const [weight, setWeight] = useState('');
+  const [weight, setWeight] = useState("");
   const [showForm, setShowForm] = useState(false);
 
   const sortedLogs = useMemo(() => {
@@ -10,10 +10,14 @@ const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
   }, [logs]);
 
   const currentWeight = sortedLogs[0]?.weight || 0;
-  const startWeight = sortedLogs[sortedLogs.length - 1]?.weight || currentWeight;
+  const startWeight =
+    sortedLogs[sortedLogs.length - 1]?.weight || currentWeight;
   const totalChange = currentWeight - startWeight;
   const goalRemaining = currentWeight - goal;
-  const progress = startWeight !== goal ? ((startWeight - currentWeight) / (startWeight - goal)) * 100 : 0;
+  const progress =
+    startWeight !== goal
+      ? ((startWeight - currentWeight) / (startWeight - goal)) * 100
+      : 0;
 
   const weeklyChange = useMemo(() => {
     if (logs.length < 2) return 0;
@@ -30,7 +34,7 @@ const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
     e.preventDefault();
     if (weight && parseFloat(weight) > 0) {
       onSubmit({ weight: parseFloat(weight) });
-      setWeight('');
+      setWeight("");
       setShowForm(false);
     }
   };
@@ -47,7 +51,9 @@ const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
             <span className="text-sm text-gray-600">Current Weight</span>
             <Scale className="w-5 h-5 text-purple-600" />
           </div>
-          <p className="text-3xl font-bold text-gray-800">{currentWeight.toFixed(1)} kg</p>
+          <p className="text-3xl font-bold text-gray-800">
+            {currentWeight.toFixed(1)} kg
+          </p>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-6">
@@ -67,8 +73,11 @@ const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
               <TrendingUp className="w-5 h-5 text-red-600" />
             )}
           </div>
-          <p className={`text-3xl font-bold ${totalChange < 0 ? 'text-green-600' : 'text-red-600'}`}>
-            {totalChange > 0 ? '+' : ''}{totalChange.toFixed(1)} kg
+          <p
+            className={`text-3xl font-bold ${totalChange < 0 ? "text-green-600" : "text-red-600"}`}
+          >
+            {totalChange > 0 ? "+" : ""}
+            {totalChange.toFixed(1)} kg
           </p>
         </div>
 
@@ -81,8 +90,11 @@ const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
               <TrendingUp className="w-5 h-5 text-orange-600" />
             )}
           </div>
-          <p className={`text-3xl font-bold ${weeklyChange < 0 ? 'text-green-600' : 'text-orange-600'}`}>
-            {weeklyChange > 0 ? '+' : ''}{weeklyChange.toFixed(1)} kg
+          <p
+            className={`text-3xl font-bold ${weeklyChange < 0 ? "text-green-600" : "text-orange-600"}`}
+          >
+            {weeklyChange > 0 ? "+" : ""}
+            {weeklyChange.toFixed(1)} kg
           </p>
         </div>
       </div>
@@ -103,7 +115,8 @@ const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
             />
           </div>
           <p className="text-center text-sm text-gray-600">
-            {Math.abs(goalRemaining).toFixed(1)} kg {goalRemaining > 0 ? 'to lose' : 'to gain'}
+            {Math.abs(goalRemaining).toFixed(1)} kg{" "}
+            {goalRemaining > 0 ? "to lose" : "to gain"}
           </p>
         </div>
       </div>
@@ -113,27 +126,39 @@ const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
         <h3 className="text-xl font-bold text-gray-800 mb-4">Weight Trend</h3>
         <div className="h-64 flex items-end justify-between gap-2">
           {sortedLogs.length > 0 ? (
-            sortedLogs.slice(0, 20).reverse().map((log, index) => {
-              const height = ((log.weight - minWeight) / (maxWeight - minWeight)) * 100;
-              return (
-                <div key={log.id || index} className="flex-1 flex flex-col items-center gap-2">
-                  <div className="w-full bg-purple-100 rounded-t-lg relative group">
-                    <div
-                      className="w-full bg-linear-to-t from-purple-600 to-pink-500 rounded-t-lg transition-all duration-300 hover:opacity-80"
-                      style={{ height: `${height * 2}px` }}
-                    />
-                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      {log.weight.toFixed(1)} kg
+            sortedLogs
+              .slice(0, 20)
+              .reverse()
+              .map((log, index) => {
+                const height =
+                  ((log.weight - minWeight) / (maxWeight - minWeight)) * 100;
+                return (
+                  <div
+                    key={log.id || index}
+                    className="flex-1 flex flex-col items-center gap-2"
+                  >
+                    <div className="w-full bg-purple-100 rounded-t-lg relative group">
+                      <div
+                        className="w-full bg-linear-to-t from-purple-600 to-pink-500 rounded-t-lg transition-all duration-300 hover:opacity-80"
+                        style={{ height: `${height * 2}px` }}
+                      />
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        {log.weight.toFixed(1)} kg
+                      </div>
                     </div>
+                    <span className="text-xs text-gray-500 transform -rotate-45 origin-top-left mt-2">
+                      {new Date(log.date).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                      })}
+                    </span>
                   </div>
-                  <span className="text-xs text-gray-500 transform -rotate-45 origin-top-left mt-2">
-                    {new Date(log.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
-                  </span>
-                </div>
-              );
-            })
+                );
+              })
           ) : (
-            <p className="text-gray-400 text-center w-full">No weight entries yet</p>
+            <p className="text-gray-400 text-center w-full">
+              No weight entries yet
+            </p>
           )}
         </div>
       </div>
@@ -154,7 +179,9 @@ const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
         {showForm && (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Weight (kg)</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Weight (kg)
+              </label>
               <input
                 type="number"
                 step="0.1"
@@ -190,10 +217,18 @@ const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
           <table className="w-full">
             <thead>
               <tr className="border-b-2 border-gray-200">
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Date</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Weight</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Change</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-700">Actions</th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">
+                  Date
+                </th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">
+                  Weight
+                </th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">
+                  Change
+                </th>
+                <th className="text-right py-3 px-4 font-semibold text-gray-700">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -202,19 +237,27 @@ const WeightTracker = ({ logs = [], goal = 75, onSubmit, onDelete }) => {
                   const prevWeight = sortedLogs[index + 1]?.weight;
                   const change = prevWeight ? log.weight - prevWeight : 0;
                   return (
-                    <tr key={log.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <tr
+                      key={log.id}
+                      className="border-b border-gray-100 hover:bg-gray-50"
+                    >
                       <td className="py-3 px-4 text-gray-800">
-                        {new Date(log.date).toLocaleDateString('en-GB', {
-                          day: '2-digit',
-                          month: 'short',
-                          year: 'numeric',
+                        {new Date(log.date).toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
                         })}
                       </td>
-                      <td className="py-3 px-4 font-semibold text-gray-800">{log.weight.toFixed(1)} kg</td>
+                      <td className="py-3 px-4 font-semibold text-gray-800">
+                        {log.weight.toFixed(1)} kg
+                      </td>
                       <td className="py-3 px-4">
                         {prevWeight ? (
-                          <span className={`font-semibold ${change < 0 ? 'text-green-600' : 'text-red-600'}`}>
-                            {change > 0 ? '+' : ''}{change.toFixed(1)} kg
+                          <span
+                            className={`font-semibold ${change < 0 ? "text-green-600" : "text-red-600"}`}
+                          >
+                            {change > 0 ? "+" : ""}
+                            {change.toFixed(1)} kg
                           </span>
                         ) : (
                           <span className="text-gray-400">-</span>

@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { X, Clock, Flame, Utensils } from 'lucide-react';
+import React, { useMemo } from "react";
+import { X, Clock, Flame, Utensils } from "lucide-react";
 
 const MealDetail = ({ meal, onCook, scale = 1 }) => {
   if (!meal) {
@@ -9,7 +9,7 @@ const MealDetail = ({ meal, onCook, scale = 1 }) => {
   const ingredients = useMemo(() => {
     return meal.items.map((item) => ({
       name: item,
-      quantity: scale === 1 ? '1 serving' : `${scale} servings`,
+      quantity: scale === 1 ? "1 serving" : `${scale} servings`,
     }));
   }, [meal.items, scale]);
 
@@ -21,13 +21,17 @@ const MealDetail = ({ meal, onCook, scale = 1 }) => {
   };
 
   const steps = [
-    'Prep all ingredients and wash produce.',
-    'Cook the main protein with light seasoning.',
-    'Prepare the carb source and vegetables.',
-    'Combine components and finish with herbs or dressing.',
+    "Prep all ingredients and wash produce.",
+    "Cook the main protein with light seasoning.",
+    "Prepare the carb source and vegetables.",
+    "Combine components and finish with herbs or dressing.",
   ];
 
-  const substitutes = ['Swap rice for quinoa', 'Use tofu instead of chicken', 'Add extra greens'];
+  const substitutes = [
+    "Swap rice for quinoa",
+    "Use tofu instead of chicken",
+    "Add extra greens",
+  ];
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center p-4">
@@ -35,7 +39,9 @@ const MealDetail = ({ meal, onCook, scale = 1 }) => {
         <div className="p-6 border-b border-gray-200 flex items-center justify-between">
           <div>
             <h3 className="text-2xl font-bold text-gray-800">{meal.name}</h3>
-            <p className="text-sm text-gray-500">{meal.time} · {meal.prepTime}</p>
+            <p className="text-sm text-gray-500">
+              {meal.time} · {meal.prepTime}
+            </p>
           </div>
           <button onClick={onCook} className="p-2 rounded-full bg-gray-100">
             <X className="w-5 h-5" />
@@ -65,7 +71,9 @@ const MealDetail = ({ meal, onCook, scale = 1 }) => {
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold text-gray-800 mb-2">Ingredients</h4>
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">
+              Ingredients
+            </h4>
             <ul className="grid grid-cols-2 gap-2 text-sm text-gray-600">
               {ingredients.map((ingredient) => (
                 <li key={ingredient.name} className="bg-gray-50 rounded-lg p-2">
@@ -76,7 +84,9 @@ const MealDetail = ({ meal, onCook, scale = 1 }) => {
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold text-gray-800 mb-2">Cooking Steps</h4>
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">
+              Cooking Steps
+            </h4>
             <ol className="space-y-2 text-sm text-gray-600">
               {steps.map((step, index) => (
                 <li key={step} className="flex gap-2">
@@ -90,10 +100,15 @@ const MealDetail = ({ meal, onCook, scale = 1 }) => {
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold text-gray-800 mb-2">Substitute Suggestions</h4>
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">
+              Substitute Suggestions
+            </h4>
             <div className="flex flex-wrap gap-2 text-sm">
               {substitutes.map((sub) => (
-                <span key={sub} className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">
+                <span
+                  key={sub}
+                  className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full"
+                >
                   {sub}
                 </span>
               ))}

@@ -1,28 +1,37 @@
-import React, { useState } from 'react';
-import { Mail, X, Plus, Trash2, Share2, CheckCircle, Loader } from 'lucide-react';
-import { reportsService } from '../../../Services/reportsService';
+import React, { useState } from "react";
+import {
+  Mail,
+  X,
+  Plus,
+  Trash2,
+  Share2,
+  CheckCircle,
+  Loader,
+} from "lucide-react";
+import { reportsService } from "../../../Services/reportsService";
 
 export default function EmailReportButton({ reportData, onComplete }) {
   const [showModal, setShowModal] = useState(false);
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [options, setOptions] = useState({
-    recipients: ['user@example.com'],
+    recipients: ["user@example.com"],
     cc: [],
     bcc: [],
-    subject: 'Your Weekly Fitness Report',
-    message: 'Please find attached your detailed fitness report with insights and recommendations.',
-    format: 'pdf',
-    scheduleTime: 'now',
-    scheduleDate: new Date().toISOString().split('T')[0],
-    scheduleTime_value: '09:00',
+    subject: "Your Weekly Fitness Report",
+    message:
+      "Please find attached your detailed fitness report with insights and recommendations.",
+    format: "pdf",
+    scheduleTime: "now",
+    scheduleDate: new Date().toISOString().split("T")[0],
+    scheduleTime_value: "09:00",
     recurring: false,
-    recurringType: 'weekly',
-    template: 'standard',
+    recurringType: "weekly",
+    template: "standard",
   });
-  const [recipientInput, setRecipientInput] = useState('');
-  const [ccInput, setCcInput] = useState('');
-  const [bbcInput, setBbcInput] = useState('');
+  const [recipientInput, setRecipientInput] = useState("");
+  const [ccInput, setCcInput] = useState("");
+  const [bbcInput, setBbcInput] = useState("");
 
   const addRecipient = () => {
     if (recipientInput && !options.recipients.includes(recipientInput)) {
@@ -30,7 +39,7 @@ export default function EmailReportButton({ reportData, onComplete }) {
         ...options,
         recipients: [...options.recipients, recipientInput],
       });
-      setRecipientInput('');
+      setRecipientInput("");
     }
   };
 
@@ -47,7 +56,7 @@ export default function EmailReportButton({ reportData, onComplete }) {
         ...options,
         cc: [...options.cc, ccInput],
       });
-      setCcInput('');
+      setCcInput("");
     }
   };
 
@@ -61,7 +70,7 @@ export default function EmailReportButton({ reportData, onComplete }) {
   const handleSend = async () => {
     setSending(true);
     setSuccess(false);
-    
+
     try {
       // Prepare email data
       const emailData = {
@@ -72,31 +81,31 @@ export default function EmailReportButton({ reportData, onComplete }) {
         message: options.message,
         format: options.format,
         reportData: reportData,
-        recurring: options.recurring ? {
-          enabled: true,
-          frequency: options.recurringType,
-        } : null,
-        scheduledFor: options.scheduleTime === 'schedule' ? 
-          `${options.scheduleDate}T${options.scheduleTime_value}` : null,
+        recurring: options.recurring
+          ? {
+              enabled: true,
+              frequency: options.recurringType,
+            }
+          : null,
+        scheduledFor:
+          options.scheduleTime === "schedule"
+            ? `${options.scheduleDate}T${options.scheduleTime_value}`
+            : null,
       };
 
       // Send email via service
-      await reportsService.emailReport(
-        options.recipients,
-        reportData,
-        {
-          cc: options.cc,
-          bcc: options.bcc,
-          subject: options.subject,
-          message: options.message,
-          format: options.format,
-          schedule: emailData.scheduledFor,
-          recurring: emailData.recurring,
-        }
-      );
+      await reportsService.emailReport(options.recipients, reportData, {
+        cc: options.cc,
+        bcc: options.bcc,
+        subject: options.subject,
+        message: options.message,
+        format: options.format,
+        schedule: emailData.scheduledFor,
+        recurring: emailData.recurring,
+      });
 
       setSuccess(true);
-      
+
       // Close modal after success
       setTimeout(() => {
         setShowModal(false);
@@ -105,7 +114,7 @@ export default function EmailReportButton({ reportData, onComplete }) {
         if (onComplete) onComplete(true);
       }, 2000);
     } catch (error) {
-      console.error('Email send failed:', error);
+      console.error("Email send failed:", error);
       setSending(false);
       // Could add error state/notification here
     }
@@ -116,11 +125,11 @@ export default function EmailReportButton({ reportData, onComplete }) {
     const urlPatterns = {
       slack: `https://slack.com/share?url=fitness-report&text=${encodeURIComponent(text)}`,
       teams: `https://teams.microsoft.com/share?url=fitness-report&text=${encodeURIComponent(text)}`,
-      whatsapp: `https://wa.me/?text=${encodeURIComponent(text + '\nCheck out my fitness progress!')}`,
+      whatsapp: `https://wa.me/?text=${encodeURIComponent(text + "\nCheck out my fitness progress!")}`,
     };
-    
+
     if (urlPatterns[platform]) {
-      window.open(urlPatterns[platform], '_blank');
+      window.open(urlPatterns[platform], "_blank");
     }
   };
 
@@ -141,7 +150,9 @@ export default function EmailReportButton({ reportData, onComplete }) {
           <div className="bg-gray-900 border border-gray-700 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-700">
-              <h2 className="text-xl font-bold text-white">Share Report via Email</h2>
+              <h2 className="text-xl font-bold text-white">
+                Share Report via Email
+              </h2>
               <button
                 onClick={() => setShowModal(false)}
                 className="text-gray-400 hover:text-white"
@@ -154,7 +165,9 @@ export default function EmailReportButton({ reportData, onComplete }) {
             <div className="p-6 space-y-6">
               {/* Recipients */}
               <div>
-                <label className="block text-white font-semibold mb-3">Recipients</label>
+                <label className="block text-white font-semibold mb-3">
+                  Recipients
+                </label>
                 <div className="space-y-2">
                   <div className="flex gap-2">
                     <input
@@ -163,7 +176,7 @@ export default function EmailReportButton({ reportData, onComplete }) {
                       onChange={(e) => setRecipientInput(e.target.value)}
                       placeholder="Enter email address"
                       className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                      onKeyPress={(e) => e.key === 'Enter' && addRecipient()}
+                      onKeyPress={(e) => e.key === "Enter" && addRecipient()}
                     />
                     <button
                       onClick={addRecipient}
@@ -194,7 +207,9 @@ export default function EmailReportButton({ reportData, onComplete }) {
 
               {/* CC */}
               <div>
-                <label className="block text-white font-semibold mb-3">CC (Optional)</label>
+                <label className="block text-white font-semibold mb-3">
+                  CC (Optional)
+                </label>
                 <div className="flex gap-2">
                   <input
                     type="email"
@@ -202,7 +217,7 @@ export default function EmailReportButton({ reportData, onComplete }) {
                     onChange={(e) => setCcInput(e.target.value)}
                     placeholder="Enter email for CC"
                     className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                    onKeyPress={(e) => e.key === 'Enter' && addCC()}
+                    onKeyPress={(e) => e.key === "Enter" && addCC()}
                   />
                   <button
                     onClick={addCC}
@@ -214,9 +229,15 @@ export default function EmailReportButton({ reportData, onComplete }) {
                 {options.cc.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-2">
                     {options.cc.map((email) => (
-                      <div key={email} className="flex items-center gap-2 px-3 py-1 bg-gray-700 text-gray-200 rounded-lg">
+                      <div
+                        key={email}
+                        className="flex items-center gap-2 px-3 py-1 bg-gray-700 text-gray-200 rounded-lg"
+                      >
                         {email}
-                        <button onClick={() => removeCC(email)} className="text-gray-300 hover:text-white">
+                        <button
+                          onClick={() => removeCC(email)}
+                          className="text-gray-300 hover:text-white"
+                        >
                           <Trash2 size={14} />
                         </button>
                       </div>
@@ -227,21 +248,29 @@ export default function EmailReportButton({ reportData, onComplete }) {
 
               {/* Subject */}
               <div>
-                <label className="block text-white font-semibold mb-2">Subject</label>
+                <label className="block text-white font-semibold mb-2">
+                  Subject
+                </label>
                 <input
                   type="text"
                   value={options.subject}
-                  onChange={(e) => setOptions({ ...options, subject: e.target.value })}
+                  onChange={(e) =>
+                    setOptions({ ...options, subject: e.target.value })
+                  }
                   className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               {/* Message */}
               <div>
-                <label className="block text-white font-semibold mb-2">Message</label>
+                <label className="block text-white font-semibold mb-2">
+                  Message
+                </label>
                 <textarea
                   value={options.message}
-                  onChange={(e) => setOptions({ ...options, message: e.target.value })}
+                  onChange={(e) =>
+                    setOptions({ ...options, message: e.target.value })
+                  }
                   placeholder="Add a custom message..."
                   className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 h-24 resize-none"
                 />
@@ -249,16 +278,18 @@ export default function EmailReportButton({ reportData, onComplete }) {
 
               {/* Format */}
               <div>
-                <label className="block text-white font-semibold mb-3">Email Format</label>
+                <label className="block text-white font-semibold mb-3">
+                  Email Format
+                </label>
                 <div className="grid grid-cols-3 gap-3">
-                  {['pdf', 'html', 'csv'].map((fmt) => (
+                  {["pdf", "html", "csv"].map((fmt) => (
                     <button
                       key={fmt}
                       onClick={() => setOptions({ ...options, format: fmt })}
                       className={`py-2 px-4 rounded-lg font-medium uppercase transition ${
                         options.format === fmt
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                       }`}
                     >
                       {fmt}
@@ -269,34 +300,45 @@ export default function EmailReportButton({ reportData, onComplete }) {
 
               {/* Schedule */}
               <div>
-                <label className="block text-white font-semibold mb-3">Schedule</label>
+                <label className="block text-white font-semibold mb-3">
+                  Schedule
+                </label>
                 <div className="grid grid-cols-2 gap-3 mb-4">
-                  {['now', 'schedule'].map((sched) => (
+                  {["now", "schedule"].map((sched) => (
                     <button
                       key={sched}
-                      onClick={() => setOptions({ ...options, scheduleTime: sched })}
+                      onClick={() =>
+                        setOptions({ ...options, scheduleTime: sched })
+                      }
                       className={`py-2 px-4 rounded-lg font-medium capitalize transition ${
                         options.scheduleTime === sched
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                       }`}
                     >
-                      {sched === 'now' ? 'Send Now' : 'Schedule Later'}
+                      {sched === "now" ? "Send Now" : "Schedule Later"}
                     </button>
                   ))}
                 </div>
-                {options.scheduleTime === 'schedule' && (
+                {options.scheduleTime === "schedule" && (
                   <div className="grid grid-cols-2 gap-3">
                     <input
                       type="date"
                       value={options.scheduleDate}
-                      onChange={(e) => setOptions({ ...options, scheduleDate: e.target.value })}
+                      onChange={(e) =>
+                        setOptions({ ...options, scheduleDate: e.target.value })
+                      }
                       className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
                     />
                     <input
                       type="time"
                       value={options.scheduleTime_value}
-                      onChange={(e) => setOptions({ ...options, scheduleTime_value: e.target.value })}
+                      onChange={(e) =>
+                        setOptions({
+                          ...options,
+                          scheduleTime_value: e.target.value,
+                        })
+                      }
                       className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
                     />
                   </div>
@@ -308,18 +350,26 @@ export default function EmailReportButton({ reportData, onComplete }) {
                 <input
                   type="checkbox"
                   checked={options.recurring}
-                  onChange={(e) => setOptions({ ...options, recurring: e.target.checked })}
+                  onChange={(e) =>
+                    setOptions({ ...options, recurring: e.target.checked })
+                  }
                   className="w-5 h-5 rounded accent-blue-600"
                 />
-                <span className="text-gray-300">Set up recurring email reports</span>
+                <span className="text-gray-300">
+                  Set up recurring email reports
+                </span>
               </label>
 
               {options.recurring && (
                 <div>
-                  <label className="block text-white font-semibold mb-2">Frequency</label>
+                  <label className="block text-white font-semibold mb-2">
+                    Frequency
+                  </label>
                   <select
                     value={options.recurringType}
-                    onChange={(e) => setOptions({ ...options, recurringType: e.target.value })}
+                    onChange={(e) =>
+                      setOptions({ ...options, recurringType: e.target.value })
+                    }
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
                   >
                     <option value="weekly">Weekly</option>
@@ -331,12 +381,14 @@ export default function EmailReportButton({ reportData, onComplete }) {
 
               {/* Social Share */}
               <div>
-                <label className="block text-white font-semibold mb-3">Share to Social Media</label>
+                <label className="block text-white font-semibold mb-3">
+                  Share to Social Media
+                </label>
                 <div className="flex gap-2">
                   {[
-                    { name: 'Slack', icon: '💬' },
-                    { name: 'Teams', icon: '📊' },
-                    { name: 'WhatsApp', icon: '💬' },
+                    { name: "Slack", icon: "💬" },
+                    { name: "Teams", icon: "📊" },
+                    { name: "WhatsApp", icon: "💬" },
                   ].map((social) => (
                     <button
                       key={social.name}
@@ -352,11 +404,16 @@ export default function EmailReportButton({ reportData, onComplete }) {
 
               {/* Preview */}
               <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                <p className="text-gray-400 text-sm font-semibold mb-2">Email Preview</p>
-                <p className="text-gray-300 text-sm">
-                  To: {options.recipients.join(', ')} {options.cc.length > 0 && `| CC: ${options.cc.join(', ')}`}
+                <p className="text-gray-400 text-sm font-semibold mb-2">
+                  Email Preview
                 </p>
-                <p className="text-gray-300 text-sm mt-1">Subject: {options.subject}</p>
+                <p className="text-gray-300 text-sm">
+                  To: {options.recipients.join(", ")}{" "}
+                  {options.cc.length > 0 && `| CC: ${options.cc.join(", ")}`}
+                </p>
+                <p className="text-gray-300 text-sm mt-1">
+                  Subject: {options.subject}
+                </p>
               </div>
             </div>
 
@@ -387,7 +444,7 @@ export default function EmailReportButton({ reportData, onComplete }) {
                 ) : (
                   <>
                     <Mail size={18} />
-                    {options.scheduleTime === 'now' ? 'Send Now' : 'Schedule'}
+                    {options.scheduleTime === "now" ? "Send Now" : "Schedule"}
                   </>
                 )}
               </button>

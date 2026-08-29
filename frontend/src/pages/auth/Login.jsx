@@ -1,4 +1,4 @@
-﻿// Login.jsx
+// Login.jsx
 import React, {
   useState,
   useEffect,
@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { loginUser } from "../../Services/authService";
 import ForgetPasswordModal from "../../modals/ForgetPasswordModal";
-import { useAuth } from "../../Context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -52,25 +52,29 @@ const Login = () => {
   const testimonials = useMemo(
     () => [
       {
-        quote: "HealthNexus transformed my fitness approach. Achieved results I never thought possible!",
+        quote:
+          "HealthNexus transformed my fitness approach. Achieved results I never thought possible!",
         author: "Sarah Johnson",
         initials: "SJ",
         achievement: "Lost 30lbs in 6 months",
       },
       {
-        quote: "The AI-powered workouts are incredibly personalized. My strength increased by 40% in 3 months!",
+        quote:
+          "The AI-powered workouts are incredibly personalized. My strength increased by 40% in 3 months!",
         author: "Michael Chen",
         initials: "MC",
         achievement: "40% strength increase",
       },
       {
-        quote: "Best investment for my health journey. The nutrition tracking feature alone is worth it!",
+        quote:
+          "Best investment for my health journey. The nutrition tracking feature alone is worth it!",
         author: "Emma Rodriguez",
         initials: "ER",
         achievement: "Consistent results",
       },
       {
-        quote: "Finally found a fitness app that actually understands my goals. Highly recommended!",
+        quote:
+          "Finally found a fitness app that actually understands my goals. Highly recommended!",
         author: "James Wilson",
         initials: "JW",
         achievement: "Achieved all fitness goals",
@@ -143,42 +147,32 @@ const Login = () => {
     setLoginError(false);
 
     try {
-      const response = await loginUser({
-        email: formData.email,
-        password: formData.password,
-        rememberMe,
-      });
+      // Use AuthContext login which handles token storage
+      const result = await login(formData.email, formData.password);
 
-      if (response?.success) {
-        login({
-          user: response.user,
-          accessToken: response.accessToken,
+      if (result?.success) {
+        toast.success("Login successful! Redirecting...", {
+          icon: "🎉",
+          duration: 2000,
         });
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
+      } else {
+        const errMsg = result?.error || "Invalid email or password";
+        toast.error(errMsg, { duration: 3000 });
+        setLoginError(true);
       }
-
-      toast.success("Login successful! Redirecting...", {
-        icon: "🎉",
-        duration: 2000,
-      });
-      window.location.href = "/dashboard";y
-
-      setTimeout(() => {
-        
-        navigate("/dashboard");
-      }, 1500);
-     
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Invalid email or password",
+        error.response?.data?.message || error.message || "Login failed",
         { duration: 3000 },
       );
       setLoginError(true);
     } finally {
       setIsLoading(false);
     }
-    
   };
-  
 
   // Optimized animation variants
   const containerVariants = {
@@ -423,11 +417,12 @@ const Login = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 border-2 rounded-lg sm:rounded-xl transition-all duration-200 outline-none text-sm sm:text-base
-                        ${touched.email && errors.email
-                          ? "border-red-300 bg-red-50 focus:border-red-500"
-                          : loginError
-                            ? "border-red-300 bg-red-50"
-                            : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
+                        ${
+                          touched.email && errors.email
+                            ? "border-red-300 bg-red-50 focus:border-red-500"
+                            : loginError
+                              ? "border-red-300 bg-red-50"
+                              : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
                         }
                         hover:border-blue-300 focus:ring-2 focus:ring-blue-100`}
                       placeholder="you@example.com"
@@ -463,11 +458,12 @@ const Login = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`w-full pl-9 sm:pl-10 pr-9 sm:pr-12 py-2.5 sm:py-3 border-2 rounded-lg sm:rounded-xl transition-all duration-200 outline-none text-sm sm:text-base
-                        ${touched.password && errors.password
-                          ? "border-red-300 bg-red-50 focus:border-red-500"
-                          : loginError
-                            ? "border-red-300 bg-red-50"
-                            : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
+                        ${
+                          touched.password && errors.password
+                            ? "border-red-300 bg-red-50 focus:border-red-500"
+                            : loginError
+                              ? "border-red-300 bg-red-50"
+                              : "border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white"
                         }
                         hover:border-blue-300 focus:ring-2 focus:ring-blue-100`}
                       placeholder="Enter your password"
@@ -549,9 +545,10 @@ const Login = () => {
                   type="submit"
                   disabled={!isValid || isLoading}
                   className={`w-full py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base text-white transition-all duration-200
-                    ${!isValid || isLoading
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-linear-to-r from-blue-500 to-purple-600 hover:shadow-md"
+                    ${
+                      !isValid || isLoading
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-linear-to-r from-blue-500 to-purple-600 hover:shadow-md"
                     }`}
                 >
                   {isLoading ? (

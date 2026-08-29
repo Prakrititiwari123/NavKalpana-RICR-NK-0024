@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Download, X, CheckCircle } from 'lucide-react';
-import reportsService from '../../../Services/reportsService';
+import React, { useState } from "react";
+import { Download, X, CheckCircle } from "lucide-react";
+import reportsService from "../../../Services/reportsService";
 
 export default function PDFDownloadButton({ reportData, onComplete }) {
   const [showModal, setShowModal] = useState(false);
   const [options, setOptions] = useState({
-    pageSize: 'A4',
-    orientation: 'portrait',
-    quality: 'standard',
+    pageSize: "A4",
+    orientation: "portrait",
+    quality: "standard",
     includeCharts: true,
     includeTables: true,
     includeInsights: true,
     includeNotes: false,
-    customNotes: '',
+    customNotes: "",
     watermark: false,
   });
   const [success, setSuccess] = useState(false);
@@ -20,8 +20,8 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
   const handleDownload = async () => {
     try {
       // In a real scenario, this would use a PDF library or backend service
-      const filename = `fitness_report_${new Date().toISOString().split('T')[0]}.pdf`;
-      
+      const filename = `fitness_report_${new Date().toISOString().split("T")[0]}.pdf`;
+
       // Mock implementation - replace with actual PDF generation
       const content = `
       FITNESS REPORT
@@ -35,16 +35,16 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
       - Quality: ${options.quality}
       
       Included Sections:
-      - Charts: ${options.includeCharts ? 'Yes' : 'No'}
-      - Tables: ${options.includeTables ? 'Yes' : 'No'}
-      - Insights: ${options.includeInsights ? 'Yes' : 'No'}
-      ${options.customNotes ? `\nNotes:\n${options.customNotes}` : ''}
-      ${options.watermark ? '\n[PREMIUM WATERMARK]' : ''}
+      - Charts: ${options.includeCharts ? "Yes" : "No"}
+      - Tables: ${options.includeTables ? "Yes" : "No"}
+      - Insights: ${options.includeInsights ? "Yes" : "No"}
+      ${options.customNotes ? `\nNotes:\n${options.customNotes}` : ""}
+      ${options.watermark ? "\n[PREMIUM WATERMARK]" : ""}
       `;
 
-      const blob = new Blob([content], { type: 'application/pdf' });
+      const blob = new Blob([content], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = filename;
       a.click();
@@ -56,7 +56,7 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
         if (onComplete) onComplete(true);
       }, 1500);
     } catch (error) {
-      console.error('PDF download failed:', error);
+      console.error("PDF download failed:", error);
     }
   };
 
@@ -77,7 +77,9 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
           <div className="bg-gray-900 border border-gray-700 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-700">
-              <h2 className="text-xl font-bold text-white">Download PDF Report</h2>
+              <h2 className="text-xl font-bold text-white">
+                Download PDF Report
+              </h2>
               <button
                 onClick={() => setShowModal(false)}
                 className="text-gray-400 hover:text-white"
@@ -90,16 +92,18 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
             <div className="p-6 space-y-6">
               {/* Page Size */}
               <div>
-                <label className="block text-white font-semibold mb-3">Page Size</label>
+                <label className="block text-white font-semibold mb-3">
+                  Page Size
+                </label>
                 <div className="grid grid-cols-3 gap-3">
-                  {['A4', 'Letter', 'A3'].map((size) => (
+                  {["A4", "Letter", "A3"].map((size) => (
                     <button
                       key={size}
                       onClick={() => setOptions({ ...options, pageSize: size })}
                       className={`py-2 px-4 rounded-lg font-medium transition ${
                         options.pageSize === size
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                       }`}
                     >
                       {size}
@@ -110,16 +114,20 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
 
               {/* Orientation */}
               <div>
-                <label className="block text-white font-semibold mb-3">Orientation</label>
+                <label className="block text-white font-semibold mb-3">
+                  Orientation
+                </label>
                 <div className="grid grid-cols-2 gap-3">
-                  {['portrait', 'landscape'].map((orient) => (
+                  {["portrait", "landscape"].map((orient) => (
                     <button
                       key={orient}
-                      onClick={() => setOptions({ ...options, orientation: orient })}
+                      onClick={() =>
+                        setOptions({ ...options, orientation: orient })
+                      }
                       className={`py-2 px-4 rounded-lg font-medium capitalize transition ${
                         options.orientation === orient
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                       }`}
                     >
                       {orient}
@@ -130,16 +138,18 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
 
               {/* Quality */}
               <div>
-                <label className="block text-white font-semibold mb-3">Quality</label>
+                <label className="block text-white font-semibold mb-3">
+                  Quality
+                </label>
                 <div className="grid grid-cols-3 gap-3">
-                  {['draft', 'standard', 'high'].map((qual) => (
+                  {["draft", "standard", "high"].map((qual) => (
                     <button
                       key={qual}
                       onClick={() => setOptions({ ...options, quality: qual })}
                       className={`py-2 px-4 rounded-lg font-medium capitalize transition ${
                         options.quality === qual
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                       }`}
                     >
                       {qual}
@@ -150,20 +160,31 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
 
               {/* Include Sections */}
               <div>
-                <label className="block text-white font-semibold mb-3">Include Sections</label>
+                <label className="block text-white font-semibold mb-3">
+                  Include Sections
+                </label>
                 <div className="space-y-2">
                   {[
-                    { key: 'includeCharts', label: 'Charts & Graphs' },
-                    { key: 'includeTables', label: 'Data Tables' },
-                    { key: 'includeInsights', label: 'AI Insights & Recommendations' },
-                    { key: 'includeNotes', label: 'Custom Notes Section' },
+                    { key: "includeCharts", label: "Charts & Graphs" },
+                    { key: "includeTables", label: "Data Tables" },
+                    {
+                      key: "includeInsights",
+                      label: "AI Insights & Recommendations",
+                    },
+                    { key: "includeNotes", label: "Custom Notes Section" },
                   ].map((section) => (
-                    <label key={section.key} className="flex items-center gap-3 cursor-pointer">
+                    <label
+                      key={section.key}
+                      className="flex items-center gap-3 cursor-pointer"
+                    >
                       <input
                         type="checkbox"
                         checked={options[section.key]}
                         onChange={(e) =>
-                          setOptions({ ...options, [section.key]: e.target.checked })
+                          setOptions({
+                            ...options,
+                            [section.key]: e.target.checked,
+                          })
                         }
                         className="w-5 h-5 rounded accent-blue-600"
                       />
@@ -176,10 +197,14 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
               {/* Custom Notes */}
               {options.includeNotes && (
                 <div>
-                  <label className="block text-white font-semibold mb-2">Add Custom Notes</label>
+                  <label className="block text-white font-semibold mb-2">
+                    Add Custom Notes
+                  </label>
                   <textarea
                     value={options.customNotes}
-                    onChange={(e) => setOptions({ ...options, customNotes: e.target.value })}
+                    onChange={(e) =>
+                      setOptions({ ...options, customNotes: e.target.value })
+                    }
                     placeholder="Add any additional notes to include in the PDF..."
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 h-24 resize-none"
                   />
@@ -191,7 +216,9 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
                 <input
                   type="checkbox"
                   checked={options.watermark}
-                  onChange={(e) => setOptions({ ...options, watermark: e.target.checked })}
+                  onChange={(e) =>
+                    setOptions({ ...options, watermark: e.target.checked })
+                  }
                   className="w-5 h-5 rounded accent-blue-600"
                 />
                 <span className="text-gray-300">Add Premium Watermark</span>
@@ -200,12 +227,19 @@ export default function PDFDownloadButton({ reportData, onComplete }) {
 
               {/* Preview */}
               <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                <p className="text-gray-400 text-sm font-semibold mb-2">Download Preview</p>
+                <p className="text-gray-400 text-sm font-semibold mb-2">
+                  Download Preview
+                </p>
                 <p className="text-gray-300 text-sm">
-                  📄 fitness_report_{new Date().toISOString().split('T')[0]}.pdf
+                  📄 fitness_report_{new Date().toISOString().split("T")[0]}.pdf
                 </p>
                 <p className="text-gray-500 text-xs mt-2">
-                  Size: {options.quality === 'high' ? '~5-8 MB' : options.quality === 'standard' ? '~2-4 MB' : '~1-2 MB'}
+                  Size:{" "}
+                  {options.quality === "high"
+                    ? "~5-8 MB"
+                    : options.quality === "standard"
+                      ? "~2-4 MB"
+                      : "~1-2 MB"}
                 </p>
               </div>
             </div>

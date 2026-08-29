@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   User,
   Heart,
@@ -13,35 +13,36 @@ import {
   Weight,
   TrendingUp,
   Shield,
-} from 'lucide-react';
-import DashboardLayout from '../../components/Dashboard/DashboardLayout';
-import HealthProfile from './Profile/HealthProfile';
-import GoalSettings from './Profile/GoalSettings';
-import toast from 'react-hot-toast';
+} from "lucide-react";
+import DashboardLayout from "../../components/Dashboard/DashboardLayout";
+import HealthProfile from "./Profile/HealthProfile";
+import GoalSettings from "./Profile/GoalSettings";
+import toast from "react-hot-toast";
+import profileService from "../../Services/profileService";
 
 const Profile = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Form data for health profile
   const [healthFormData, setHealthFormData] = useState({
-    age: '',
-    sex: '',
-    height: '',
-    heightUnit: 'cm',
-    weight: '',
-    activityLevel: '',
+    age: "",
+    sex: "",
+    height: "",
+    heightUnit: "cm",
+    weight: "",
+    activityLevel: "",
     bmi: null,
-    bmiCategory: '',
+    bmiCategory: "",
   });
 
   // Form data for goal settings
   const [goalFormData, setGoalFormData] = useState({
-    goalType: '',
-    targetWeight: '',
-    timeline: '',
-    experienceLevel: '',
+    goalType: "",
+    targetWeight: "",
+    timeline: "",
+    experienceLevel: "",
     calorieTarget: null,
   });
 
@@ -49,44 +50,44 @@ const Profile = () => {
 
   // Tabs configuration
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: User },
-    { id: 'health', label: 'Health Profile', icon: Heart },
-    { id: 'goals', label: 'Goals & Targets', icon: Target },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: "overview", label: "Overview", icon: User },
+    { id: "health", label: "Health Profile", icon: Heart },
+    { id: "goals", label: "Goals & Targets", icon: Target },
+    { id: "settings", label: "Settings", icon: Settings },
   ];
 
   // Load user data
   useEffect(() => {
-    const loadUserData = () => {
+    const loadUserData = async () => {
       try {
-        const storedUser = localStorage.getItem('healthnexus_user');
-        if (storedUser) {
-          const parsedUser = JSON.parse(storedUser);
+        const { data: parsedUser } = await profileService.getProfile();
+        if (parsedUser) {
           setUserData(parsedUser);
 
           // Populate form data from user data
           setHealthFormData({
-            age: parsedUser?.healthData?.profile?.age || '',
-            sex: parsedUser?.healthData?.profile?.gender || '',
-            height: parsedUser?.healthData?.vitals?.height || '',
-            heightUnit: 'cm',
-            weight: parsedUser?.healthData?.vitals?.currentWeight || '',
-            activityLevel: parsedUser?.healthData?.profile?.activityLevel || '',
+            age: parsedUser?.healthData?.profile?.age || "",
+            sex: parsedUser?.healthData?.profile?.gender || "",
+            height: parsedUser?.healthData?.vitals?.height || "",
+            heightUnit: "cm",
+            weight: parsedUser?.healthData?.vitals?.currentWeight || "",
+            activityLevel: parsedUser?.healthData?.profile?.activityLevel || "",
             bmi: null,
-            bmiCategory: '',
+            bmiCategory: "",
           });
 
           setGoalFormData({
-            goalType: parsedUser?.healthData?.goals?.primaryGoal || '',
-            targetWeight: parsedUser?.healthData?.vitals?.goalWeight || '',
-            timeline: parsedUser?.healthData?.goals?.timeline || '',
-            experienceLevel: parsedUser?.healthData?.goals?.experienceLevel || '',
+            goalType: parsedUser?.healthData?.goals?.primaryGoal || "",
+            targetWeight: parsedUser?.healthData?.vitals?.goalWeight || "",
+            timeline: parsedUser?.healthData?.goals?.timeline || "",
+            experienceLevel:
+              parsedUser?.healthData?.goals?.experienceLevel || "",
             calorieTarget: parsedUser?.healthData?.goals?.calorieTarget || null,
           });
         }
       } catch (error) {
-        console.error('Error loading user data:', error);
-        toast.error('Failed to load profile data');
+        console.error("Error loading user data:", error);
+        toast.error("Failed to load profile data");
       } finally {
         setLoading(false);
       }
@@ -97,17 +98,28 @@ const Profile = () => {
 
   // Calculate BMI
   const calculateBMI = () => {
-    if (userData?.healthData?.vitals?.height && userData?.healthData?.vitals?.currentWeight) {
+    if (
+      userData?.healthData?.vitals?.height &&
+      userData?.healthData?.vitals?.currentWeight
+    ) {
       const heightInMeters = userData.healthData.vitals.height / 100;
-      const bmi = (userData.healthData.vitals.currentWeight / (heightInMeters * heightInMeters)).toFixed(1);
+      const bmi = (
+        userData.healthData.vitals.currentWeight /
+        (heightInMeters * heightInMeters)
+      ).toFixed(1);
       return bmi;
     }
-    return 'N/A';
+    return "N/A";
   };
 
   // Calculate maintenance calories
   const calculateMaintenanceCalories = () => {
-    if (!healthFormData.weight || !healthFormData.age || !healthFormData.sex || !healthFormData.activityLevel) {
+    if (
+      !healthFormData.weight ||
+      !healthFormData.age ||
+      !healthFormData.sex ||
+      !healthFormData.activityLevel
+    ) {
       return null;
     }
 
@@ -116,13 +128,13 @@ const Profile = () => {
     const age = parseInt(healthFormData.age);
     let height = parseFloat(healthFormData.height);
 
-    if (healthFormData.heightUnit === 'ft') {
+    if (healthFormData.heightUnit === "ft") {
       height = height * 30.48;
     }
 
-    if (healthFormData.sex === 'male') {
+    if (healthFormData.sex === "male") {
       bmr = 10 * weight + 6.25 * height - 5 * age + 5;
-    } else if (healthFormData.sex === 'female') {
+    } else if (healthFormData.sex === "female") {
       bmr = 10 * weight + 6.25 * height - 5 * age - 161;
     } else {
       bmr = 10 * weight + 6.25 * height - 5 * age - 78;
@@ -143,49 +155,48 @@ const Profile = () => {
   // Get member since date
   const getMemberSince = () => {
     if (userData?.createdAt) {
-      return new Date(userData.createdAt).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+      return new Date(userData.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     }
-    return 'N/A';
+    return "N/A";
   };
 
   // Handle save profile
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async () => {
     try {
-      const existingUser = JSON.parse(localStorage.getItem('healthnexus_user') || '{}');
-      const updatedUser = {
-        ...existingUser,
-        healthData: {
-          ...existingUser.healthData,
-          profile: {
-            age: healthFormData.age,
-            gender: healthFormData.sex,
-            activityLevel: healthFormData.activityLevel,
-          },
-          vitals: {
-            ...existingUser.healthData?.vitals,
-            height: healthFormData.height,
-            currentWeight: healthFormData.weight,
-            goalWeight: goalFormData.targetWeight || healthFormData.weight,
-          },
-          goals: {
-            primaryGoal: goalFormData.goalType,
-            experienceLevel: goalFormData.experienceLevel,
-            timeline: goalFormData.timeline,
-            calorieTarget: goalFormData.calorieTarget,
-          },
+      const updatedHealthData = {
+        profile: {
+          age: Number(healthFormData.age),
+          gender: healthFormData.sex,
+          activityLevel: healthFormData.activityLevel,
+        },
+        vitals: {
+          height: Number(healthFormData.height),
+          currentWeight: Number(healthFormData.weight),
+          goalWeight:
+            Number(goalFormData.targetWeight) || Number(healthFormData.weight),
+        },
+        goals: {
+          primaryGoal: goalFormData.goalType,
+          experienceLevel: goalFormData.experienceLevel,
+          timeline: goalFormData.timeline,
+          calorieTarget: Number(goalFormData.calorieTarget),
         },
       };
 
-      localStorage.setItem('healthnexus_user', JSON.stringify(updatedUser));
-      setUserData(updatedUser);
-      toast.success('Profile updated successfully!');
+      const updatedFields = {
+        healthData: updatedHealthData,
+      };
+
+      const { user } = await profileService.updateProfile(updatedFields);
+      setUserData(user);
+      toast.success("Profile updated successfully!");
     } catch (error) {
-      console.error('Error saving profile:', error);
-      toast.error('Failed to save profile');
+      console.error("Error saving profile:", error);
+      toast.error("Failed to save profile");
     }
   };
 
@@ -214,8 +225,12 @@ const Profile = () => {
       <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Profile Management</h1>
-          <p className="text-gray-600">Manage your health profile, goals, and settings</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Profile Management
+          </h1>
+          <p className="text-gray-600">
+            Manage your health profile, goals, and settings
+          </p>
         </div>
 
         {/* Tabs Navigation */}
@@ -231,8 +246,8 @@ const Profile = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-all whitespace-nowrap ${
                     isActive
-                      ? 'bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md"
+                      : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -246,7 +261,7 @@ const Profile = () => {
         {/* Tab Content */}
         <AnimatePresence mode="wait">
           {/* Overview Tab */}
-          {activeTab === 'overview' && (
+          {activeTab === "overview" && (
             <motion.div
               key="overview"
               initial={{ opacity: 0, y: 20 }}
@@ -273,7 +288,7 @@ const Profile = () => {
                         )}
                       </div>
                       <h2 className="text-2xl font-bold text-gray-800 text-center">
-                        {userData?.fullName || 'User Name'}
+                        {userData?.fullName || "User Name"}
                       </h2>
                       <p className="text-gray-500 text-sm mt-1">
                         Member since {getMemberSince()}
@@ -287,7 +302,7 @@ const Profile = () => {
                         <div>
                           <p className="text-xs text-gray-500">Email</p>
                           <p className="text-sm font-medium text-gray-800">
-                            {userData?.email || 'N/A'}
+                            {userData?.email || "N/A"}
                           </p>
                         </div>
                       </div>
@@ -297,7 +312,7 @@ const Profile = () => {
                         <div>
                           <p className="text-xs text-gray-500">Age</p>
                           <p className="text-sm font-medium text-gray-800">
-                            {userData?.healthData?.profile?.age || 'N/A'} years
+                            {userData?.healthData?.profile?.age || "N/A"} years
                           </p>
                         </div>
                       </div>
@@ -307,7 +322,7 @@ const Profile = () => {
                         <div>
                           <p className="text-xs text-gray-500">Gender</p>
                           <p className="text-sm font-medium text-gray-800 capitalize">
-                            {userData?.healthData?.profile?.gender || 'N/A'}
+                            {userData?.healthData?.profile?.gender || "N/A"}
                           </p>
                         </div>
                       </div>
@@ -319,7 +334,9 @@ const Profile = () => {
                 <div className="lg:col-span-2 space-y-6">
                   {/* Health Statistics */}
                   <div className="bg-white rounded-xl shadow-lg p-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">Health Statistics</h3>
+                    <h3 className="text-xl font-bold text-gray-800 mb-4">
+                      Health Statistics
+                    </h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="p-4 bg-linear-to-br from-blue-50 to-blue-100 rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
@@ -327,7 +344,7 @@ const Profile = () => {
                           <p className="text-xs text-gray-600">Height</p>
                         </div>
                         <p className="text-2xl font-bold text-gray-800">
-                          {userData?.healthData?.vitals?.height || 'N/A'}
+                          {userData?.healthData?.vitals?.height || "N/A"}
                           <span className="text-sm text-gray-600 ml-1">cm</span>
                         </p>
                       </div>
@@ -338,7 +355,7 @@ const Profile = () => {
                           <p className="text-xs text-gray-600">Weight</p>
                         </div>
                         <p className="text-2xl font-bold text-gray-800">
-                          {userData?.healthData?.vitals?.currentWeight || 'N/A'}
+                          {userData?.healthData?.vitals?.currentWeight || "N/A"}
                           <span className="text-sm text-gray-600 ml-1">kg</span>
                         </p>
                       </div>
@@ -349,7 +366,7 @@ const Profile = () => {
                           <p className="text-xs text-gray-600">Goal</p>
                         </div>
                         <p className="text-2xl font-bold text-gray-800">
-                          {userData?.healthData?.vitals?.goalWeight || 'N/A'}
+                          {userData?.healthData?.vitals?.goalWeight || "N/A"}
                           <span className="text-sm text-gray-600 ml-1">kg</span>
                         </p>
                       </div>
@@ -359,53 +376,70 @@ const Profile = () => {
                           <Activity className="w-5 h-5 text-orange-600" />
                           <p className="text-xs text-gray-600">BMI</p>
                         </div>
-                        <p className="text-2xl font-bold text-gray-800">{calculateBMI()}</p>
+                        <p className="text-2xl font-bold text-gray-800">
+                          {calculateBMI()}
+                        </p>
                       </div>
                     </div>
                   </div>
 
                   {/* Fitness Profile */}
                   <div className="bg-white rounded-xl shadow-lg p-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">Fitness Profile</h3>
+                    <h3 className="text-xl font-bold text-gray-800 mb-4">
+                      Fitness Profile
+                    </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="p-4 border border-gray-200 rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
                           <TrendingUp className="w-5 h-5 text-blue-600" />
-                          <p className="text-sm font-medium text-gray-700">Activity Level</p>
+                          <p className="text-sm font-medium text-gray-700">
+                            Activity Level
+                          </p>
                         </div>
                         <p className="text-lg font-semibold text-gray-800 capitalize">
-                          {userData?.healthData?.profile?.activityLevel || 'Not Set'}
+                          {userData?.healthData?.profile?.activityLevel ||
+                            "Not Set"}
                         </p>
                       </div>
 
                       <div className="p-4 border border-gray-200 rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
                           <Target className="w-5 h-5 text-purple-600" />
-                          <p className="text-sm font-medium text-gray-700">Primary Goal</p>
+                          <p className="text-sm font-medium text-gray-700">
+                            Primary Goal
+                          </p>
                         </div>
                         <p className="text-lg font-semibold text-gray-800 capitalize">
-                          {userData?.healthData?.goals?.primaryGoal || 'Not Set'}
+                          {userData?.healthData?.goals?.primaryGoal ||
+                            "Not Set"}
                         </p>
                       </div>
 
                       <div className="p-4 border border-gray-200 rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
                           <Heart className="w-5 h-5 text-red-600" />
-                          <p className="text-sm font-medium text-gray-700">Heart Rate</p>
+                          <p className="text-sm font-medium text-gray-700">
+                            Heart Rate
+                          </p>
                         </div>
                         <p className="text-lg font-semibold text-gray-800">
-                          {userData?.healthData?.vitals?.heartRate || 'N/A'}
-                          <span className="text-sm text-gray-600 ml-1">bpm</span>
+                          {userData?.healthData?.vitals?.heartRate || "N/A"}
+                          <span className="text-sm text-gray-600 ml-1">
+                            bpm
+                          </span>
                         </p>
                       </div>
 
                       <div className="p-4 border border-gray-200 rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
                           <Activity className="w-5 h-5 text-green-600" />
-                          <p className="text-sm font-medium text-gray-700">Experience</p>
+                          <p className="text-sm font-medium text-gray-700">
+                            Experience
+                          </p>
                         </div>
                         <p className="text-lg font-semibold text-gray-800 capitalize">
-                          {userData?.healthData?.goals?.experienceLevel || 'Not Set'}
+                          {userData?.healthData?.goals?.experienceLevel ||
+                            "Not Set"}
                         </p>
                       </div>
                     </div>
@@ -416,7 +450,7 @@ const Profile = () => {
           )}
 
           {/* Health Profile Tab */}
-          {activeTab === 'health' && (
+          {activeTab === "health" && (
             <motion.div
               key="health"
               initial={{ opacity: 0, y: 20 }}
@@ -425,7 +459,9 @@ const Profile = () => {
             >
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800">Health Profile</h2>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Health Profile
+                  </h2>
                   <button
                     onClick={handleSaveProfile}
                     className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all"
@@ -445,7 +481,7 @@ const Profile = () => {
           )}
 
           {/* Goals & Targets Tab */}
-          {activeTab === 'goals' && (
+          {activeTab === "goals" && (
             <motion.div
               key="goals"
               initial={{ opacity: 0, y: 20 }}
@@ -454,7 +490,9 @@ const Profile = () => {
             >
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800">Goals & Targets</h2>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Goals & Targets
+                  </h2>
                   <button
                     onClick={handleSaveProfile}
                     className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all"
@@ -466,7 +504,10 @@ const Profile = () => {
 
                 <GoalSettings
                   onChange={handleGoalSettingsChange}
-                  values={{ ...goalFormData, currentWeight: healthFormData.weight }}
+                  values={{
+                    ...goalFormData,
+                    currentWeight: healthFormData.weight,
+                  }}
                   errors={errors}
                   maintenanceCalories={calculateMaintenanceCalories()}
                 />
@@ -475,7 +516,7 @@ const Profile = () => {
           )}
 
           {/* Settings Tab */}
-          {activeTab === 'settings' && (
+          {activeTab === "settings" && (
             <motion.div
               key="settings"
               initial={{ opacity: 0, y: 20 }}
@@ -483,17 +524,23 @@ const Profile = () => {
               exit={{ opacity: 0, y: -20 }}
             >
               <div className="bg-white rounded-xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Profile Settings</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                  Profile Settings
+                </h2>
 
                 {/* Medical Disclaimer */}
                 <div className="bg-blue-50 border-l-4 border-blue-400 rounded-lg p-4 mb-6">
                   <div className="flex items-start gap-3">
                     <Shield className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
                     <div>
-                      <h4 className="font-semibold text-gray-800 text-sm mb-1">Medical Disclaimer</h4>
+                      <h4 className="font-semibold text-gray-800 text-sm mb-1">
+                        Medical Disclaimer
+                      </h4>
                       <p className="text-xs text-gray-700">
-                        The information provided here is for general guidance only. Always consult with a
-                        qualified healthcare professional before starting any new fitness or nutrition program.
+                        The information provided here is for general guidance
+                        only. Always consult with a qualified healthcare
+                        professional before starting any new fitness or
+                        nutrition program.
                       </p>
                     </div>
                   </div>
@@ -502,7 +549,9 @@ const Profile = () => {
                 {/* Account Actions */}
                 <div className="space-y-4">
                   <div className="border border-gray-200 rounded-lg p-4">
-                    <h3 className="font-semibold text-gray-800 mb-2">Data Management</h3>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      Data Management
+                    </h3>
                     <p className="text-sm text-gray-600 mb-4">
                       Download or manage your personal health data
                     </p>
@@ -517,24 +566,39 @@ const Profile = () => {
                   </div>
 
                   <div className="border border-gray-200 rounded-lg p-4">
-                    <h3 className="font-semibold text-gray-800 mb-2">Privacy Settings</h3>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      Privacy Settings
+                    </h3>
                     <p className="text-sm text-gray-600 mb-4">
                       Control your privacy and data sharing preferences
                     </p>
                     <div className="space-y-3">
                       <label className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Share progress with trainers</span>
-                        <input type="checkbox" className="w-4 h-4 text-blue-600 rounded" />
+                        <span className="text-sm text-gray-700">
+                          Share progress with trainers
+                        </span>
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 rounded"
+                        />
                       </label>
                       <label className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Allow data analytics</span>
-                        <input type="checkbox" className="w-4 h-4 text-blue-600 rounded" defaultChecked />
+                        <span className="text-sm text-gray-700">
+                          Allow data analytics
+                        </span>
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 rounded"
+                          defaultChecked
+                        />
                       </label>
                     </div>
                   </div>
 
                   <div className="border border-red-200 bg-red-50 rounded-lg p-4">
-                    <h3 className="font-semibold text-red-800 mb-2">Danger Zone</h3>
+                    <h3 className="font-semibold text-red-800 mb-2">
+                      Danger Zone
+                    </h3>
                     <p className="text-sm text-red-600 mb-4">
                       Irreversible actions - proceed with caution
                     </p>

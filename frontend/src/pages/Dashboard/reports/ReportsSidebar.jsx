@@ -1,65 +1,79 @@
-import React from 'react';
-import { BarChart3, Calendar, TrendingUp, Award, FileText, Download, Mail, Bookmark, Settings } from 'lucide-react';
+import React from "react";
+import {
+  BarChart3,
+  Calendar,
+  TrendingUp,
+  Award,
+  FileText,
+  Download,
+  Mail,
+  Bookmark,
+  Settings,
+} from "lucide-react";
 
-export default function ReportsSidebar({ activeReport, onReportChange, bookmarkedReports = [] }) {
+export default function ReportsSidebar({
+  activeReport,
+  onReportChange,
+  bookmarkedReports = [],
+}) {
   const reportMenuItems = [
     {
-      id: 'weekly',
-      label: 'Weekly Report',
+      id: "weekly",
+      label: "Weekly Report",
       icon: Calendar,
-      color: 'text-indigo-400',
-      bgColor: 'bg-indigo-500/10',
-      hoverBg: 'hover:bg-indigo-500/20',
-      description: 'Last 7 days',
+      color: "text-indigo-400",
+      bgColor: "bg-indigo-500/10",
+      hoverBg: "hover:bg-indigo-500/20",
+      description: "Last 7 days",
     },
     {
-      id: 'monthly',
-      label: 'Monthly Report',
+      id: "monthly",
+      label: "Monthly Report",
       icon: BarChart3,
-      color: 'text-green-400',
-      bgColor: 'bg-green-500/10',
-      hoverBg: 'hover:bg-green-500/20',
-      description: 'Current month',
+      color: "text-green-400",
+      bgColor: "bg-green-500/10",
+      hoverBg: "hover:bg-green-500/20",
+      description: "Current month",
     },
     {
-      id: 'multiweek',
-      label: 'Multi-Week',
+      id: "multiweek",
+      label: "Multi-Week",
       icon: TrendingUp,
-      color: 'text-blue-400',
-      bgColor: 'bg-blue-500/10',
-      hoverBg: 'hover:bg-blue-500/20',
-      description: 'Custom range',
+      color: "text-blue-400",
+      bgColor: "bg-blue-500/10",
+      hoverBg: "hover:bg-blue-500/20",
+      description: "Custom range",
     },
     {
-      id: 'yearly',
-      label: 'Yearly Report',
+      id: "yearly",
+      label: "Yearly Report",
       icon: Award,
-      color: 'text-purple-400',
-      bgColor: 'bg-purple-500/10',
-      hoverBg: 'hover:bg-purple-500/20',
-      description: 'Annual summary',
+      color: "text-purple-400",
+      bgColor: "bg-purple-500/10",
+      hoverBg: "hover:bg-purple-500/20",
+      description: "Annual summary",
     },
   ];
 
   const actionItems = [
     {
-      id: 'bookmarks',
-      label: 'Bookmarks',
+      id: "bookmarks",
+      label: "Bookmarks",
       icon: Bookmark,
-      color: 'text-yellow-400',
+      color: "text-yellow-400",
       badge: bookmarkedReports.length,
     },
     {
-      id: 'exports',
-      label: 'Exports',
+      id: "exports",
+      label: "Exports",
       icon: Download,
-      color: 'text-blue-400',
+      color: "text-blue-400",
     },
     {
-      id: 'scheduled',
-      label: 'Scheduled Reports',
+      id: "scheduled",
+      label: "Scheduled Reports",
       icon: Mail,
-      color: 'text-pink-400',
+      color: "text-pink-400",
     },
   ];
 
@@ -81,13 +95,15 @@ export default function ReportsSidebar({ activeReport, onReportChange, bookmarke
       {/* Report Types */}
       <div className="flex-1 overflow-y-auto py-4 px-3 space-y-2">
         <div className="px-3 mb-3">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Report Types</p>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+            Report Types
+          </p>
         </div>
-        
+
         {reportMenuItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeReport === item.id;
-          
+
           return (
             <button
               key={item.id}
@@ -98,13 +114,19 @@ export default function ReportsSidebar({ activeReport, onReportChange, bookmarke
                   : `text-gray-400 ${item.hoverBg} hover:text-white hover:scale-102`
               }`}
             >
-              <div className={`p-2 rounded-lg transition-all ${
-                isActive ? 'bg-white/10 scale-110' : 'bg-gray-800 group-hover:bg-gray-700'
-              }`}>
+              <div
+                className={`p-2 rounded-lg transition-all ${
+                  isActive
+                    ? "bg-white/10 scale-110"
+                    : "bg-gray-800 group-hover:bg-gray-700"
+                }`}
+              >
                 <Icon size={20} />
               </div>
               <div className="flex-1 text-left">
-                <p className={`font-semibold text-sm ${isActive ? 'text-white' : ''}`}>
+                <p
+                  className={`font-semibold text-sm ${isActive ? "text-white" : ""}`}
+                >
                   {item.label}
                 </p>
                 <p className="text-xs text-gray-500 group-hover:text-gray-400">
@@ -112,7 +134,9 @@ export default function ReportsSidebar({ activeReport, onReportChange, bookmarke
                 </p>
               </div>
               {isActive && (
-                <div className={`w-1.5 h-1.5 rounded-full ${item.color.replace('text-', 'bg-')} animate-pulse`} />
+                <div
+                  className={`w-1.5 h-1.5 rounded-full ${item.color.replace("text-", "bg-")} animate-pulse`}
+                />
               )}
             </button>
           );
@@ -123,12 +147,14 @@ export default function ReportsSidebar({ activeReport, onReportChange, bookmarke
 
         {/* Quick Actions */}
         <div className="px-3 mb-3">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Quick Actions</p>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+            Quick Actions
+          </p>
         </div>
 
         {actionItems.map((item) => {
           const Icon = item.icon;
-          
+
           return (
             <button
               key={item.id}
@@ -137,7 +163,9 @@ export default function ReportsSidebar({ activeReport, onReportChange, bookmarke
               <div className="p-2 rounded-lg bg-gray-800 group-hover:bg-gray-700 transition-all">
                 <Icon size={18} className={item.color} />
               </div>
-              <span className="flex-1 text-left font-medium text-sm">{item.label}</span>
+              <span className="flex-1 text-left font-medium text-sm">
+                {item.label}
+              </span>
               {item.badge > 0 && (
                 <span className="px-2 py-0.5 text-xs font-bold bg-yellow-500/20 text-yellow-400 rounded-full">
                   {item.badge}
@@ -154,7 +182,9 @@ export default function ReportsSidebar({ activeReport, onReportChange, bookmarke
           <div className="p-2 rounded-lg bg-gray-800 group-hover:bg-gray-700 transition-all">
             <Settings size={18} />
           </div>
-          <span className="flex-1 text-left font-medium text-sm">Report Settings</span>
+          <span className="flex-1 text-left font-medium text-sm">
+            Report Settings
+          </span>
         </button>
       </div>
 

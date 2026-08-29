@@ -1,16 +1,39 @@
 ﻿// Register.jsx
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
-  User, Mail, Lock, Eye, EyeOff, Calendar,
-  Users, Ruler, Weight, Activity, Target,
-  AlertCircle, CheckCircle, Heart, FileText,
-  ArrowRight, ArrowLeft, ChevronRight, Dumbbell,
-  Shield, Award, Zap, TrendingUp, Clock
-} from 'lucide-react';
-import { validateForm, calculateBMI, getPasswordStrength } from '../../Utils/Validations';
+  User,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Calendar,
+  Users,
+  Ruler,
+  Weight,
+  Activity,
+  Target,
+  AlertCircle,
+  CheckCircle,
+  Heart,
+  FileText,
+  ArrowRight,
+  ArrowLeft,
+  ChevronRight,
+  Dumbbell,
+  Shield,
+  Award,
+  Zap,
+  TrendingUp,
+  Clock,
+} from "lucide-react";
+import {
+  validateForm,
+  calculateBMI,
+  getPasswordStrength,
+} from "../../Utils/Validations";
 import api from "../../config/Api";
 
 const Register = () => {
@@ -18,23 +41,23 @@ const Register = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Basic Information
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+
     // Health Profile
-    age: '',
-    biologicalSex: '',
-    height: '',
-    weight: '',
-    activityLevel: '',
-    experienceLevel: '',
-    primaryGoal: '',
-    
+    age: "",
+    biologicalSex: "",
+    height: "",
+    weight: "",
+    activityLevel: "",
+    experienceLevel: "",
+    primaryGoal: "",
+
     // Legal
     medicalDisclaimer: false,
-    termsAccepted: false
+    termsAccepted: false,
   });
 
   const [errors, setErrors] = useState({});
@@ -46,13 +69,15 @@ const Register = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   // Password strength indicator
-  const passwordStrength = useMemo(() => 
-    getPasswordStrength(formData.password), [formData.password]
+  const passwordStrength = useMemo(
+    () => getPasswordStrength(formData.password),
+    [formData.password],
   );
 
   // BMI Calculation
-  const bmi = useMemo(() => 
-    calculateBMI(formData.weight, formData.height), [formData.weight, formData.height]
+  const bmi = useMemo(
+    () => calculateBMI(formData.weight, formData.height),
+    [formData.weight, formData.height],
   );
 
   // Real-time validation
@@ -64,26 +89,34 @@ const Register = () => {
 
   const handleChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   }, []);
 
   const handleBlur = useCallback((e) => {
     const { name } = e.target;
-    setTouched(prev => ({ ...prev, [name]: true }));
+    setTouched((prev) => ({ ...prev, [name]: true }));
   }, []);
 
   const validateStep = (step) => {
     const stepFields = {
-      1: ['fullName', 'email', 'password', 'confirmPassword'],
-      2: ['age', 'biologicalSex', 'height', 'weight', 'activityLevel', 'experienceLevel', 'primaryGoal'],
-      3: ['medicalDisclaimer', 'termsAccepted']
+      1: ["fullName", "email", "password", "confirmPassword"],
+      2: [
+        "age",
+        "biologicalSex",
+        "height",
+        "weight",
+        "activityLevel",
+        "experienceLevel",
+        "primaryGoal",
+      ],
+      3: ["medicalDisclaimer", "termsAccepted"],
     };
 
     const stepErrors = {};
-    stepFields[step].forEach(field => {
+    stepFields[step].forEach((field) => {
       if (errors[field]) {
         stepErrors[field] = errors[field];
       }
@@ -94,50 +127,60 @@ const Register = () => {
 
   const handleNext = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep(prev => prev + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setCurrentStep((prev) => prev + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       // Mark all fields in current step as touched to show errors
       const stepFields = {
-        1: ['fullName', 'email', 'password', 'confirmPassword'],
-        2: ['age', 'biologicalSex', 'height', 'weight', 'activityLevel', 'experienceLevel', 'primaryGoal'],
-        3: ['medicalDisclaimer', 'termsAccepted']
+        1: ["fullName", "email", "password", "confirmPassword"],
+        2: [
+          "age",
+          "biologicalSex",
+          "height",
+          "weight",
+          "activityLevel",
+          "experienceLevel",
+          "primaryGoal",
+        ],
+        3: ["medicalDisclaimer", "termsAccepted"],
       };
-      
+
       const newTouched = { ...touched };
-      stepFields[currentStep].forEach(field => {
+      stepFields[currentStep].forEach((field) => {
         newTouched[field] = true;
       });
       setTouched(newTouched);
-      
-      toast.error('Please fill all required fields correctly');
+
+      toast.error("Please fill all required fields correctly");
     }
   };
 
   const handlePrevious = () => {
-    setCurrentStep(prev => prev - 1);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setCurrentStep((prev) => prev - 1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateStep(3) || isSubmitting) return;
 
     setIsSubmitting(true);
-    
+
     try {
       const response = await api.post("/auth/register", formData);
-      
+
       setIsSuccess(true);
-      toast.success('Account created successfully!');
-      
+      toast.success("Account created successfully!");
+
       setTimeout(() => {
-        navigate('/login', { state: { user: response.user } });
+        navigate("/login", { state: { user: response.user } });
       }, 2000);
-      
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Registration failed. Please try again.');
+      toast.error(
+        error.response?.data?.message ||
+          "Registration failed. Please try again.",
+      );
       setIsSubmitting(false);
       setIsSuccess(false);
     }
@@ -150,9 +193,9 @@ const Register = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -160,30 +203,30 @@ const Register = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: 'spring', stiffness: 300, damping: 24 }
-    }
+      transition: { type: "spring", stiffness: 300, damping: 24 },
+    },
   };
 
   // Step configuration
   const steps = [
     {
       number: 1,
-      title: 'Personal Info',
+      title: "Personal Info",
       icon: User,
-      description: 'Basic details'
+      description: "Basic details",
     },
     {
       number: 2,
-      title: 'Health Profile',
+      title: "Health Profile",
       icon: Heart,
-      description: 'Fitness metrics'
+      description: "Fitness metrics",
     },
     {
       number: 3,
-      title: 'Legal',
+      title: "Legal",
       icon: Shield,
-      description: 'Terms & agreements'
-    }
+      description: "Terms & agreements",
+    },
   ];
 
   return (
@@ -198,7 +241,7 @@ const Register = () => {
           transition={{
             duration: 20,
             repeat: Infinity,
-            ease: "linear"
+            ease: "linear",
           }}
           className="absolute -top-1/2 -left-1/2 w-full h-full bg-white/5 rounded-full"
         />
@@ -210,7 +253,7 @@ const Register = () => {
           transition={{
             duration: 20,
             repeat: Infinity,
-            ease: "linear"
+            ease: "linear",
           }}
           className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-purple-300/5 rounded-full"
         />
@@ -228,7 +271,7 @@ const Register = () => {
             <motion.div
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: 'spring', duration: 1, bounce: 0.5 }}
+              transition={{ type: "spring", duration: 1, bounce: 0.5 }}
               className="text-center"
             >
               <CheckCircle className="w-24 h-24 text-white mx-auto mb-4" />
@@ -271,10 +314,10 @@ const Register = () => {
                     whileHover={{ scale: 1.1 }}
                     className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
                       currentStep > step.number
-                        ? 'bg-green-500 text-white'
+                        ? "bg-green-500 text-white"
                         : currentStep === step.number
-                        ? 'bg-white text-blue-600 shadow-lg'
-                        : 'bg-white/20 text-white'
+                          ? "bg-white text-blue-600 shadow-lg"
+                          : "bg-white/20 text-white"
                     }`}
                   >
                     {currentStep > step.number ? (
@@ -283,14 +326,22 @@ const Register = () => {
                       <step.icon className="w-5 h-5" />
                     )}
                   </motion.div>
-                  <span className={`text-xs mt-2 font-medium ${
-                    currentStep >= step.number ? 'text-white' : 'text-white/60'
-                  }`}>
+                  <span
+                    className={`text-xs mt-2 font-medium ${
+                      currentStep >= step.number
+                        ? "text-white"
+                        : "text-white/60"
+                    }`}
+                  >
                     {step.title}
                   </span>
-                  <span className={`text-[10px] ${
-                    currentStep >= step.number ? 'text-white/80' : 'text-white/40'
-                  }`}>
+                  <span
+                    className={`text-[10px] ${
+                      currentStep >= step.number
+                        ? "text-white/80"
+                        : "text-white/40"
+                    }`}
+                  >
                     {step.description}
                   </span>
                 </div>
@@ -298,9 +349,9 @@ const Register = () => {
                   <div className="flex-1 mx-4 relative">
                     <div className="h-1 bg-white/20 rounded-full">
                       <motion.div
-                        initial={{ width: '0%' }}
+                        initial={{ width: "0%" }}
                         animate={{
-                          width: currentStep > step.number ? '100%' : '0%'
+                          width: currentStep > step.number ? "100%" : "0%",
                         }}
                         transition={{ duration: 0.5 }}
                         className="h-full bg-green-400 rounded-full"
@@ -322,7 +373,8 @@ const Register = () => {
             {steps[currentStep - 1].title}
           </motion.h2>
           <p className="text-white/80 text-sm">
-            Step {currentStep} of {steps.length}: {steps[currentStep - 1].description}
+            Step {currentStep} of {steps.length}:{" "}
+            {steps[currentStep - 1].description}
           </p>
         </div>
 
@@ -411,7 +463,7 @@ const Register = () => {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/40" />
                       <input
-                        type={showPassword ? 'text' : 'password'}
+                        type={showPassword ? "text" : "password"}
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
@@ -436,7 +488,7 @@ const Register = () => {
                     {formData.password && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
+                        animate={{ opacity: 1, height: "auto" }}
                         className="mt-2"
                       >
                         <div className="flex space-x-1">
@@ -449,13 +501,13 @@ const Register = () => {
                               className={`h-1 flex-1 rounded-full transition-colors ${
                                 level <= passwordStrength.level
                                   ? passwordStrength.level === 1
-                                    ? 'bg-red-400'
+                                    ? "bg-red-400"
                                     : passwordStrength.level === 2
-                                    ? 'bg-yellow-400'
-                                    : passwordStrength.level === 3
-                                    ? 'bg-blue-400'
-                                    : 'bg-green-400'
-                                  : 'bg-white/20'
+                                      ? "bg-yellow-400"
+                                      : passwordStrength.level === 3
+                                        ? "bg-blue-400"
+                                        : "bg-green-400"
+                                  : "bg-white/20"
                               }`}
                             />
                           ))}
@@ -486,7 +538,7 @@ const Register = () => {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/40" />
                       <input
-                        type={showConfirmPassword ? 'text' : 'password'}
+                        type={showConfirmPassword ? "text" : "password"}
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleChange}
@@ -496,7 +548,9 @@ const Register = () => {
                       />
                       <button
                         type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         className="absolute right-3 top-1/2 transform -translate-y-1/2"
                       >
                         {showConfirmPassword ? (
@@ -549,7 +603,9 @@ const Register = () => {
                         />
                       </div>
                       {touched.age && errors.age && (
-                        <p className="text-red-300 text-xs mt-1">{errors.age}</p>
+                        <p className="text-red-300 text-xs mt-1">
+                          {errors.age}
+                        </p>
                       )}
                     </div>
 
@@ -565,13 +621,23 @@ const Register = () => {
                         onBlur={handleBlur}
                         className="w-full px-3 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-all"
                       >
-                        <option value="" className="bg-gray-800">Select</option>
-                        <option value="male" className="bg-gray-800">Male</option>
-                        <option value="female" className="bg-gray-800">Female</option>
-                        <option value="other" className="bg-gray-800">Other</option>
+                        <option value="" className="bg-gray-800">
+                          Select
+                        </option>
+                        <option value="male" className="bg-gray-800">
+                          Male
+                        </option>
+                        <option value="female" className="bg-gray-800">
+                          Female
+                        </option>
+                        <option value="other" className="bg-gray-800">
+                          Other
+                        </option>
                       </select>
                       {touched.biologicalSex && errors.biologicalSex && (
-                        <p className="text-red-300 text-xs mt-1">{errors.biologicalSex}</p>
+                        <p className="text-red-300 text-xs mt-1">
+                          {errors.biologicalSex}
+                        </p>
                       )}
                     </div>
 
@@ -593,7 +659,9 @@ const Register = () => {
                         />
                       </div>
                       {touched.height && errors.height && (
-                        <p className="text-red-300 text-xs mt-1">{errors.height}</p>
+                        <p className="text-red-300 text-xs mt-1">
+                          {errors.height}
+                        </p>
                       )}
                     </div>
 
@@ -615,7 +683,9 @@ const Register = () => {
                         />
                       </div>
                       {touched.weight && errors.weight && (
-                        <p className="text-red-300 text-xs mt-1">{errors.weight}</p>
+                        <p className="text-red-300 text-xs mt-1">
+                          {errors.weight}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -628,14 +698,19 @@ const Register = () => {
                       className="bg-white/20 p-3 rounded-lg"
                     >
                       <p className="text-sm text-white">
-                        Your BMI: <span className="font-bold">{bmi.value}</span> 
-                        {' - '}
-                        <span className={`font-semibold ${
-                          bmi.category === 'Normal' ? 'text-green-300' :
-                          bmi.category === 'Overweight' ? 'text-yellow-300' :
-                          bmi.category === 'Obese' ? 'text-red-300' :
-                          'text-blue-300'
-                        }`}>
+                        Your BMI: <span className="font-bold">{bmi.value}</span>
+                        {" - "}
+                        <span
+                          className={`font-semibold ${
+                            bmi.category === "Normal"
+                              ? "text-green-300"
+                              : bmi.category === "Overweight"
+                                ? "text-yellow-300"
+                                : bmi.category === "Obese"
+                                  ? "text-red-300"
+                                  : "text-blue-300"
+                          }`}
+                        >
                           {bmi.category}
                         </span>
                       </p>
@@ -654,15 +729,29 @@ const Register = () => {
                       onBlur={handleBlur}
                       className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-all"
                     >
-                      <option value="" className="bg-gray-800">Select Activity Level</option>
-                      <option value="sedentary" className="bg-gray-800">Sedentary (little or no exercise)</option>
-                      <option value="light" className="bg-gray-800">Lightly Active (1-3 days/week)</option>
-                      <option value="moderate" className="bg-gray-800">Moderately Active (3-5 days/week)</option>
-                      <option value="very" className="bg-gray-800">Very Active (6-7 days/week)</option>
-                      <option value="extra" className="bg-gray-800">Extra Active (athlete/physical job)</option>
+                      <option value="" className="bg-gray-800">
+                        Select Activity Level
+                      </option>
+                      <option value="sedentary" className="bg-gray-800">
+                        Sedentary (little or no exercise)
+                      </option>
+                      <option value="light" className="bg-gray-800">
+                        Lightly Active (1-3 days/week)
+                      </option>
+                      <option value="moderate" className="bg-gray-800">
+                        Moderately Active (3-5 days/week)
+                      </option>
+                      <option value="very" className="bg-gray-800">
+                        Very Active (6-7 days/week)
+                      </option>
+                      <option value="extra" className="bg-gray-800">
+                        Extra Active (athlete/physical job)
+                      </option>
                     </select>
                     {touched.activityLevel && errors.activityLevel && (
-                      <p className="text-red-300 text-xs mt-1">{errors.activityLevel}</p>
+                      <p className="text-red-300 text-xs mt-1">
+                        {errors.activityLevel}
+                      </p>
                     )}
                   </div>
 
@@ -678,13 +767,23 @@ const Register = () => {
                       onBlur={handleBlur}
                       className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-all"
                     >
-                      <option value="" className="bg-gray-800">Select Experience Level</option>
-                      <option value="beginner" className="bg-gray-800">Beginner (0-1 years)</option>
-                      <option value="intermediate" className="bg-gray-800">Intermediate (1-3 years)</option>
-                      <option value="advanced" className="bg-gray-800">Advanced (3+ years)</option>
+                      <option value="" className="bg-gray-800">
+                        Select Experience Level
+                      </option>
+                      <option value="beginner" className="bg-gray-800">
+                        Beginner (0-1 years)
+                      </option>
+                      <option value="intermediate" className="bg-gray-800">
+                        Intermediate (1-3 years)
+                      </option>
+                      <option value="advanced" className="bg-gray-800">
+                        Advanced (3+ years)
+                      </option>
                     </select>
                     {touched.experienceLevel && errors.experienceLevel && (
-                      <p className="text-red-300 text-xs mt-1">{errors.experienceLevel}</p>
+                      <p className="text-red-300 text-xs mt-1">
+                        {errors.experienceLevel}
+                      </p>
                     )}
                   </div>
 
@@ -700,15 +799,29 @@ const Register = () => {
                       onBlur={handleBlur}
                       className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-all"
                     >
-                      <option value="" className="bg-gray-800">Select Primary Goal</option>
-                      <option value="weight_loss" className="bg-gray-800">Weight Loss</option>
-                      <option value="muscle_gain" className="bg-gray-800">Muscle Gain</option>
-                      <option value="maintenance" className="bg-gray-800">Maintenance</option>
-                      <option value="endurance" className="bg-gray-800">Endurance</option>
-                      <option value="strength" className="bg-gray-800">Strength</option>
+                      <option value="" className="bg-gray-800">
+                        Select Primary Goal
+                      </option>
+                      <option value="weight_loss" className="bg-gray-800">
+                        Weight Loss
+                      </option>
+                      <option value="muscle_gain" className="bg-gray-800">
+                        Muscle Gain
+                      </option>
+                      <option value="maintenance" className="bg-gray-800">
+                        Maintenance
+                      </option>
+                      <option value="endurance" className="bg-gray-800">
+                        Endurance
+                      </option>
+                      <option value="strength" className="bg-gray-800">
+                        Strength
+                      </option>
                     </select>
                     {touched.primaryGoal && errors.primaryGoal && (
-                      <p className="text-red-300 text-xs mt-1">{errors.primaryGoal}</p>
+                      <p className="text-red-300 text-xs mt-1">
+                        {errors.primaryGoal}
+                      </p>
                     )}
                   </div>
                 </motion.div>
@@ -736,7 +849,8 @@ const Register = () => {
                         className="mt-1 mr-3"
                       />
                       <label className="text-sm text-white">
-                        I confirm that I have consulted with a healthcare professional before starting any fitness program
+                        I confirm that I have consulted with a healthcare
+                        professional before starting any fitness program
                       </label>
                     </div>
                     {touched.medicalDisclaimer && errors.medicalDisclaimer && (
@@ -777,10 +891,23 @@ const Register = () => {
                       Registration Summary
                     </h4>
                     <div className="space-y-2 text-sm text-white/80">
-                      <p><span className="font-medium">Name:</span> {formData.fullName || 'Not provided'}</p>
-                      <p><span className="font-medium">Email:</span> {formData.email || 'Not provided'}</p>
-                      <p><span className="font-medium">Age:</span> {formData.age || 'Not provided'}</p>
-                      <p><span className="font-medium">Goal:</span> {formData.primaryGoal?.replace('_', ' ') || 'Not selected'}</p>
+                      <p>
+                        <span className="font-medium">Name:</span>{" "}
+                        {formData.fullName || "Not provided"}
+                      </p>
+                      <p>
+                        <span className="font-medium">Email:</span>{" "}
+                        {formData.email || "Not provided"}
+                      </p>
+                      <p>
+                        <span className="font-medium">Age:</span>{" "}
+                        {formData.age || "Not provided"}
+                      </p>
+                      <p>
+                        <span className="font-medium">Goal:</span>{" "}
+                        {formData.primaryGoal?.replace("_", " ") ||
+                          "Not selected"}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -801,7 +928,7 @@ const Register = () => {
                   Previous
                 </motion.button>
               )}
-              
+
               {currentStep < steps.length ? (
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -821,15 +948,30 @@ const Register = () => {
                   disabled={!validateStep(3) || isSubmitting}
                   className={`px-8 py-3 rounded-lg font-medium transition-all flex items-center ml-auto ${
                     !validateStep(3) || isSubmitting
-                      ? 'bg-gray-400 cursor-not-allowed text-gray-600'
-                      : 'bg-green-500 text-white hover:bg-green-600'
+                      ? "bg-gray-400 cursor-not-allowed text-gray-600"
+                      : "bg-green-500 text-white hover:bg-green-600"
                   }`}
                 >
                   {isSubmitting ? (
                     <>
-                      <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      <svg
+                        className="animate-spin h-5 w-5 mr-3"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          fill="none"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
                       </svg>
                       Creating Account...
                     </>
@@ -848,10 +990,10 @@ const Register = () => {
               variants={itemVariants}
               className="text-center text-sm text-white/80 mt-6"
             >
-              Already have an account?{' '}
+              Already have an account?{" "}
               <button
                 type="button"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate("/login")}
                 className="text-white font-semibold hover:text-white/80 transition-colors underline"
               >
                 Sign In
@@ -868,11 +1010,14 @@ const Register = () => {
           className="mt-8 grid grid-cols-3 gap-4"
         >
           {[
-            { icon: Zap, text: 'AI-Powered' },
-            { icon: TrendingUp, text: 'Track Progress' },
-            { icon: Award, text: 'Expert Guidance' }
+            { icon: Zap, text: "AI-Powered" },
+            { icon: TrendingUp, text: "Track Progress" },
+            { icon: Award, text: "Expert Guidance" },
           ].map((feature, index) => (
-            <div key={index} className="flex items-center justify-center space-x-2 text-white/80">
+            <div
+              key={index}
+              className="flex items-center justify-center space-x-2 text-white/80"
+            >
               <feature.icon className="w-4 h-4" />
               <span className="text-xs">{feature.text}</span>
             </div>

@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import {
-  Check,
-  Square,
-  CheckSquare,
-  Plus,
-  Minus,
-  Save,
-} from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Check, Square, CheckSquare, Plus, Minus, Save } from "lucide-react";
 
 const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
   const [sets, setSets] = useState([]);
-  const [notes, setNotes] = useState(initialData?.notes || '');
+  const [notes, setNotes] = useState(initialData?.notes || "");
 
   useEffect(() => {
     // Initialize sets based on exercise
@@ -20,8 +13,8 @@ const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
       initialSets.push({
         setNumber: i + 1,
         completed: initialData?.sets?.[i]?.completed || false,
-        weight: initialData?.sets?.[i]?.weight || '',
-        reps: initialData?.sets?.[i]?.reps || '',
+        weight: initialData?.sets?.[i]?.weight || "",
+        reps: initialData?.sets?.[i]?.reps || "",
         rpe: initialData?.sets?.[i]?.rpe || 5,
       });
     }
@@ -46,8 +39,8 @@ const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
       {
         setNumber: sets.length + 1,
         completed: false,
-        weight: '',
-        reps: '',
+        weight: "",
+        reps: "",
         rpe: 5,
       },
     ]);
@@ -67,8 +60,9 @@ const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
       sets: sets,
       notes: notes,
       totalVolume: sets.reduce(
-        (acc, set) => acc + (parseFloat(set.weight) || 0) * (parseInt(set.reps) || 0),
-        0
+        (acc, set) =>
+          acc + (parseFloat(set.weight) || 0) * (parseInt(set.reps) || 0),
+        0,
       ),
     };
     onSubmit(logData);
@@ -95,7 +89,7 @@ const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.05 }}
             className={`bg-white rounded-lg p-4 ${
-              set.completed ? 'ring-2 ring-green-500' : 'border border-gray-200'
+              set.completed ? "ring-2 ring-green-500" : "border border-gray-200"
             }`}
           >
             <div className="grid grid-cols-12 gap-3 items-center">
@@ -113,16 +107,20 @@ const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
 
               {/* Set Number */}
               <div className="col-span-2">
-                <p className="text-sm font-semibold text-gray-700">Set {set.setNumber}</p>
+                <p className="text-sm font-semibold text-gray-700">
+                  Set {set.setNumber}
+                </p>
               </div>
 
               {/* Weight Input */}
               <div className="col-span-3">
-                <label className="block text-xs text-gray-600 mb-1">Weight (kg)</label>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Weight (kg)
+                </label>
                 <input
                   type="number"
                   value={set.weight}
-                  onChange={(e) => updateSet(index, 'weight', e.target.value)}
+                  onChange={(e) => updateSet(index, "weight", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="0"
                   step="0.5"
@@ -135,7 +133,7 @@ const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
                 <input
                   type="number"
                   value={set.reps}
-                  onChange={(e) => updateSet(index, 'reps', e.target.value)}
+                  onChange={(e) => updateSet(index, "reps", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="0"
                 />
@@ -146,7 +144,9 @@ const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
                 <label className="block text-xs text-gray-600 mb-1">RPE</label>
                 <select
                   value={set.rpe}
-                  onChange={(e) => updateSet(index, 'rpe', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateSet(index, "rpe", parseInt(e.target.value))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                 >
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rpe) => (
@@ -183,7 +183,9 @@ const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
 
       {/* RPE Guide */}
       <div className="bg-white rounded-lg p-3 mb-4">
-        <p className="text-xs font-semibold text-gray-700 mb-2">RPE Guide (Rate of Perceived Exertion)</p>
+        <p className="text-xs font-semibold text-gray-700 mb-2">
+          RPE Guide (Rate of Perceived Exertion)
+        </p>
         <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
           <div>1-3: Very easy</div>
           <div>4-6: Moderate</div>
@@ -212,12 +214,14 @@ const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
         disabled={!allSetsCompleted}
         className={`w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
           allSetsCompleted
-            ? 'bg-linear-to-r from-green-600 to-emerald-600 text-white hover:shadow-lg'
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            ? "bg-linear-to-r from-green-600 to-emerald-600 text-white hover:shadow-lg"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
         }`}
       >
         <Save className="w-5 h-5" />
-        {allSetsCompleted ? 'Submit Workout Log' : 'Complete All Sets to Submit'}
+        {allSetsCompleted
+          ? "Submit Workout Log"
+          : "Complete All Sets to Submit"}
       </button>
 
       {/* Volume Summary */}
@@ -228,10 +232,11 @@ const WorkoutLogger = ({ exercise, onSubmit, initialData }) => {
             {sets
               .reduce(
                 (acc, set) =>
-                  acc + (parseFloat(set.weight) || 0) * (parseInt(set.reps) || 0),
-                0
+                  acc +
+                  (parseFloat(set.weight) || 0) * (parseInt(set.reps) || 0),
+                0,
               )
-              .toFixed(1)}{' '}
+              .toFixed(1)}{" "}
             kg
           </p>
         </div>
