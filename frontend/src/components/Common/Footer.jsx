@@ -34,11 +34,6 @@ const Footer = () => {
   ];
   const isDashboardPage = dashboardRoutes.includes(location.pathname);
 
-  // Don't render footer on dashboard pages
-  if (isDashboardPage) {
-    return null;
-  }
-
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -62,6 +57,11 @@ const Footer = () => {
       setTimeout(() => setIsSubscribed(false), 3000);
     }
   };
+
+  // Don't render footer on dashboard pages
+  if (isDashboardPage) {
+    return null;
+  }
 
   return (
     <footer

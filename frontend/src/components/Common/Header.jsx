@@ -261,36 +261,6 @@ const Header = () => {
               >
                 Home
               </button>
-              <button
-                onClick={() => handleNavigation("/features")}
-                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${
-                  location.pathname === "/features"
-                    ? "text-blue-600 bg-blue-50"
-                    : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
-                }`}
-              >
-                Features
-              </button>
-              <button
-                onClick={() => handleNavigation("/benefits")}
-                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${
-                  location.pathname === "/benefits"
-                    ? "text-blue-600 bg-blue-50"
-                    : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
-                }`}
-              >
-                Benefits
-              </button>
-              <button
-                onClick={() => handleNavigation("/about")}
-                className={`px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 text-left ${
-                  location.pathname === "/about"
-                    ? "text-blue-600 bg-blue-50"
-                    : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
-                }`}
-              >
-                About
-              </button>
             </div>
           </div>
         )}
