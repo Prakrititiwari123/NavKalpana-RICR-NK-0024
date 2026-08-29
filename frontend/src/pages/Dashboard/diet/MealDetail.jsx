@@ -2,16 +2,17 @@ import React, { useMemo } from "react";
 import { X, Clock, Flame, Utensils } from "lucide-react";
 
 const MealDetail = ({ meal, onCook, scale = 1 }) => {
-  if (!meal) {
-    return null;
-  }
-
   const ingredients = useMemo(() => {
+    if (!meal) return [];
     return meal.items.map((item) => ({
       name: item,
       quantity: scale === 1 ? "1 serving" : `${scale} servings`,
     }));
-  }, [meal.items, scale]);
+  }, [meal, scale]);
+
+  if (!meal) {
+    return null;
+  }
 
   const nutrition = {
     calories: meal.calories,
